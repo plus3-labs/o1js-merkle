@@ -1,0 +1,65 @@
+{
+  "name": "@anomix/merkle-tree",
+  "version": "0.1.0",
+  "description": "",
+  "author": "",
+  "license": "Apache-2.0",
+  "keywords": [
+    "mina-zkapp",
+    "mina-zk-app",
+    "mina-dapp",
+    "zkapp"
+  ],
+  "type": "module",
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
+  "scripts": {
+    "demo": "tsc -p tsconfig.json && node --experimental-specifier-resolution=node ./dist/src/new_tree_test.js",
+    "build": "npm run lib:build",
+    "buildw": "tsc --watch",
+    "coverage": "node --experimental-vm-modules --experimental-wasm-threads node_modules/jest/bin/jest.js --coverage",
+    "format": "prettier --write --ignore-unknown **/*",
+    "test": "node --experimental-vm-modules --experimental-wasm-threads node_modules/jest/bin/jest.js",
+    "testw": "node --experimental-vm-modules --experimental-wasm-threads node_modules/jest/bin/jest.js --watch",
+    "lint": "npm run lib:lint",
+    "lib:dev": "tsc --build tsconfig.json --watch",
+    "lib:build": "tsc --build tsconfig.json",
+    "lib:clean": "rimraf ./dist  ./tsconfig.tsbuildinfo",
+    "lib:lint": "eslint \"src/**/*.ts\" --fix"
+  },
+  "lint-staged": {
+    "**/*": [
+      "eslint src/* --fix",
+      "prettier --write --ignore-unknown"
+    ]
+  },
+  "dependencies": {
+    "@anomix/types": "^0.1.0",
+    "@anomix/utils": "^0.1.0",
+    "leveldown": "^6.1.1",
+    "levelup": "^5.1.1",
+    "memdown": "^6.1.1"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.16.4",
+    "@babel/preset-typescript": "^7.16.0",
+    "@types/debug": "^4.1.8",
+    "@types/jest": "^27.0.3",
+    "@types/leveldown": "^4.0.3",
+    "@types/levelup": "^5.1.2",
+    "@types/memdown": "^3.0.1",
+    "@typescript-eslint/eslint-plugin": "^5.5.0",
+    "@typescript-eslint/parser": "^5.5.0",
+    "eslint": "^8.7.0",
+    "eslint-plugin-o1js": "^0.4.0",
+    "husky": "^7.0.1",
+    "jest": "^27.3.1",
+    "lint-staged": "^11.0.1",
+    "prettier": "^2.3.2",
+    "ts-jest": "^27.0.7",
+    "typescript": "^4.7.2"
+  },
+  "peerDependencies": {
+    "o1js": "0.13.0"
+  }
+}
