@@ -1,0 +1,27 @@
+{
+  "name": "@anomix/utils",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
+  "license": "MIT",
+  "scripts": {
+    "keys": "tsc -p tsconfig.json && node --experimental-specifier-resolution=node ./dist/src/keys_helper_test.js",
+    "encrypt": "tsc -p tsconfig.json && node --experimental-specifier-resolution=node ./dist/src/encrypt_test.js",
+    "lib:dev": "npm run lib:build && (concurrently \"tsc --build tsconfig.json --watch\" \"tsc-alias -w\")",
+    "lib:build": "tsc --build tsconfig.json && tsc-alias",
+    "lib:clean": "rimraf ./dist ./dist_es ./tsconfig.es.tsbuildinfo ./tsconfig.tsbuildinfo",
+    "lib:lint": "eslint \"src/**/*.ts\" --fix"
+  },
+  "peerDependencies": {
+    "o1js": "0.13.0"
+  },
+  "dependencies": {
+    "@anomix/types": "0.1.0",
+    "@scure/base": "^1.1.3",
+    "@scure/bip32": "^1.3.2",
+    "buffer": "^4.9.1",
+    "uncrypto": "^0.1.3"
+  }
+}
