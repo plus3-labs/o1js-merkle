@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "deployAliases": {},
+  "networks": {
+    "berkeley": {
+      "mina": "https://proxy.testworld.minaexplorer.com",
+      "archive": "https://archive.testworld.minaexplorer.com"
+    }
+  }
+}

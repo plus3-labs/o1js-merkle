@@ -1,0 +1,63 @@
+{
+  "name": "anomix-network",
+  "private": true,
+  "version": "0.0.0",
+  "description": "",
+  "author": "",
+  "license": "MIT",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "libs:build": "npm run lib:build -w @anomix/types && npm run lib:build -w @anomix/utils && npm run lib:build -w @anomix/merkle-tree && npm run lib:build -w @anomix/circuits && npm run lib:build -w @anomix/dao && npm run lib:build -w @anomix/sdk",
+    "depositProcessor:dev": "npm run serve -w @anomix/deposit-processor",
+    "rollupSequencer:dev": "npm run serve -w @anomix/rollup-sequencer",
+    "proofGenerators:dev": "npm run serve -w @anomix/proof-generators",
+    "coordinator:dev": "npm run serve -w @anomix/coordinator",
+    "openApi:dev": "npm run serve -w @anomix/open-api",
+    "web:dev": "npm run serve -w @anomix/ano-cash-ui",
+    "server:dev": "npm run depositProcessor:dev && npm run rollupSequencer:dev && npm run proofGenerators:dev && npm run coordinator:dev",
+    "build": "npm run libs:build && npm run build --workspaces --if-present",
+    "clean": "rimraf ./_dist && npm run lib:clean --workspaces --if-present && npm run clean --workspaces --if-present",
+    "lint": "npm run lint --workspaces --if-present && npm run lib:lint --workspaces --if-present"
+  },
+  "dependencies": {
+    "axios": "^0.27.2",
+    "axios-retry": "^3.7.0",
+    "dotenv": "^16.3.1",
+    "shelljs": "^0.8.5",
+    "typescript-json-schema": "^0.59.0"
+  },
+  "devDependencies": {
+    "@rushstack/eslint-patch": "^1.1.0",
+    "@types/bcryptjs": "^2.4.2",
+    "@types/estree": "^0.0.51",
+    "@types/jest": "^27.4.1",
+    "@types/jsonwebtoken": "^8.5.8",
+    "@types/node": "^16.0.21",
+    "@types/pino": "^7.0.5",
+    "@typescript-eslint/eslint-plugin": "^5.14.0",
+    "@typescript-eslint/parser": "^5.14.0",
+    "@vue/eslint-config-prettier": "^7.0.0",
+    "@vue/eslint-config-typescript": "^10.0.0",
+    "concurrently": "^7.2.0",
+    "copyfiles": "2.4.1",
+    "eslint": "^8.11.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-vue": "^8.2.0",
+    "jest": "^27.5.1",
+    "nodemon": "^2.0.15",
+    "pino-pretty": "^7.5.3",
+    "pkg": "^5.6.0",
+    "rimraf": "3.0.2",
+    "ts-jest": "^27.1.3",
+    "ts-loader": "^9.2.3",
+    "ts-node": "^10.6.0",
+    "tsc-alias": "^1.8.7",
+    "tsconfig-paths": "^3.10.1",
+    "tslib": "^2.4.0",
+    "typescript": "^4.6.2"
+  }
+}

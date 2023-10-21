@@ -1,0 +1,22 @@
+{
+  "feePayer": {
+    "privateKey": "",
+    "publicKey": ""
+  },
+  "operator": {
+    "privateKey": "",
+    "publicKey": ""
+  },
+  "vaultContract": {
+    "privateKey": "",
+    "publicKey": ""
+  },
+  "entryContract": {
+    "privateKey": "",
+    "publicKey": ""
+  },
+  "rollupContract": {
+    "privateKey": "",
+    "publicKey": ""
+  }
+}
