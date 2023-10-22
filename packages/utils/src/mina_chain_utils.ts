@@ -32,8 +32,10 @@ export async function activeMinaInstance() {
     const Blockchain = isLocalBlockChain
         ? Mina.LocalBlockchain({ proofsEnabled: true })
         : Mina.Network({
-            mina: "https://berkeley.minascan.io/graphql",
-            archive: "https://archive.berkeley.minaexplorer.com",
+            //mina: "https://berkeley.minascan.io/graphql",
+            // archive: "https://archive.berkeley.minaexplorer.com",
+            mina: "https://proxy.testworld.minaexplorer.com",
+            archive: "https://archive.testworld.minaexplorer.com",
         });
 
     Mina.setActiveInstance(Blockchain);
