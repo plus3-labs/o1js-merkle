@@ -1,0 +1,33 @@
+{
+  "name": "@anomix/types",
+  "private": true,
+  "description": "common types for Anomix-Network",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
+  "license": "MIT",
+  "scripts": {
+    "lib:dev": "npm run lib:build && (concurrently \"tsc --build tsconfig.json --watch\" \"tsc-alias -w\")",
+    "lib:gen-schema": "npm run gen-schema-aibreqdto && npm run gen-schema-aibdto && npm run gen-schema-txreqdto && npm run gen-schema-txrespdto && npm run gen-schema-mpdto && npm run gen-schema-nsdto && npm run gen-schema-ptdto && npm run gen-schema-rtdto && npm run gen-schema-tfsdto && npm run gen-schema-widto && npm run gen-schema-wareqdto && npm run gen-schema-wsrespdto && npm run gen-schema-wwdto ",
+    "lib:build": "npm run lib:clean && npm run lib:gen-schema && tsc --build tsconfig.json && tsc-alias",
+    "lib:clean": "rimraf ./dist ./dist_es ./tsconfig.es.tsbuildinfo ./tsconfig.tsbuildinfo",
+    "lib:lint": "eslint \"src/**/*.ts\" --fix",
+    "gen-schema-aibreqdto": "npx typescript-json-schema --refs false ./src/asset-in-block-req-dto.ts AssetInBlockReqDto -o ./src/asset-in-block-req-dto-schema.json",
+    "gen-schema-aibdto": "npx typescript-json-schema --refs false ./src/asset-in-block-dto.ts AssetsInBlockDto -o ./src/asset-in-block-dto-schema.json",
+    "gen-schema-txreqdto": "npx typescript-json-schema --refs false ./src/l2-tx-req-dto.ts L2TxReqDto -o ./src/l2-tx-req-dto-schema.json",
+    "gen-schema-txrespdto": "npx typescript-json-schema --refs false ./src/l2-tx-resp-dto.ts L2TxRespDto -o ./src/l2-tx-resp-dto-schema.json",
+    "gen-schema-mpdto": "npx typescript-json-schema --refs false ./src/merkle-proof-dto.ts MerkleProofDto -o ./src/merkle-proof-dto-schema.json",
+    "gen-schema-nsdto": "npx typescript-json-schema --refs false ./src/network-status-dto.ts NetworkStatusDto -o ./src/network-status-dto-schema.json",
+    "gen-schema-ptdto": "npx typescript-json-schema --refs false ./src/proof-task-dto.ts ProofTaskDto -o ./src/proof-task-dto-schema.json",
+    "gen-schema-rtdto": "npx typescript-json-schema --refs false ./src/rollup-task-dto.ts RollupTaskDto -o ./src/rollup-task-dto-schema.json",
+    "gen-schema-tfsdto": "npx typescript-json-schema --refs false ./src/txfee-suggestion-dto.ts TxFeeSuggestionDto -o ./src/txfee-suggestion-dto-schema.json",
+    "gen-schema-widto": "npx typescript-json-schema --refs false ./src/withdraw-info-dto.ts WithdrawInfoDto -o ./src/withdraw-info-dto-schema.json",
+    "gen-schema-wareqdto": "npx typescript-json-schema --refs false ./src/withdraw-asset-req-dto.ts WithdrawAssetReqDto -o ./src/withdraw-asset-req-dto-schema.json",
+    "gen-schema-wsrespdto": "npx typescript-json-schema --refs false ./src/worldstate-resp-dto.ts WorldStateRespDto -o ./src/worldstate-resp-dto-schema.json",
+    "gen-schema-wwdto": "npx typescript-json-schema --refs false ./src/withdrawal-witness-dto.ts WithdrawalWitnessDto -o ./src/withdrawal-witness-dto-schema.json"
+  },
+  "peerDependencies": {
+    "o1js": "0.13.0"
+  }
+}
