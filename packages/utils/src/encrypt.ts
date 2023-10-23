@@ -9,7 +9,7 @@ import {
 
 const IV_LENGTH = 12;
 const ALGORITHM = "AES-GCM";
-const PBKDF2_ITERATIONS = 1000;
+const PBKDF2_ITERATIONS = 10000;
 
 /*
   Get some key material to use as input to the deriveKey method.
