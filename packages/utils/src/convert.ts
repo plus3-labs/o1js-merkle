@@ -13,3 +13,11 @@ export function uint8ArrayToField(arr: Uint8Array) {
 
   return Field(bigIntValue);
 }
+
+const toBigInt2 = (arr: Uint8Array) => {
+  const bigIntValue = BigInt(
+    '0x' +
+      Array.from(arr, (byte) => byte.toString(16).padStart(2, '0')).join('')
+  );
+  return bigIntValue;
+};
