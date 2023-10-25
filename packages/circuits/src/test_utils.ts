@@ -76,8 +76,6 @@ function getTestContext(onlySupportProof = false): TestContext {
   };
 
   let initMinaNetwork = async () => {
-    await isReady;
-
     let Blockchain;
 
     if (deployToBerkeley) {
