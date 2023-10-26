@@ -1,10 +1,15 @@
 import { LevelUp, LevelUpChain } from 'levelup';
+import { createDebugLogger, createLogger } from './log';
 import { BaseSiblingPath, SiblingPath } from '@anomix/types';
 import { Hasher } from '@anomix/types';
 import { MerkleTree } from './interfaces/merkle_tree.js';
 import { toBigIntLE, toBufferLE } from './utils';
 import { Field } from 'o1js';
 import { bufferToInt256, int256ToBuffer } from '@anomix/utils';
+
+const log = createDebugLogger('anomix:tree-base');
+
+log(`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~TreeBase~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`);
 
 const MAX_DEPTH = 254;
 
@@ -144,15 +149,25 @@ export abstract class TreeBase implements MerkleTree {
    * @returns Empty promise.
    */
   public async commit(): Promise<void> {
+    log(`start commit...`);
     const batch = this.db.batch();
     const keys = Object.getOwnPropertyNames(this.cache);
+    log(`print this.cache: `);
     for (const key of keys) {
+      log(`  cache.key: ${key}, cache.value: ${this.cache[key].toString()}`);
       batch.put(key, this.cache[key]);
     }
-    this.size = this.getNumLeaves(true);
-    this.root = this.getRoot(true);
+    log(`after put cache, batch.length: ${batch.length}`);
+
     await this.writeMeta(batch);
+    log(`after writeMeta, batch.length: ${batch.length}`);
     await batch.write();
+
+    this.size = this.getNumLeaves(true);
+    log(`this.size: ${this.size}`);
+    this.root = this.getRoot(true);
+    log(`this.root: ${this.root}`);
+    
     this.clearCache();
   }
 
@@ -178,13 +193,13 @@ export abstract class TreeBase implements MerkleTree {
     return this.getLatestValueAtIndex(this.depth, index, includeUncommitted);
   }
 
-    /**
-     * Clears the cache.
-     */
-    private clearCache() {
-        this.cache = {};
-        this.cachedSize = undefined;
-    }
+  /**
+   * Clears the cache.
+   */
+  private clearCache() {
+    this.cache = {};
+    this.cachedSize = undefined;
+  }
 
   /**
    * Adds a leaf and all the hashes above it to the cache.
