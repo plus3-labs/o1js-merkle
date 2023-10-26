@@ -8,3 +8,4 @@ export * from './standard_tree/standard_tree';
 export { INITIAL_LEAF } from './tree_base';
 export { newTree } from './new_tree';
 export { loadTree } from './load_tree';
+export * from './utils'
