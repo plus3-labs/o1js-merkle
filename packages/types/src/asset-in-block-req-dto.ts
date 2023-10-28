@@ -1,5 +1,5 @@
 
-export interface AssetInBlockReqDto {
+export interface AssetInBlocksReqDto {
     /**
      * block height list, no requirements on sequence.
      */
