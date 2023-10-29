@@ -5,7 +5,7 @@ await isReady;
 
 const server = fastify()
 
-server.get('/ping', async (request, reply) => {
+server.get('/health', async (request, reply) => {
   const priKey = PrivateKey.random();
   return priKey.toBase58();
 });
