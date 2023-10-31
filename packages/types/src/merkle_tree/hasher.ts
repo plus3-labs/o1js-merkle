@@ -8,3 +8,7 @@ export interface Hasher {
     compressInputs(inputs: Field[]): Field;
     hashToTree(leaves: Field[]): Promise<Field[]>;
 }
+export interface PoseidonHasher {
+    compress(lhs: Field, rhs: Field): Field;
+    compressInputs(inputs: Field[]): Field;
+}
