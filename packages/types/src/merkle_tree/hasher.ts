@@ -12,3 +12,7 @@ export interface PoseidonHasher {
     compress(lhs: Field, rhs: Field): Field;
     compressInputs(inputs: Field[]): Field;
 }
+
+export interface hashUtil {
+    
+}
