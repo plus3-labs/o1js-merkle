@@ -1,4 +1,4 @@
-import { arrayProp, Bool, Circuit, Field, Poseidon, Provable } from 'snarkyjs';
+import { arrayProp, Bool, Circuit, Field, Poseidon, Provable } from 'o1js';
 import { EMPTY_VALUE } from '../constant';
 import { Hasher } from '../model';
 import { BaseMerkleProof } from './proofs';

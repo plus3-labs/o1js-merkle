@@ -1,4 +1,4 @@
-import { Provable, Field } from 'snarkyjs';
+import { Provable, Field } from 'o1js';
 import { strToFieldArry } from '../utils';
 import { Store } from './store';
 

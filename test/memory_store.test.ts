@@ -1,4 +1,4 @@
-import { Field, isReady, shutdown } from 'snarkyjs';
+import { Field, isReady, shutdown } from 'o1js';
 import { MemoryStore } from '../src/lib/store/memory_store';
 
 describe('MemoryStore', () => {

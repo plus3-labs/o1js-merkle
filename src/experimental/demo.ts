@@ -1,4 +1,4 @@
-import { Field, isReady, shutdown } from 'snarkyjs';
+import { Field, isReady, shutdown } from 'o1js';
 import { DeepMerkleSubTree } from '../lib/merkle/deep_subtree';
 import { MerkleTree } from '../lib/merkle/merkle_tree';
 import { MerkleTreeUtils } from '../lib/merkle/proofs';

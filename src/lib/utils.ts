@@ -1,4 +1,4 @@
-import { Bool, Field, Provable } from 'snarkyjs';
+import { Bool, Field, Provable } from 'o1js';
 
 export {
   createEmptyValue,

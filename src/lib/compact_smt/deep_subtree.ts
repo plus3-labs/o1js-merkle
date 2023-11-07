@@ -1,4 +1,4 @@
-import { Field, Poseidon, Provable } from 'snarkyjs';
+import { Field, Poseidon, Provable } from 'o1js';
 import { Hasher } from '../model';
 import { Store } from '../store/store';
 import { CompactSparseMerkleProof, CSMTUtils } from './proofs';

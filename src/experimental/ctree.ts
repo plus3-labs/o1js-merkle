@@ -1,4 +1,4 @@
-import { Field, isReady, shutdown } from 'snarkyjs';
+import { Field, isReady, shutdown } from 'o1js';
 import { CompactDeepSparseMerkleSubTree } from '../lib/compact_smt/deep_subtree';
 import { CompactSparseMerkleTree } from '../lib/compact_smt/csmt';
 import { ProvableCSMTUtils } from '../lib/compact_smt/verify_circuit';

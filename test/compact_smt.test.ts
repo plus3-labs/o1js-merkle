@@ -1,4 +1,4 @@
-import { Circuit, Field, isReady, Poseidon, shutdown } from 'snarkyjs';
+import { Circuit, Field, isReady, Poseidon, shutdown } from 'o1js';
 import { CSMTUtils } from '../src/lib/compact_smt/proofs';
 import { CompactSparseMerkleTree } from '../src/lib/compact_smt/csmt';
 import { ProvableCSMTUtils } from '../src/lib/compact_smt/verify_circuit';

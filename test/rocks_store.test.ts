@@ -1,4 +1,4 @@
-import { Field, isReady, shutdown } from 'snarkyjs';
+import { Field, isReady, shutdown } from 'o1js';
 import { RocksStore } from '../src/lib/store/rocks_store';
 import encode from 'encoding-down';
 import rocksdb from 'rocksdb';

@@ -1,4 +1,4 @@
-import { Field, Provable } from 'snarkyjs';
+import { Field, Provable } from 'o1js';
 import { Store } from './store';
 import mongoose, { Schema, model, Model } from 'mongoose';
 import { strToFieldArry } from '../utils';

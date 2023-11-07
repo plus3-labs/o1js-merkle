@@ -1,4 +1,4 @@
-import { Circuit, Field, isReady, Poseidon, shutdown } from 'snarkyjs';
+import { Circuit, Field, isReady, Poseidon, shutdown } from 'o1js';
 import { MemoryStore } from '../src/lib/store/memory_store';
 import { SparseMerkleTree } from '../src/lib/smt/smt';
 import { SMTUtils } from '../src/lib/smt/proofs';

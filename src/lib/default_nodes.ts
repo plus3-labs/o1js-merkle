@@ -1,4 +1,4 @@
-import { Field } from 'snarkyjs';
+import { Field } from 'o1js';
 import { SMT_DEPTH, EMPTY_VALUE } from './constant';
 import { Hasher } from './model';
 

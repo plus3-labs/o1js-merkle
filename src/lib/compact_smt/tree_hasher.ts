@@ -1,4 +1,4 @@
-import { Bool, Field, isReady, Poseidon, Provable } from 'snarkyjs';
+import { Bool, Field, isReady, Poseidon, Provable } from 'o1js';
 import { Hasher } from '../model';
 
 await isReady;

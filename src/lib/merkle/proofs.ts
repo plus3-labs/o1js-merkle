@@ -5,7 +5,7 @@ import {
   isReady,
   Poseidon,
   Provable,
-} from 'snarkyjs';
+} from 'o1js';
 
 import { EMPTY_VALUE, RIGHT } from '../constant';
 import { defaultNodes } from '../default_nodes';

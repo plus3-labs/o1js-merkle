@@ -6,7 +6,7 @@ import {
   Poseidon,
   Provable,
   Struct,
-} from 'snarkyjs';
+} from 'o1js';
 import { RIGHT } from '../constant';
 import { Hasher } from '../model';
 import { CP_PADD_VALUE, CSMT_DEPTH, PLACEHOLDER } from './constant';

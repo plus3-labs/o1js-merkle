@@ -1,4 +1,4 @@
-import { Field, isReady } from 'snarkyjs';
+import { Field, isReady } from 'o1js';
 
 await isReady;
 

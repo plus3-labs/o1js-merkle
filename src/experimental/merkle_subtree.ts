@@ -12,7 +12,7 @@ import {
   SmartContract,
   State,
   state,
-} from 'snarkyjs';
+} from 'o1js';
 import { getProofsEnabled } from 'snarkyjs/dist/node/lib/mina';
 import { ProvableDeepMerkleSubTree } from '../lib/merkle/deep_subtree_circuit';
 import { MerkleTree } from '../lib/merkle/merkle_tree';

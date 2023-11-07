@@ -1,4 +1,4 @@
-import { Field, Poseidon, Provable } from 'snarkyjs';
+import { Field, Poseidon, Provable } from 'o1js';
 import { EMPTY_VALUE } from '../constant';
 import { Hasher } from '../model';
 import { BaseMerkleProof, MerkleTreeUtils } from './proofs';

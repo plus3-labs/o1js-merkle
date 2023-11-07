@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { Field, isReady, shutdown } from 'snarkyjs';
+import { Field, isReady, shutdown } from 'o1js';
 import { MongoStore } from '../src/lib/store/mongo_store';
 import { MongoMemoryReplSet } from 'mongodb-memory-server';
 

@@ -1,5 +1,5 @@
 import { Level } from 'level';
-import { Field, isReady, shutdown } from 'snarkyjs';
+import { Field, isReady, shutdown } from 'o1js';
 import { LevelStore } from '../src/lib/store/level_store';
 
 describe('LevelStore', () => {

@@ -1,4 +1,4 @@
-import { Bool, Circuit, Field, Poseidon, Provable, Struct } from 'snarkyjs';
+import { Bool, Circuit, Field, Poseidon, Provable, Struct } from 'o1js';
 import { EMPTY_VALUE, RIGHT, SMT_DEPTH } from '../constant';
 import { defaultNodes } from '../default_nodes';
 import { Hasher } from '../model';

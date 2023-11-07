@@ -1,4 +1,4 @@
-import { Circuit, Field, isReady, shutdown } from 'snarkyjs';
+import { Circuit, Field, isReady, shutdown } from 'o1js';
 import { MerkleTree } from '../src/lib/merkle/merkle_tree';
 import { MerkleTreeUtils } from '../src/lib/merkle/proofs';
 import { ProvableMerkleTreeUtils } from '../src/lib/merkle/verify_circuit';

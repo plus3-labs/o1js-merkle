@@ -1,4 +1,4 @@
-import { Field, Poseidon, Provable } from 'snarkyjs';
+import { Field, Poseidon, Provable } from 'o1js';
 
 import { EMPTY_VALUE, RIGHT, SMT_DEPTH } from '../constant';
 import { defaultNodes } from '../default_nodes';

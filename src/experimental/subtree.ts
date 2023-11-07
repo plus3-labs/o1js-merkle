@@ -12,7 +12,7 @@ import {
   SmartContract,
   State,
   state,
-} from 'snarkyjs';
+} from 'o1js';
 import { ProvableDeepSparseMerkleSubTree } from '../lib/smt/deep_subtree_circuit';
 import { SparseMerkleProof } from '../lib/smt/proofs';
 import { SparseMerkleTree } from '../lib/smt/smt';

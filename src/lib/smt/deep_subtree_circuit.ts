@@ -1,4 +1,4 @@
-import { Bool, Circuit, Field, Poseidon, Provable, Struct } from 'snarkyjs';
+import { Bool, Circuit, Field, Poseidon, Provable, Struct } from 'o1js';
 import { EMPTY_VALUE, SMT_DEPTH } from '../constant';
 import { Hasher } from '../model';
 import { SparseMerkleProof } from './proofs';
