@@ -1,168 +1,349 @@
-<div align="center">
-<img align='center' src="./docs/pic/anomix.svg" height="100px" width="100px">
-</div>
+# snarky-smt
 
-# Anomix Monorepo
+![npm](https://img.shields.io/npm/v/snarky-smt)
+![node-current](https://img.shields.io/node/v/snarky-smt)
+![Libraries.io dependency status for latest release](https://img.shields.io/librariesio/release/npm/snarky-smt)
+![npm](https://img.shields.io/npm/dm/snarky-smt)
 
-NOTE: currently under development, cannot used at production env.
+Merkle Tree for o1js (membership / non-membership merkle proof).
 
-## Description
+The library contains implementations of sparse merkle tree, merkle tree and compact merkle tree based on o1js, which you can use in the browser or node.js, and provides a corresponding set of verifiable utility methods that can be run in circuits.
 
-Anomix Network, formerly called 'Shadow' in zkApp Builders Program 1,  is a zk-zkRollup layer2 solution on Mina, focusing on Privacy&Scalablility. It grows up alongside with the upgrade of o1js.<br>
+**Notice**: Versions starting from 0.6.0 (Structs are officially supported) have a breaking update to the api and are not compatible with previous versions
 
-Basically, On Anomix Network, you could make your L2 account anonymous and your on-chain operations private(invisible&untraceable). Besides, As a layer2, Anomix Network batches L2 txs to make fee apportioned(much lower cost), and furthermore it’s easy to build private defi/nft/DID, etc.<br>
-Within zkIgnite cohort1, We will provide a zkApp, named as Ano-Cash, as the officially first entry of Anomix Network.<br>
+This article gives a brief introduction to SMT: [Whats a sparse merkle tree](https://medium.com/@kelvinfichter/whats-a-sparse-merkle-tree-acda70aeb837)
 
-NOTE: Thanks to ZKRollup's predecessors such as zkSync, Aztec, etc, and ZK Layer1 such as Mina, IRon Fish, with reference on design documentation of them, this design could be completed.
+## Disclaimer and Notes
 
-Please go to [doc](./docs/README.md) for more details on tech!!
+The library hasn't been audited. The API and the format of the proof may be changed in the future as o1js is updated.
+Make sure you know what you are doing before using this library.
 
-## Prerequisites
+---
 
-Suggest to install [nest-cli](https://docs.nestjs.com/cli/overview) globally in dev environment.
+## Table of Contents
 
-## Quick start
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+- [Install](#install)
+  - [1. Install module](#1-install-module)
+  - [2. Install peer dependencies](#2-install-peer-dependencies)
+- [What can you do with this library](#what-can-you-do-with-this-library)
+- [Usage](#usage)
+  - [Create a merkle tree data store](#create-a-merkle-tree-data-store)
+    - [1. Create a memory store](#1-create-a-memory-store)
+    - [2. Create a leveldb store](#2-create-a-leveldb-store)
+    - [3. Create a rocksdb store](#3-create-a-rocksdb-store)
+    - [4. Create a mongodb store](#4-create-a-mongodb-store)
+  - [Use MerkleTree (original NumIndexSparseMerkleTree)](#use-merkletree-original-numindexsparsemerkletree)
+  - [Use SparseMerkleTree](#use-sparsemerkletree)
+  - [Use CompactSparseMerkleTree](#use-compactsparsemerkletree)
+- [API Reference](#api-reference)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+## Install
+
+### 1. Install module
 
 ```bash
-
-# 1. Clone the repository
-git clone https://github.com/anomix-zk/anomix-network.git
-
-# 2. Enter your newly-cloned folder
-cd anomix-network
-
-# 3. Install the project and build packages in libs folder
-npm install
-
-# 4. Dev: Run backend with hot reload
-# Note that you need to create the config.yaml file in the server directory beforehand
-# You can copy the config.example.yaml file and rename it to config.yaml
-# Then you can configure database access and other server settings
-npm run server:dev
-
-# 5. Dev: Run frontend with hot reload
-npm run web:dev
-
+npm install snarky-smt
 ```
 
-## Back-end server config example
+or with yarn:
 
-```yaml
-# HTTP / HTTPS server settings
-http:
-  # If you change the server port you have to change it also on the front-end
-  port: 3000
-
-  # If true it starts the HTTPS server
-  # Note that you need to fill in the credentials fields for the SSL certificate
-  secure: false
-
-  # If secure option is set to true you must define the paths for the SSL certificate
-  credentials:
-    key: "PATH_TO_KEY_DIR/key.pem"
-    cert: "PATH_TO_CERT_DIR/cert.pem"
-
-  # Cross-Origin Resource Sharing domain origins
-  # More info: https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
-  cors:
-    - "http://localhost:8080"
-
-# Database server settings
-# More info: https://typeorm.io
-db:
-  # Database type (mysql, mysql etc.)
-  type: "mysql"
-
-  # Database server address
-  host: "localhost"
-
-  # Database server port
-  port: 5432
-
-  # Database name
-  database: ""
-
-  # Database username
-  username: ""
-
-  # Database password
-  password: ""
-
-  # Disable this in the production version of the application
-  synchronize: true
-
-# Keys required for hashing passwords and tokens
-# They should be filled with random, unique strings
-keys:
-  pwdsalt: ""
-  jwt: ""
+```bash
+yarn add snarky-smt
 ```
 
-## Volar and Visual Studio Code (Takeover Mode)
+### 2. Install peer dependencies
 
-- Install [Volar](https://marketplace.visualstudio.com/items?itemName=vue.volar) extension
-- In your project workspace, bring up the command palette with Ctrl + Shift + P (macOS: Cmd + Shift + P).
-- Type built and select "Extensions: Show Built-in Extensions".
-- Type typescript in the extension search box (do not remove @builtin prefix).
-- Click the little gear icon of "TypeScript and JavaScript Language Features", and select "Disable (Workspace)".
-- Reload the workspace. Takeover mode will be enabled when you open a Vue or TS file.
-
-More info here: https://vuejs.org/guide/typescript/overview.html#takeover-mode
-
-## Top-Level Scripts
-
-- `apps:dev` - run front-end and back-end simultaneously with hot reload
-- `web:dev` - run front-end with hot reload
-- `server:dev` - run back-end with hot reload
-- `libs:build` - build packages in `libs` folder
-- `build` - build all packages
-- `clean` - clean all packages
-- `lint` - lint all packages
-
-## Visual Studio Code extensions
-
-```json
-{
-  "recommendations": [
-    "vue.volar",
-    "dbaeumer.vscode-eslint",
-    "editorconfig.editorconfig",
-    "syler.sass-indented",
-
-    "eamodio.gitlens",
-    "donjayamanne.githistory",
-    "aaron-bond.better-comments",
-    "visualstudioexptteam.vscodeintellicode",
-    "pkief.material-icon-theme"
-  ]
-}
+```bash
+npm install o1js
+# yarn add o1js
 ```
 
-### Required
+If you need to use LevelDB to store data, you will also need to install:
 
-- `vue.volar` - Vue Language Features (Volar)
-- `syler.sass-indented` - Sass syntax highlighting.
-- `dbaeumer.vscode-eslint` - VS Code ESLint extension.
-- `editorconfig.editorconfig` - EditorConfig for VS Code.
-
-### Optional
-
-- `eamodio.gitlens` - GitLens - Git supercharged.
-- `donjayamanne.githistory` - Git History
-- `visualstudioexptteam.vscodeintellicode` - IntelliCode
-- `pkief.material-icon-theme` - Material Icon Theme in VS Code
-- `aaron-bond.better-comments` - Better Comments
-
-## Visual Studio Code settings
-
-Disables top-level scripts for packages from the npm script panel.
-
-```json
-{
-  "npm.exclude": ["**/apps/**", "**/packages/**"]
-}
+```bash
+npm install level
+# yarn add level
 ```
 
-## License
+RocksDB:
 
-MIT
+```bash
+npm install rocksdb encoding-down levelup
+```
+
+MongoDB:
+
+```bash
+npm install mongoose
+```
+
+## What can you do with this library
+
+You can update the data of Sparse Merkle Tree(SMT) outside the circuit, and then verify the membership proof or non-membership proof of the data in the circuit. At the same time, you can also verify the correctness of the state transformation of SMT in the circuit, which makes us not need to update the SMT in the circuit, but also ensure the legal modification of SMT data outside the circuit. We can verify the validity of data modification through zkApp.
+
+---
+
+## Usage
+
+### Create a merkle tree data store
+
+#### 1. Create a memory store
+
+```typescript
+import { MemoryStore, Store } from 'snarky-smt';
+import { Field } from 'o1js';
+
+// memory data store for Field type data, you can use any CircuitValue from o1js or a custom composite CircuitValue
+let store: Store<Field> = new MemoryStore<Field>();
+```
+
+#### 2. Create a leveldb store
+
+```typescript
+import { Field } from 'o1js';
+import { LevelStore, Store } from 'snarky-smt';
+import { Level } from 'level';
+// create a leveldb data store for Field type data, you can use any CircuitValue from o1js or a custom composite CircuitValue
+const levelDb = new Level<string, any>('./db');
+let store: Store<Field> = new LevelStore<Field>(levelDb, Field, 'test');
+```
+
+#### 3. Create a rocksdb store
+
+```typescript
+import { RocksStore, Store } from 'snarky-smt';
+import { Field } from 'o1js';
+import encode from 'encoding-down';
+import rocksdb from 'rocksdb';
+import levelup from 'levelup';
+
+const encoded = encode(rocksdb('./rocksdb'));
+const db = levelup(encoded);
+let store: Store<Field> = new RocksStore<Field>(db, Field, 'test');
+```
+
+#### 4. Create a mongodb store
+
+```typescript
+import mongoose from 'mongoose';
+import { MongoStore, Store } from 'snarky-smt';
+import { Field } from 'o1js';
+
+await mongoose.connect('mongodb://localhost/my_database');
+let store: Store<Field> = new MongoStore(mongoose.connection, Field, 'test');
+```
+
+### Use MerkleTree (original NumIndexSparseMerkleTree)
+
+> MerkleTree is a merkle tree of numerically indexed data that can customize the tree height, this merkel tree is equivalent to a data structure: Map<bigint, Struct>, Struct can be a CircuitValue type in o1js, such as Field, PublicKey, or a custom composite Struct.
+> Tree height <= 254, Numeric index <= (2^height-1).
+
+MerkleTreeUtils: A collection of merkle tree utility methods that do not work in circuits.
+
+ProvableMerkleTreeUtils: A collection of merkle tree utility methods that can be verified to work in circuits
+
+An example of using MerkleTree in the mina smart contract, modified from the example in the [o1js official repo](https://github.com/o1-labs/o1js):
+[**merkle_zkapp.ts**](./src/examples/merkle_zkapp.ts)
+
+```typescript
+class Account extends Struct({
+  address: PublicKey,
+  balance: UInt64,
+  nonce: UInt32,
+}) {}
+
+// Create a memory store
+let store = new MemoryStore<Account>();
+// initialize a new Merkle Tree with height 8
+let tree = await MerkleTree.build(store, 8, Account);
+
+let testValue = new Account({
+  address: PrivateKey.random().toPublicKey(),
+  balance: UInt64.fromNumber(100),
+  nonce: UInt32.fromNumber(0),
+});
+
+const root = await tree.update(0n, testValue);
+
+// get value
+const v = await tree.get(0n);
+// support compact merkle proof
+const cproof = await tree.proveCompact(0n);
+// decompact NumIndexProof
+const proof = MerkleTreeUtils.decompactMerkleProof(cproof);
+// check membership outside the circuit
+const ok = MerkleTreeUtils.checkMembership(proof, root, 0n, testValue, Account);
+
+// check membership in the circuit
+ProvableMerkleTreeUtils.checkMembership(
+  proof,
+  root,
+  Field(0n),
+  testValue,
+  Account
+).assertTrue();
+
+testValue.nonce = testValue.nonce.add(1);
+// calculate new root in the circuit
+const newRoot = ProvableMerkleTreeUtils.computeRoot(
+  proof,
+  Field(0n),
+  testValue,
+  Account
+);
+```
+
+Support DeepMerkleSubTree: DeepMerkleSubTree is a deep sparse merkle subtree for working on only a few leafs.(ProvableDeepMerkleSubTree is a deep subtree version that works in circuit).
+[**DeepMerkleSubTree Example**](./src/experimental/merkle_subtree.ts)
+
+### Use SparseMerkleTree
+
+> SparseMerkleTree is a merkle tree with a fixed height of 254, this merkel tree is equivalent to a data structure: Map<Struct,Struct>, Struct can be a CircuitValue type in o1js, such as Field, PublicKey, or a custom composite Struct.
+
+SMTUtils: A collection of sparse merkle tree utility methods that do not work in circuits.
+
+ProvableSMTUtils: A collection of sparse merkle tree utility methods that can be verified to work in circuits
+
+An example of using SparseMerkleTree in the mina smart contract, modified from the example in the [o1js official repo](https://github.com/o1-labs/o1js):
+[**smt_zkapp.ts**](./src/examples/smt_zkapp.ts)
+
+```typescript
+class Account extends Struct({
+  address: PublicKey,
+  balance: UInt64,
+  nonce: UInt32,
+}) {}
+
+// Create a memory store
+let store = new MemoryStore<Account>();
+// Or create a level db store:
+// const levelDb = new Level<string, any>('./db');
+// let store = new LevelStore<Account>(levelDb, Account, 'test');
+
+let smt = await SparseMerkleTree.build(store, Field, Account);
+// Or import a tree by store
+// smt = await SparseMerkleTree.importTree<Field, Account>(store);
+
+let testKey = Field(1);
+let testValue = new Account({
+  address: PrivateKey.random().toPublicKey(),
+  balance: UInt64.fromNumber(100),
+  nonce: UInt32.fromNumber(0),
+});
+let newValue = new Account({
+  address: PrivateKey.random().toPublicKey(),
+  balance: UInt64.fromNumber(50),
+  nonce: UInt32.fromNumber(1),
+});
+
+const root = await smt.update(testKey, testValue);
+// Create a compacted merkle proof for a key against the current root.
+const cproof = await smt.proveCompact(testKey);
+// Verify the compacted Merkle proof outside the circuit.
+const ok = SMTUtils.verifyCompactProof(
+  cproof,
+  root,
+  testKey,
+  Field,
+  testValue,
+  Account
+);
+console.log('ok: ', ok);
+
+// Create a merkle proof for a key against the current root.
+const proof = await smt.prove(testKey);
+
+// Check membership in the circuit, isOk should be true.
+let isOk = ProvableSMTUtils.checkMembership(
+  proof,
+  root,
+  testKey,
+  Field,
+  testValue,
+  Account
+);
+
+// Check Non-membership in the circuit, isOk should be false.
+isOk = ProvableSMTUtils.checkNonMembership(proof, root, testKey, Field);
+
+// Calculate new root in the circuit
+let newRoot = ProvableSMTUtils.computeRoot(
+  roof.sideNodes,
+  testKey,
+  Field,
+  newValue,
+  Account
+);
+console.log('newRoot: ', newRoot.toString());
+```
+
+Support DeepSparseMerkleSubTree: DeepSparseMerkleSubTree is a deep sparse merkle subtree for working on only a few leafs.(ProvableDeepSparseMerkleSubTree is a deep subtree version that works in circuit).
+[**DeepSparseMerkleSubTree Example**](./src/experimental/subtree.ts)
+
+### Use CompactSparseMerkleTree
+
+> CompactSparseMerkleTree is a merkle tree with a fixed height of 254, this merkel tree is equivalent to a data structure: Map<Struct,Struct>, Struct can be a CircuitValue type in o1js, such as Field, PublicKey, or a custom composite Struct. Compared with SparseMerkleTree, its advantage is that it can save storage space, and the operation efficiency of the tree is relatively high, but it is currently impossible to calculate the new root after the state transformation in the circuit.
+
+CSMTUtils: A collection of compact sparse merkle tree utility methods that do not work in circuits.
+
+ProvableCSMTUtils: A collection of compact sparse merkle tree utility methods that can be verified to work in circuits
+
+```typescript
+class Account extends Struct({
+  address: PublicKey,
+  balance: UInt64,
+  nonce: UInt32,
+}) {}
+
+// Create a memory store
+let store = new MemoryStore<Account>();
+// Or create a level db store:
+// const levelDb = new Level<string, any>('./db');
+// let store = new LevelStore<Account>(levelDb, Account, 'test');
+
+let smt = new CompactSparseMerkleTree(store, Field, Account);
+// Or import a tree by store
+// smt = await CompactSparseMerkleTree.import(store);
+
+let testKey = Field(1);
+let testValue = new Account(
+  PrivateKey.random().toPublicKey(),
+  UInt64.fromNumber(100),
+  UInt32.fromNumber(0)
+);
+let newValue = new Account(
+  PrivateKey.random().toPublicKey(),
+  UInt64.fromNumber(50),
+  UInt32.fromNumber(1)
+);
+
+const root = await smt.update(testKey, testValue);
+
+// Create a merkle proof for a key against the current root.
+const proof = await smt.prove(testKey);
+
+// Check membership in circuit, isOk should be true.
+let isOk = ProvableCSMTUtils.checkMembership(
+  proof,
+  root,
+  testKey,
+  Field,
+  testValue,
+  Account
+);
+
+// Check Non-membership in circuit, isOk should be false.
+isOk = ProvableCSMTUtils.checkNonMembership(proof, root, testKey, Field);
+```
+
+Support CompactDeepSparseMerkleSubTree: CompactDeepSparseMerkleSubTree is a deep sparse merkle subtree for working on only a few leafs.
+[**CompactDeepSparseMerkleSubTree Example**](./src/experimental/ctree.ts)
+
+## API Reference
+
+- [API Document](https://comdex.github.io/snarky-smt/)
