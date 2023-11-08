@@ -9,4 +9,5 @@ coverage
 yarn.lock
 db
 rocksdb
+package-lock.json
 
