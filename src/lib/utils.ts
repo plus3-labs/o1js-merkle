@@ -177,3 +177,21 @@ export function toBufferBE(num: bigint, width: number): Buffer {
     throw new Error(`Number ${num.toString(16)} does not fit in ${width}`);
   return buffer;
 }
+
+export const int256ToBuffer = (n: bigint) => {
+  const buf = Buffer.alloc(32); // 256 bits = 32 bytes
+
+  for (let i = 0; i < 32; i++) {
+      buf[31 - i] = Number(n & BigInt(0xff));
+      n >>= BigInt(8);
+  }
+
+  return buf;
+};
+
+export const bufferToInt256 = (buf: Buffer) => {
+  const bi = BigInt("0x" + buf.toString("hex"));
+  const res = bi & ((BigInt(1) << BigInt(256)) - BigInt(1));
+
+  return res;
+};
