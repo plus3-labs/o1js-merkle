@@ -1,11 +1,11 @@
-import { toBigIntBE, toBufferBE } from '../utils';
+import { toBigIntBE, toBufferBE } from '../../lib2/utils';
 import { createDebugLogger, createLogger } from '../log';
-import { Hasher } from './types';
+import { Hasher } from '../types';
 import { IndexedTree, LeafData } from '../interfaces/indexed_tree';
 import { TreeBase } from '../tree_base';
-import { SiblingPath } from './types';
+import { SiblingPath } from '../types';
 import { Field } from 'o1js';
-import { BaseSiblingPath } from './types';
+import { BaseSiblingPath } from '../types';
 
 const log = createDebugLogger('anomix:standard-indexed-tree');
 log(`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~StandardIndexedTree~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`);

@@ -1,5 +1,5 @@
 import { Field } from 'o1js';
-import { BaseSiblingPath } from './types';
+import { BaseSiblingPath } from '../types';
 import { LowLeafWitnessData } from '../standard_indexed_tree/standard_indexed_tree';
 import { AppendOnlyTree } from './append_only_tree';
 
