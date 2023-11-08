@@ -3,9 +3,8 @@ import { createDebugLogger, createLogger } from './log';
 import { BaseSiblingPath, SiblingPath } from './types';
 import { Hasher } from './types';
 import { IMerkleTree } from './interfaces/merkle_tree.js';
-import { toBigIntLE, toBufferLE } from './utils';
+import { toBigIntLE, toBufferLE, bufferToInt256, int256ToBuffer  } from './utils';
 import { Field } from 'o1js';
-import { bufferToInt256, int256ToBuffer } from '@anomix/utils';
 
 const log = createDebugLogger('anomix:tree-base');
 

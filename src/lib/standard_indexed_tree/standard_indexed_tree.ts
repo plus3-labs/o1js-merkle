@@ -1,4 +1,4 @@
-import { toBigIntBE, toBufferBE } from '../../lib2/utils';
+import { toBigIntBE, toBufferBE } from '../utils';
 import { createDebugLogger, createLogger } from '../log';
 import { Hasher } from '../types';
 import { IndexedTree, LeafData } from '../interfaces/indexed_tree';
