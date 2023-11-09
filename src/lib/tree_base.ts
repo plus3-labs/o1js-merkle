@@ -2,10 +2,9 @@ import { LevelUp, LevelUpChain } from 'levelup';
 import { createDebugLogger, createLogger } from './log';
 import { BaseSiblingPath, SiblingPath } from './types';
 import { Hasher } from './types';
-import { MerkleTree } from './interfaces/merkle_tree.js';
-import { toBigIntLE, toBufferLE } from './utils';
+import { IMerkleTree } from './interfaces/merkle_tree.js';
+import { toBigIntLE, toBufferLE, bufferToInt256, int256ToBuffer  } from './utils';
 import { Field } from 'o1js';
-import { bufferToInt256, int256ToBuffer } from '@anomix/utils';
 
 const log = createDebugLogger('anomix:tree-base');
 
@@ -40,7 +39,7 @@ export const INITIAL_LEAF = Field(0);
 /**
  * A Merkle tree implementation that uses a LevelDB database to store the tree.
  */
-export abstract class TreeBase implements MerkleTree {
+export abstract class TreeBase implements IMerkleTree {
   protected readonly maxIndex: bigint;
   protected cachedSize?: bigint;
   private root!: Field;

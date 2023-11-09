@@ -1,5 +1,5 @@
 import { Field } from 'o1js';
-import { BaseSiblingPath } from './types';
+import { BaseSiblingPath } from '../types';
 
 /**
  * Defines the interface for a source of sibling paths.
@@ -19,7 +19,7 @@ export interface SiblingPathSource {
 /**
  * Defines the interface for a Merkle tree.
  */
-export interface MerkleTree extends SiblingPathSource {
+export interface IMerkleTree extends SiblingPathSource {
   /**
    * Returns the current root of the tree.
    * @param includeUncommitted - Set to true to include uncommitted updates in the calculated root.

@@ -1,9 +1,9 @@
-# snarky-smt
+# o1js-merkle
 
-![npm](https://img.shields.io/npm/v/snarky-smt)
-![node-current](https://img.shields.io/node/v/snarky-smt)
-![Libraries.io dependency status for latest release](https://img.shields.io/librariesio/release/npm/snarky-smt)
-![npm](https://img.shields.io/npm/dm/snarky-smt)
+![npm](https://img.shields.io/npm/v/o1js-merkle)
+![node-current](https://img.shields.io/node/v/o1js-merkle)
+![Libraries.io dependency status for latest release](https://img.shields.io/librariesio/release/npm/o1js-merkle)
+![npm](https://img.shields.io/npm/dm/o1js-merkle)
 
 Merkle Tree for o1js (membership / non-membership merkle proof).
 
@@ -47,13 +47,13 @@ Make sure you know what you are doing before using this library.
 ### 1. Install module
 
 ```bash
-npm install snarky-smt
+npm install o1js-merkle
 ```
 
 or with yarn:
 
 ```bash
-yarn add snarky-smt
+yarn add o1js-merkle
 ```
 
 ### 2. Install peer dependencies
@@ -95,7 +95,7 @@ You can update the data of Sparse Merkle Tree(SMT) outside the circuit, and then
 #### 1. Create a memory store
 
 ```typescript
-import { MemoryStore, Store } from 'snarky-smt';
+import { MemoryStore, Store } from 'o1js-merkle';
 import { Field } from 'o1js';
 
 // memory data store for Field type data, you can use any CircuitValue from o1js or a custom composite CircuitValue
@@ -106,7 +106,7 @@ let store: Store<Field> = new MemoryStore<Field>();
 
 ```typescript
 import { Field } from 'o1js';
-import { LevelStore, Store } from 'snarky-smt';
+import { LevelStore, Store } from 'o1js-merkle';
 import { Level } from 'level';
 // create a leveldb data store for Field type data, you can use any CircuitValue from o1js or a custom composite CircuitValue
 const levelDb = new Level<string, any>('./db');
@@ -116,7 +116,7 @@ let store: Store<Field> = new LevelStore<Field>(levelDb, Field, 'test');
 #### 3. Create a rocksdb store
 
 ```typescript
-import { RocksStore, Store } from 'snarky-smt';
+import { RocksStore, Store } from 'o1js-merkle';
 import { Field } from 'o1js';
 import encode from 'encoding-down';
 import rocksdb from 'rocksdb';
@@ -131,7 +131,7 @@ let store: Store<Field> = new RocksStore<Field>(db, Field, 'test');
 
 ```typescript
 import mongoose from 'mongoose';
-import { MongoStore, Store } from 'snarky-smt';
+import { MongoStore, Store } from 'o1js-merkle';
 import { Field } from 'o1js';
 
 await mongoose.connect('mongodb://localhost/my_database');
@@ -346,4 +346,4 @@ Support CompactDeepSparseMerkleSubTree: CompactDeepSparseMerkleSubTree is a deep
 
 ## API Reference
 
-- [API Document](https://comdex.github.io/snarky-smt/)
+- [API Document](https://github.com/plus3-labs/o1js-merkle)
