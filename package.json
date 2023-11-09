@@ -55,7 +55,24 @@
     "levelup": "^5.1.1",
     "rocksdb": "^5.2.1",
     "mongoose": "^6.5.2",
-    "o1js": "0.13.0"
+    "o1js": "0.14.1"
+  },
+  "peerDependenciesMeta": {
+    "encoding-down": {
+      "optional": true
+    },
+    "level": {
+      "optional": true
+    },
+    "levelup": {
+      "optional": true
+    },
+    "rocksdb": {
+      "optional": true
+    },
+    "mongoose": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@babel/preset-env": "^7.16.4",
