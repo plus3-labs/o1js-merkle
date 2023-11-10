@@ -148,24 +148,17 @@ export abstract class TreeBase implements IMerkleTree {
    * @returns Empty promise.
    */
   public async commit(): Promise<void> {
-    log(`start commit...`);
     const batch = this.db.batch();
     const keys = Object.getOwnPropertyNames(this.cache);
-    log(`print this.cache: `);
     for (const key of keys) {
-      log(`  cache.key: ${key}, cache.value: ${this.cache[key].toString()}`);
       batch.put(key, this.cache[key]);
     }
-    log(`after put cache, batch.length: ${batch.length}`);
 
     await this.writeMeta(batch);
-    log(`after writeMeta, batch.length: ${batch.length}`);
     await batch.write();
 
     this.size = this.getNumLeaves(true);
-    log(`this.size: ${this.size}`);
     this.root = this.getRoot(true);
-    log(`this.root: ${this.root}`);
 
     this.clearCache();
   }

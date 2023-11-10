@@ -169,7 +169,6 @@ export class StandardIndexedTree extends TreeBase implements IndexedTree {
          */
         alreadyPresent: boolean;
     } {
-        log(`start findIndexOfPreviousValue: newValue: ${newValue}, includeUncommitted: ${includeUncommitted}`);
         const numLeaves = this.getNumLeaves(includeUncommitted);
         const diff: bigint[] = [];
 
@@ -190,7 +189,6 @@ export class StandardIndexedTree extends TreeBase implements IndexedTree {
         }
         const minIndex = this.findMinIndex(diff);
 
-        log(`findIndexOfPreviousValue, done.`);
         return { index: minIndex, alreadyPresent: false };
     }
 
@@ -205,17 +203,9 @@ export class StandardIndexedTree extends TreeBase implements IndexedTree {
         index: number,
         includeUncommitted: boolean
     ): LeafData | undefined {
-        log(`index: ${index}, includeUncommitted: ${includeUncommitted}`);
         const leaf = !includeUncommitted
             ? this.leaves[index]
             : this.cachedLeaves[index] ?? this.leaves[index];
-        if (this.leaves[index]) {
-            log(`this.leaves[${index}]: ${JSON.stringify({ value: this.leaves[index].value.toString(), nextIndex: this.leaves[index].nextIndex.toString(), nextValue: this.leaves[index].nextValue.toString() })}`);
-        } else if (this.cachedLeaves[index]) {
-            log(`this.cachedLeaves[${index}]: ${JSON.stringify({ value: this.cachedLeaves[index].value.toString(), nextIndex: this.cachedLeaves[index].nextIndex.toString(), nextValue: this.cachedLeaves[index].nextValue.toString() })}`);
-        } else {
-            log(`no leaf at index: ${index}`);
-        }
         return leaf
             ? ({
                 value: leaf.value,
@@ -260,20 +250,14 @@ export class StandardIndexedTree extends TreeBase implements IndexedTree {
             nextValue: previousLeafCopy.nextValue,
         } as LeafData;
         if (indexOfPrevious.alreadyPresent) {
-            log(`this newValue is alreadyPresent, end.`);
             return;
         }
-        log(`before append, previousLeaf's index: ${JSON.stringify(indexOfPrevious)}`)
-        log(`before append, previousLeaf: ${JSON.stringify({ 'value': previousLeafCopy.value.toString(), 'nextIndex': previousLeafCopy.nextIndex.toString(), 'nextValue': previousLeafCopy.nextValue.toString() })}`)
         // insert a new leaf at the highest index and update the values of our previous leaf copy
         const currentSize = this.getNumLeaves(true);
         previousLeafCopy.nextIndex = BigInt(currentSize);
         previousLeafCopy.nextValue = newLeaf.value;
         this.cachedLeaves[Number(currentSize)] = newLeaf;
-        log(`newLeaf’s index: ${currentSize}`)
-        log(`newLeaf: ${JSON.stringify({ 'value': newLeaf.value.toString(), 'nextIndex': newLeaf.nextIndex.toString(), 'nextValue': newLeaf.nextValue.toString() })}`)
         this.cachedLeaves[Number(indexOfPrevious.index)] = previousLeafCopy;
-        log(`after append, previousLeaf: ${JSON.stringify({ 'value': previousLeafCopy.value.toString(), 'nextIndex': previousLeafCopy.nextIndex.toString(), 'nextValue': previousLeafCopy.nextValue.toString() })}`)
         await this._updateLeaf(
             hashEncodedTreeValue(previousLeafCopy, this.hasher),
             BigInt(indexOfPrevious.index)
@@ -323,7 +307,6 @@ export class StandardIndexedTree extends TreeBase implements IndexedTree {
      * Loads Merkle tree data from a database and assigns them to this object.
      */
     public async initFromDb(): Promise<void> {
-        log(`initFromDb...`);
         const startingIndex = 0n;
         const values: LeafData[] = [];
         const promise = new Promise<void>((resolve, reject) => {
@@ -337,14 +320,12 @@ export class StandardIndexedTree extends TreeBase implements IndexedTree {
                     const index = Number(arr[arr.length - 1]);
                     values[index] = decodeTreeValue(data.value);
 
-                    log(`values[${index}]: {value: ${values[index].value}, nextIndex: ${values[index].nextIndex}, nextValue: ${values[index].nextValue} }`);
                 })
                 .on('close', function () { })
                 .on('end', function () {
                     resolve();
                 })
                 .on('error', function () {
-                    log('stream error');
                     reject();
                 });
         });
@@ -356,21 +337,17 @@ export class StandardIndexedTree extends TreeBase implements IndexedTree {
      * Commits all the leaves to the database and removes them from a cache.
      */
     private async commitLeaves(): Promise<void> {
-        log(`start StandardIndexedTree.commitLeaves...`);
         const batch = this.db.batch();
         const keys = Object.getOwnPropertyNames(this.cachedLeaves);
-        log(`print this.cachedLeaves: `);
         for (const key of keys) {
             const index = Number(key);
 
             const value = this.cachedLeaves[index].value;
             const nextIndex = this.cachedLeaves[index].nextIndex;
             const nextValue = this.cachedLeaves[index].nextValue;
-            log(`  key: ${index}, value: LeafData{"value": ${value}, nextIndex: ${nextIndex}, nextValue:${nextValue}}`);
             batch.put(indexToKeyLeaf(this.getName(), BigInt(index)), encodeTreeValue(this.cachedLeaves[index]));
             this.leaves[index] = this.cachedLeaves[index];
         }
-        log(`after put, batch.length: ${batch.length}`);
         await batch.write();
         this.clearCachedLeaves();
     }
