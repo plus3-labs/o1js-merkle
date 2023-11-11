@@ -7,7 +7,7 @@
 
 **Merkle Trees for o1js (membership / non-membership merkle witness)**
 
-The library contains implementations of sparse merkle tree, merkle tree and compact merkle tree based on o1js, which you can use in the **browser** or **node.js** env, and provides a corresponding set of verifiable utility methods that can be run in **circuits**.
+The library contains implementations of *Sparse Merkle Tree*, *Standard Merkle Tree* and *Compact Merkle Tree* based on o1js, which you can use in the **browser** or **node.js** env, and provides a corresponding set of verifiable utility methods that can be run in **circuits**. Besides, you could choose different persistence storage tools for each Merkle tree.
 
 This article gives a brief introduction to SMT: [Whats a sparse merkle tree](https://medium.com/@kelvinfichter/whats-a-sparse-merkle-tree-acda70aeb837)
 
@@ -15,8 +15,6 @@ This article gives a brief introduction to SMT: [Whats a sparse merkle tree](htt
 
 The library hasn't been audited. The API and the format of the proof may be changed in the future as o1js is updated.
 Make sure you know what you are doing before using this library.
-
----
 
 ## Background
 As a succint blockchain, Mina chain only contains 8 fields as onchain states for each zkApp account. Apparently this capacity is not enough, this is why we need maintain offchain storage keeping aligned with the onchain state. The classic solution for offchain storage is using a merkle tree whose root is stored onchain representing the whole offchain data.
@@ -53,26 +51,15 @@ Within the package, various merkle trees totally belong to 2 catagories:
 
 ## Table of Contents
 - [Install](#install)
-  - [1. Install module](#1-install-module)
-
+  - [Install module](#1-install-module)
 - [Contents Table of 'Retrofit from Third-Party library'](#)
-  - [2. Install peer dependencies](#2-install-peer-dependencies)
-  - [What can you do with this library](#what-can-you-do-with-this-library)
+  - [Install peer dependencies](#2-install-peer-dependencies)
   - [Usage](#usage)
-    - [Create a merkle tree](#create-a-merkle-tree-data-store)
-      - [1. based on LevelDB](#2-create-a-leveldb-store)
-        - [create a StandardTree]()
-        - [create a SparseTree]()
-        - [create a StandardIndexedTree]()
-      - [2. based on Memory](#2-create-a-memory-store)
-
-    - [load a merkle tree data from db](#create-a-merkle-tree-data-store)
-        - [load a StandardTree]()
-        - [load a SparseTree]()
-        - [load a StandardIndexedTree]()
-
+      - [Create and Load a StandardTree]()
+      - [Create and Load a SparseTree]()
+      - [Create and Load a StandardIndexedTree]()
 - [Contents Table of 'Implementation from the Scratch'](#)
-  - [2. Install peer dependencies](#2-install-peer-dependencies)
+  - [Install peer dependencies](#2-install-peer-dependencies)
   - [What can you do with this library](#what-can-you-do-with-this-library)
   - [Usage](#usage)
     - [Create a merkle tree data store](#create-a-merkle-tree-data-store)
@@ -83,7 +70,7 @@ Within the package, various merkle trees totally belong to 2 catagories:
     - [Use MerkleTree (original NumIndexSparseMerkleTree)](#use-merkletree-original-numindexsparsemerkletree)
     - [Use SparseMerkleTree](#use-sparsemerkletree)
     - [Use CompactSparseMerkleTree](#use-compactsparsemerkletree)
-  - [API Reference](#api-reference)
+  - [3.4 API Reference](#api-reference)
 
 
 ### Install
@@ -102,7 +89,7 @@ yarn add o1js-merkle
 
 ### Contents Table of 'Retrofit from Third-Party library'
 
-#### 2. Install peer dependencies
+#### Install peer dependencies
 
 ```bash
 npm install o1js
@@ -112,10 +99,110 @@ npm install level
 # yarn add level
 ```
 
+### Usage
+#### Create and Load a StandardTree
+``` ts
 
-### Contents Table of 'Implementation from the Scratch'
+import { newTree } from './new_tree.js';
+import { default as levelup } from 'levelup';
+import { default as memdown, type MemDown } from 'memdown';
+import { PoseidonHasher } from './types/index.js';
+import { StandardIndexedTree } from './standard_indexed_tree/standard_indexed_tree.js';
+import { Field, Provable } from 'o1js';
+import { StandardTree } from './standard_tree/standard_tree.js';
 
-#### 2. Install peer dependencies
+// create a leveldb for test
+const createMemDown = () => (memdown as any)() as MemDown<any, any>;
+let db = new levelup(createMemDown());
+
+// poseidonHasher from o1js package
+let poseidonHasher = new PoseidonHasher();
+
+// tree height: 4
+const PRIVATE_DATA_TREE_HEIGHT = 4;
+
+// create a standard merkle tree instance
+const standardTreeInstance: StandardTree = await newTree(
+  StandardTree,
+  db,
+  poseidonHasher,
+  'privateData',
+  PRIVATE_DATA_TREE_HEIGHT
+);
+console.log('standard tree initial root: ', standardTreeInstance.getRoot(true).toString());
+
+// append the first leaf of type: Field, the newly inserted leaf is kept in an array before being flushed into db.
+await standardTreeInstance.appendLeaves([
+  Field(
+    '20468198949394563802460512965219839480612000520504690501918527632215047268421'
+  ),
+]);
+
+// before commit, you must get the leaf by specifying 'leafIndex' and 'includeUncommitted' = true
+let leaf1 = await standardTreeInstance.getLeafValue(0n, true);
+console.log('leaf1: ', leaf1?.toString());
+// if you mistake specifying 'includeUncommitted' = false, then got 'undefined'. because the newly inserted leaf is not persisted yet.
+leaf1 = await standardTreeInstance.getLeafValue(0n, false);
+console.log('leaf1: ', leaf1);
+
+console.log('after append one leaf, tree root based on all cached&persisted leaves: ', standardTreeInstance.getRoot(true).toString());
+
+let nowRootBeforeCommit = standardTreeInstance.getRoot(false);
+console.log('before commit, tree root based on existing persisted leaves: ', nowRootBeforeCommit.toString());
+
+// persist, i.e. commit the tree into leveldb
+await standardTreeInstance.commit();
+console.log('exec commit... now all cached leaves are flushed into db and become parts of persisted leaves');
+
+let nowRootAfterCommit = standardTreeInstance.getRoot(false);
+console.log('after commit, tree root based on all persisted leaves: ', nowRootAfterCommit.toString());
+
+// after commit, now you could successfully get the leaf by specifying 'leafIndex' and 'includeUncommitted' = false
+leaf1 = await standardTreeInstance.getLeafValue(0n, false);
+console.log('leaf1: ', leaf1);
+
+// go on append several leaves
+await standardTreeInstance.appendLeaves([Field(11)]);
+await standardTreeInstance.appendLeaves([Field(21)]);
+await standardTreeInstance.appendLeaves([Field(31)]);
+await standardTreeInstance.appendLeaves([Field(41)]);
+await standardTreeInstance.appendLeaves([Field(51)]);
+await standardTreeInstance.appendLeaves([Field(61)]);
+
+// get merkle witness
+const witness = await standardTreeInstance.getSiblingPath(3n, true);
+console.log('witness: ', witness.toJSON());
+// check the membership within circuit
+Provable.runAndCheck(() => {
+  const root = witness.calculateRoot(Field(41), Field(3n));
+  Provable.log(root);
+  Provable.assertEqual(Field, root, nowRootBeforeCommit);
+});
+
+const witness2 = await standardTreeInstance.getSiblingPath(6n, true);
+console.log('witness2: ', witness2.toJSON());
+Provable.runAndCheck(() => {
+  const root = witness2.calculateRoot(Field(0), Field(6n));
+  Provable.log('testroot: ', root);
+});
+
+await standardTreeInstance.commit();
+
+
+```
+
+
+#### Create and Load a SparseTree
+
+
+
+#### Create and Load a StandardIndexedTree
+
+
+
+### 3. Contents Table of 'Implementation from the Scratch'
+
+#### 3.1 Install peer dependencies
 
 ```bash
 npm install o1js
