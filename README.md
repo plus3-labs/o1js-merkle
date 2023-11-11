@@ -101,8 +101,9 @@ npm install level
 
 ### Usage
 #### Create and Load a StandardTree
-``` ts
+[here](./src/lib/alternatives/new_standard_tree_test.ts) is the code.
 
+``` ts
 import { newTree } from './new_tree.js';
 import { default as levelup } from 'levelup';
 import { default as memdown, type MemDown } from 'memdown';
@@ -121,6 +122,9 @@ let poseidonHasher = new PoseidonHasher();
 // tree height: 4
 const PRIVATE_DATA_TREE_HEIGHT = 4;
 
+// indicate if need consider the cached leaves, beside the existing leaves.
+const includeUncommitted = true;
+
 // create a standard merkle tree instance
 const standardTreeInstance: StandardTree = await newTree(
   StandardTree,
@@ -129,7 +133,7 @@ const standardTreeInstance: StandardTree = await newTree(
   'privateData',
   PRIVATE_DATA_TREE_HEIGHT
 );
-console.log('standard tree initial root: ', standardTreeInstance.getRoot(true).toString());
+console.log('standard tree initial root: ', standardTreeInstance.getRoot(includeUncommitted).toString());
 
 // append the first leaf of type: Field, the newly inserted leaf is kept in an array before being flushed into db.
 await standardTreeInstance.appendLeaves([
@@ -139,26 +143,26 @@ await standardTreeInstance.appendLeaves([
 ]);
 
 // before commit, you must get the leaf by specifying 'leafIndex' and 'includeUncommitted' = true
-let leaf1 = await standardTreeInstance.getLeafValue(0n, true);
+let leaf1 = await standardTreeInstance.getLeafValue(0n, includeUncommitted);
 console.log('leaf1: ', leaf1?.toString());
 // if you mistake specifying 'includeUncommitted' = false, then got 'undefined'. because the newly inserted leaf is not persisted yet.
-leaf1 = await standardTreeInstance.getLeafValue(0n, false);
+leaf1 = await standardTreeInstance.getLeafValue(0n, !includeUncommitted);
 console.log('leaf1: ', leaf1);
 
-console.log('after append one leaf, tree root based on all cached&persisted leaves: ', standardTreeInstance.getRoot(true).toString());
+console.log('after append one leaf, tree root based on all cached&persisted leaves: ', standardTreeInstance.getRoot(includeUncommitted).toString());
 
-let nowRootBeforeCommit = standardTreeInstance.getRoot(false);
+let nowRootBeforeCommit = standardTreeInstance.getRoot(!includeUncommitted);
 console.log('before commit, tree root based on existing persisted leaves: ', nowRootBeforeCommit.toString());
 
 // persist, i.e. commit the tree into leveldb
 await standardTreeInstance.commit();
 console.log('exec commit... now all cached leaves are flushed into db and become parts of persisted leaves');
 
-let nowRootAfterCommit = standardTreeInstance.getRoot(false);
+let nowRootAfterCommit = standardTreeInstance.getRoot(!includeUncommitted);
 console.log('after commit, tree root based on all persisted leaves: ', nowRootAfterCommit.toString());
 
 // after commit, now you could successfully get the leaf by specifying 'leafIndex' and 'includeUncommitted' = false
-leaf1 = await standardTreeInstance.getLeafValue(0n, false);
+leaf1 = await standardTreeInstance.getLeafValue(0n, !includeUncommitted);
 console.log('leaf1: ', leaf1);
 
 // go on append several leaves
@@ -170,23 +174,24 @@ await standardTreeInstance.appendLeaves([Field(51)]);
 await standardTreeInstance.appendLeaves([Field(61)]);
 
 // get merkle witness
-const witness = await standardTreeInstance.getSiblingPath(3n, true);
-console.log('witness: ', witness.toJSON());
+const membershipWitness = await standardTreeInstance.getSiblingPath(3n, includeUncommitted);
+console.log('witness: ', membershipWitness.toJSON());
 // check the membership within circuit
 Provable.runAndCheck(() => {
-  const root = witness.calculateRoot(Field(41), Field(3n));
+  const root = membershipWitness.calculateRoot(Field(41), Field(3n));
   Provable.log(root);
   Provable.assertEqual(Field, root, nowRootBeforeCommit);
 });
 
-const witness2 = await standardTreeInstance.getSiblingPath(6n, true);
-console.log('witness2: ', witness2.toJSON());
+const membershipWitness2 = await standardTreeInstance.getSiblingPath(6n, includeUncommitted);
+console.log('witness2: ', membershipWitness2.toJSON());
 Provable.runAndCheck(() => {
-  const root = witness2.calculateRoot(Field(0), Field(6n));
+  const root = membershipWitness2.calculateRoot(Field(0), Field(6n));
   Provable.log('testroot: ', root);
 });
 
 await standardTreeInstance.commit();
+
 
 // when you app restart, you could load tree from leveldb easily
 const privateDataTree = await loadTree(StandardTree, db, poseidonHasher,  'privateData',)
@@ -201,12 +206,105 @@ similar as StandardTree cases above.
 #### Create and Load a StandardIndexedTree
 StandardIndexedTree extends StandardTree, but MAINLY used for non-membership merkle witness. So the membership cases are like the ones above, and here are the non-membership witness cases.
 
-
-[here](./src/lib/alternatives/new_standard_index_tree_test.ts)
-
-// TODO add non-membership witness cases
+[here](./src/lib/alternatives/new_standard_index_tree_test.ts) is the test case code.
 
 ``` ts
+import { newTree } from './new_tree.js';
+import { default as levelup } from 'levelup';
+import { default as memdown, type MemDown } from 'memdown';
+import { PoseidonHasher } from './types/index.js';
+import { StandardIndexedTree } from './standard_indexed_tree/standard_indexed_tree.js';
+import { Field, Poseidon, Provable } from 'o1js';
+
+// create a leveldb for test
+const createMemDown = () => (memdown as any)() as MemDown<any, any>;
+let db = new levelup(createMemDown());
+
+// poseidonHasher from o1js package
+let poseidonHasher = new PoseidonHasher();
+
+// tree height: 4
+const PRIVATE_DATA_TREE_HEIGHT = 4;
+
+// indicate if need consider the cached leaves, beside the existing leaves.
+const includeUncommitted = true;
+
+// create a standard merkle tree instance
+const standardIndexedTreeInstance: StandardIndexedTree = await newTree(
+  StandardIndexedTree,
+  db,
+  poseidonHasher,
+  'NULLIFIER_TREE',
+  PRIVATE_DATA_TREE_HEIGHT
+);
+console.log('standard indexed tree initial root: ', standardIndexedTreeInstance.getRoot(includeUncommitted).toString());
+
+// append the first leaf of type: Field, the newly inserted leaf is kept in an array before being flushed into db.
+await standardIndexedTreeInstance.appendLeaves([
+  Field(
+    '20468198949394563802460512965219839480612000520504690501918527632215047268421'
+  ),
+]);
+
+// before commit, you must get the leaf by specifying 'leafIndex' and 'includeUncommitted' = true
+let leaf1 = await standardIndexedTreeInstance.getLeafValue(0n, includeUncommitted);
+console.log('leaf1: ', leaf1?.toString());
+// if you mistake specifying 'includeUncommitted' = false, then got 'undefined'. because the newly inserted leaf is not persisted yet.
+leaf1 = await standardIndexedTreeInstance.getLeafValue(0n, !includeUncommitted);
+console.log('leaf1: ', leaf1?.toString());
+
+console.log('after append one leaf, tree root based on all cached&persisted leaves: ', standardIndexedTreeInstance.getRoot(includeUncommitted).toString());
+
+let nowRootBeforeCommit = standardIndexedTreeInstance.getRoot(!includeUncommitted);
+console.log('before commit, tree root based on existing persisted leaves: ', nowRootBeforeCommit.toString());
+
+// persist, i.e. commit the tree into leveldb
+await standardIndexedTreeInstance.commit();
+console.log('exec commit... now all cached leaves are flushed into db and become parts of persisted leaves');
+
+let nowRootAfterCommit = standardIndexedTreeInstance.getRoot(!includeUncommitted);
+console.log('after commit, tree root based on all persisted leaves: ', nowRootAfterCommit.toString());
+
+// after commit, now you could successfully get the leaf by specifying 'leafIndex' and 'includeUncommitted' = false
+leaf1 = await standardIndexedTreeInstance.getLeafValue(0n, !includeUncommitted);
+console.log('leaf1: ', leaf1);
+
+// go on append several leaves
+await standardIndexedTreeInstance.appendLeaves([Field(11)]);
+await standardIndexedTreeInstance.appendLeaves([Field(21)]);
+await standardIndexedTreeInstance.appendLeaves([Field(31)]);
+await standardIndexedTreeInstance.appendLeaves([Field(41)]);
+await standardIndexedTreeInstance.appendLeaves([Field(51)]);
+await standardIndexedTreeInstance.appendLeaves([Field(61)]);
+
+// commit the later newly inserted leaves into levelDB
+await standardIndexedTreeInstance.commit();
+
+// Non-Membership merkle witness
+nowRootAfterCommit = standardIndexedTreeInstance.getRoot(!includeUncommitted);
+const nullifier1 = 71n;// the nullifier to be inserted
+const { index, alreadyPresent } = await standardIndexedTreeInstance.findIndexOfPreviousValue(nullifier1, includeUncommitted);
+if (alreadyPresent) {// if exist, then throw error.
+    throw new Error("nullifier1[${nullifier1}] existed!");
+}
+const siblingPath = (await standardIndexedTreeInstance.getSiblingPath(BigInt(index), includeUncommitted))!;
+const leafData = standardIndexedTreeInstance.getLatestLeafDataCopy(index, includeUncommitted)!;
+
+// compose the result
+const nonMembershipWitness = {
+  index: `${index}`,
+  siblingPath,
+  leafData
+};
+
+// the membership witness of previous leaf is the Non-membership witness of 'nullifier1'
+// pseudocode to check within circuit
+console.assert(leafData.nextValue != nullifier1);
+const commitment = Poseidon.hash([Field(leafData.value), Field(leafData.nextValue), Field(leafData.nextIndex)]);
+const root1 = siblingPath.calculateRoot(commitment, Field(index), poseidonHasher);
+// if true, then mean 'nullifier1' is not in the tree.
+console.assert(nowRootAfterCommit.equals(root1).toBoolean());
+
 
 ```
 
