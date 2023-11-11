@@ -6,7 +6,7 @@ import { IMerkleTree } from './interfaces/merkle_tree.js';
 import { toBigIntLE, toBufferLE, bufferToInt256, int256ToBuffer  } from '../utils';
 import { Field } from 'o1js';
 
-const log = createDebugLogger('anomix:tree-base');
+const log = createDebugLogger('tree-base');
 
 log(`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~TreeBase~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`);
 

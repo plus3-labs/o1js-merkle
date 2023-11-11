@@ -7,7 +7,7 @@ import { SiblingPath } from '../types';
 import { Field } from 'o1js';
 import { BaseSiblingPath } from '../types';
 
-const log = createDebugLogger('anomix:standard-indexed-tree');
+const log = createDebugLogger('standard-indexed-tree');
 log(`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~StandardIndexedTree~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`);
 
 const indexToKeyLeaf = (name: string, index: bigint) => {
