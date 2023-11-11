@@ -53,6 +53,7 @@
     "encoding-down": "^7.1.0",
     "level": "^8.0.0",
     "levelup": "^5.1.1",
+    "memdown": "^6.1.1",
     "rocksdb": "^5.2.1",
     "mongoose": "^6.5.2",
     "o1js": "0.14.1"
@@ -79,6 +80,8 @@
     "@babel/preset-typescript": "^7.16.0",
     "@types/encoding-down": "^5.0.0",
     "@types/jest": "^28.1.8",
+    "@types/leveldown": "^4.0.3",
+    "@types/memdown": "^3.0.1",
     "@types/levelup": "^5.1.2",
     "@types/rocksdb": "^3.0.1",
     "@typescript-eslint/eslint-plugin": "^5.5.0",
