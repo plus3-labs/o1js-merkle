@@ -188,16 +188,29 @@ Provable.runAndCheck(() => {
 
 await standardTreeInstance.commit();
 
+// when you app restart, you could load tree from leveldb easily
+const privateDataTree = await loadTree(StandardTree, db, poseidonHasher,  'privateData',)
 
 ```
 
 
 #### Create and Load a SparseTree
-
+similar as StandardTree cases above.
 
 
 #### Create and Load a StandardIndexedTree
+StandardIndexedTree extends StandardTree, but MAINLY used for non-membership merkle witness. So the membership cases are like the ones above, and here are the non-membership witness cases.
 
+
+[here](./src/lib/alternatives/new_standard_index_tree_test.ts)
+
+// TODO add non-membership witness cases
+
+``` ts
+
+```
+
+If you wanna go deeper the theory of StandardIndexedTree, please refer to [here](https://docs.aztec.network/concepts/advanced/data_structures/indexed_merkle_tree).
 
 
 ### 3. Contents Table of 'Implementation from the Scratch'

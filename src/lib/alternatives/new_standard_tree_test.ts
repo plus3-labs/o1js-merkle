@@ -82,16 +82,3 @@ Provable.runAndCheck(() => {
 });
 
 await standardTreeInstance.commit();
-
-
-
-
-const tree2: StandardIndexedTree = await newTree(
-  StandardIndexedTree,
-  db,
-  poseidonHasher,
-  'indexData',
-  4
-);
-
-console.log('indexTree init root4: ', tree2.getRoot(true).toString());
