@@ -52,16 +52,16 @@ Within the package, various merkle trees totally belong to 2 catagories:
 ## Table of Contents
 - [Install](#install)
   - [Install module](#1-install-module)
-- [Contents Table of 'Retrofit from Third-Party library'](#)
-  - [Install peer dependencies](#2-install-peer-dependencies)
-  - [Usage](#usage)
-      - [Create and Load a StandardTree]()
-      - [Create and Load a SparseTree]()
-      - [Create and Load a StandardIndexedTree]()
-- [Contents Table of 'Implementation from the Scratch'](#)
-  - [Install peer dependencies](#2-install-peer-dependencies)
-  - [What can you do with this library](#what-can-you-do-with-this-library)
-  - [Usage](#usage)
+- [Contents Table of 'Retrofit from Third-Party library'](#2-contents-table-of-retrofit-from-third-party-library)
+  - [Install peer dependencies](#21-install-peer-dependencies)
+  - [Usage](#22-usage)
+      - [Create and Load a StandardTree](#create-and-load-a-standardtree)
+      - [Create and Load a SparseTree](#create-and-load-a-sparsetree)
+      - [Create and Load a StandardIndexedTree](#create-and-load-a-standardindexedtree)
+- [Contents Table of 'Implementation from the Scratch'](#3-contents-table-of-implementation-from-the-scratch)
+  - [Install peer dependencies](#31-install-peer-dependencies)
+  - [What can you do with this library](#32-what-can-you-do-with-this-library)
+  - [Usage](#33-usage)
     - [Create a merkle tree data store](#create-a-merkle-tree-data-store)
       - [1. Create a memory store](#1-create-a-memory-store)
       - [2. Create a leveldb store](#2-create-a-leveldb-store)
@@ -87,9 +87,9 @@ or with yarn:
 yarn add o1js-merkle
 ```
 
-### Contents Table of 'Retrofit from Third-Party library'
+### 2. Contents Table of 'Retrofit from Third-Party library'
 
-#### Install peer dependencies
+#### 2.1 Install peer dependencies
 
 ```bash
 npm install o1js
@@ -99,7 +99,7 @@ npm install level
 # yarn add level
 ```
 
-### Usage
+### 2.2 Usage
 #### Create and Load a StandardTree
 [here](./src/lib/alternatives/new_standard_tree_test.ts) is the code.
 
@@ -339,13 +339,13 @@ MongoDB:
 npm install mongoose
 ```
 
-### What can you do with this library
+### 3.2 What can you do with this library
 
 You can update the data of Sparse Merkle Tree(SMT) outside the circuit, and then verify the membership proof or non-membership proof of the data in the circuit. At the same time, you can also verify the correctness of the state transformation of SMT in the circuit, which makes us not need to update the SMT in the circuit, but also ensure the legal modification of SMT data outside the circuit. We can verify the validity of data modification through zkApp.
 
 ---
 
-### Usage
+### 3.3 Usage
 
 #### Create a merkle tree data store
 
