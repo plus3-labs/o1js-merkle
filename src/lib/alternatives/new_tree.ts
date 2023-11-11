@@ -1,4 +1,4 @@
-import { LevelUp } from 'levelup';
+import { ChainedBatch, Level } from "level";
 import { Hasher } from './types';
 import { TreeBase } from './tree_base.js';
 
@@ -14,7 +14,7 @@ import { TreeBase } from './tree_base.js';
  */
 export async function newTree<T extends TreeBase>(
   c: new (...args: any[]) => T,
-  db: LevelUp,
+  db: Level,
   hasher: Hasher,
   name: string,
   depth: number,

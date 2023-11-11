@@ -1,4 +1,5 @@
-import { LevelUp, LevelUpChain } from 'levelup';
+// import { LevelUp, LevelUpChain } from 'levelup';
+import { ChainedBatch, Level } from "level";
 import { createDebugLogger, createLogger } from './log';
 import { BaseSiblingPath, SiblingPath } from './types';
 import { Hasher } from './types';
@@ -47,7 +48,7 @@ export abstract class TreeBase implements IMerkleTree {
   private cache: { [key: string]: Buffer } = {};
 
   public constructor(
-    protected db: LevelUp,
+    protected db: Level<string, Buffer>,
     protected hasher: Hasher,
     private name: string,
     private depth: number,
@@ -282,7 +283,7 @@ export abstract class TreeBase implements IMerkleTree {
    * Writes meta data to the provided batch.
    * @param batch - The batch to which to write the meta data.
    */
-  protected async writeMeta(batch?: LevelUpChain<string, Buffer>) {
+  protected async writeMeta(batch?: ChainedBatch<Level<string, Buffer>, string, Buffer>) {
     const data = encodeMeta(
       this.getRoot(true),
       this.depth,

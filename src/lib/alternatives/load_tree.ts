@@ -1,4 +1,4 @@
-import { LevelUp } from 'levelup';
+import { Level } from 'level';
 import { Hasher } from './types';
 import { TreeBase, decodeMeta } from './tree_base.js';
 
@@ -12,7 +12,7 @@ import { TreeBase, decodeMeta } from './tree_base.js';
  */
 export async function loadTree<T extends TreeBase>(
   c: new (...args: any[]) => T,
-  db: LevelUp,
+  db: Level<string, Buffer>,
   hasher: Hasher,
   name: string
 ): Promise<T> {
