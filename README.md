@@ -5,11 +5,9 @@
 ![Libraries.io dependency status for latest release](https://img.shields.io/librariesio/release/npm/o1js-merkle)
 ![npm](https://img.shields.io/npm/dm/o1js-merkle)
 
-Merkle Tree for o1js (membership / non-membership merkle proof).
+**Merkle Trees for o1js (membership / non-membership merkle witness)**
 
-The library contains implementations of sparse merkle tree, merkle tree and compact merkle tree based on o1js, which you can use in the browser or node.js, and provides a corresponding set of verifiable utility methods that can be run in circuits.
-
-**Notice**: Versions starting from 0.6.0 (Structs are officially supported) have a breaking update to the api and are not compatible with previous versions
+The library contains implementations of *Sparse Merkle Tree*, *Standard Merkle Tree* and *Compact Merkle Tree* based on o1js, which you can use in the **browser** or **node.js** env, and provides a corresponding set of verifiable utility methods that can be run in **circuits**. Besides, you could choose different persistence storage tools for each Merkle tree.
 
 This article gives a brief introduction to SMT: [Whats a sparse merkle tree](https://medium.com/@kelvinfichter/whats-a-sparse-merkle-tree-acda70aeb837)
 
@@ -18,33 +16,66 @@ This article gives a brief introduction to SMT: [Whats a sparse merkle tree](htt
 The library hasn't been audited. The API and the format of the proof may be changed in the future as o1js is updated.
 Make sure you know what you are doing before using this library.
 
----
+## Background
+As a succint blockchain, Mina chain only contains 8 fields as onchain states for each zkApp account. Apparently this capacity is not enough, this is why we need maintain offchain storage keeping aligned with the onchain state. The classic solution for offchain storage is using a merkle tree whose root is stored onchain representing the whole offchain data.
+
+As a zkApp engineer, you must learn about the [*merkle tree* ](https://docs.minaprotocol.com/zkapps/o1js/merkle-tree) section at Mina Doc. Well, o1js library provides a memory-based classic MerkleTree implementation and MerkleMap implementation which is for sparse merkle trees.
+
+But please **NOTICE: the both currently are in memory, meaning the data is lost if the process is terminated. So we need to design a persistent storage to keep the data**. And this library provides a set of useful merkle trees implementations with capability of persistence for you!
+
+Within the package, various merkle trees totally belong to 2 catagories:
+
+* **Retrofit from Third-Party Library**
+
+  These implementations are located [here](./src/lib/alternatives/). They are retrofited from [Aztec Merkle Tree library](https://github.com/AztecProtocol/aztec-packages/tree/master/yarn-project/merkle-tree) and currently fully made usage of within [Anomix Network -- a zk-zkRollup layer2 solution on Mina, focusing on Privacy&Scalablility](https://github.com/anomix-zk/anomix-network/).
+
+  Totally there are __three__ kinds of merkle tree implementations:
+
+  * **Append only 'Standard' merkle trees**. New values are inserted into the next available leaf index. Values are never updated.
+  * **Indexed trees** are also append only in nature but retain the ability to update leaves. The reason for this is that the Indexed Tree leaves not only store the value but the index of the next highest leaf. New insertions can require prior leaves to be updated.
+  * **Sparse trees** that can be updated at any index. The 'size' of the tree is defined by the number of non-empty leaves, not by the highest populated leaf index as is the case with a Standard Tree.
+
+  All of the trees leverage LevelDB as persistence storage. more cases please go to [here](#contents-table-of-retrofit-from-third-party-library).
+
+* **Implementation from the Scratch**
+
+  The other implementations are aside the **Retrofited** ones, which are implemented by us team from scratch. 
+
+  There are also Standard Merkle Tree and Sparse Merkle Tree implementations. What's more flexible, you could choose different persistence tools to store the tree. 
+  1. store in **memory**
+  2. store in **leveldb**
+  3. store in **rocksdb**
+  4. store in **mongodb**
+
+  more cases please go to [here](#contents-table-of-implementation-from-the-scratch).
 
 ## Table of Contents
-
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-
 - [Install](#install)
-  - [1. Install module](#1-install-module)
-  - [2. Install peer dependencies](#2-install-peer-dependencies)
-- [What can you do with this library](#what-can-you-do-with-this-library)
-- [Usage](#usage)
-  - [Create a merkle tree data store](#create-a-merkle-tree-data-store)
-    - [1. Create a memory store](#1-create-a-memory-store)
-    - [2. Create a leveldb store](#2-create-a-leveldb-store)
-    - [3. Create a rocksdb store](#3-create-a-rocksdb-store)
-    - [4. Create a mongodb store](#4-create-a-mongodb-store)
-  - [Use MerkleTree (original NumIndexSparseMerkleTree)](#use-merkletree-original-numindexsparsemerkletree)
-  - [Use SparseMerkleTree](#use-sparsemerkletree)
-  - [Use CompactSparseMerkleTree](#use-compactsparsemerkletree)
-- [API Reference](#api-reference)
+  - [Install module](#1-install-module)
+- [Contents Table of 'Retrofit from Third-Party library'](#)
+  - [Install peer dependencies](#2-install-peer-dependencies)
+  - [Usage](#usage)
+      - [Create and Load a StandardTree]()
+      - [Create and Load a SparseTree]()
+      - [Create and Load a StandardIndexedTree]()
+- [Contents Table of 'Implementation from the Scratch'](#)
+  - [Install peer dependencies](#2-install-peer-dependencies)
+  - [What can you do with this library](#what-can-you-do-with-this-library)
+  - [Usage](#usage)
+    - [Create a merkle tree data store](#create-a-merkle-tree-data-store)
+      - [1. Create a memory store](#1-create-a-memory-store)
+      - [2. Create a leveldb store](#2-create-a-leveldb-store)
+      - [3. Create a rocksdb store](#3-create-a-rocksdb-store)
+      - [4. Create a mongodb store](#4-create-a-mongodb-store)
+    - [Use MerkleTree (original NumIndexSparseMerkleTree)](#use-merkletree-original-numindexsparsemerkletree)
+    - [Use SparseMerkleTree](#use-sparsemerkletree)
+    - [Use CompactSparseMerkleTree](#use-compactsparsemerkletree)
+  - [3.4 API Reference](#api-reference)
 
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-## Install
+### Install
 
-### 1. Install module
+#### 1. Install module
 
 ```bash
 npm install o1js-merkle
@@ -56,7 +87,135 @@ or with yarn:
 yarn add o1js-merkle
 ```
 
-### 2. Install peer dependencies
+### Contents Table of 'Retrofit from Third-Party library'
+
+#### Install peer dependencies
+
+```bash
+npm install o1js
+# yarn add o1js
+
+npm install level
+# yarn add level
+```
+
+### Usage
+#### Create and Load a StandardTree
+``` ts
+
+import { newTree } from './new_tree.js';
+import { default as levelup } from 'levelup';
+import { default as memdown, type MemDown } from 'memdown';
+import { PoseidonHasher } from './types/index.js';
+import { StandardIndexedTree } from './standard_indexed_tree/standard_indexed_tree.js';
+import { Field, Provable } from 'o1js';
+import { StandardTree } from './standard_tree/standard_tree.js';
+
+// create a leveldb for test
+const createMemDown = () => (memdown as any)() as MemDown<any, any>;
+let db = new levelup(createMemDown());
+
+// poseidonHasher from o1js package
+let poseidonHasher = new PoseidonHasher();
+
+// tree height: 4
+const PRIVATE_DATA_TREE_HEIGHT = 4;
+
+// create a standard merkle tree instance
+const standardTreeInstance: StandardTree = await newTree(
+  StandardTree,
+  db,
+  poseidonHasher,
+  'privateData',
+  PRIVATE_DATA_TREE_HEIGHT
+);
+console.log('standard tree initial root: ', standardTreeInstance.getRoot(true).toString());
+
+// append the first leaf of type: Field, the newly inserted leaf is kept in an array before being flushed into db.
+await standardTreeInstance.appendLeaves([
+  Field(
+    '20468198949394563802460512965219839480612000520504690501918527632215047268421'
+  ),
+]);
+
+// before commit, you must get the leaf by specifying 'leafIndex' and 'includeUncommitted' = true
+let leaf1 = await standardTreeInstance.getLeafValue(0n, true);
+console.log('leaf1: ', leaf1?.toString());
+// if you mistake specifying 'includeUncommitted' = false, then got 'undefined'. because the newly inserted leaf is not persisted yet.
+leaf1 = await standardTreeInstance.getLeafValue(0n, false);
+console.log('leaf1: ', leaf1);
+
+console.log('after append one leaf, tree root based on all cached&persisted leaves: ', standardTreeInstance.getRoot(true).toString());
+
+let nowRootBeforeCommit = standardTreeInstance.getRoot(false);
+console.log('before commit, tree root based on existing persisted leaves: ', nowRootBeforeCommit.toString());
+
+// persist, i.e. commit the tree into leveldb
+await standardTreeInstance.commit();
+console.log('exec commit... now all cached leaves are flushed into db and become parts of persisted leaves');
+
+let nowRootAfterCommit = standardTreeInstance.getRoot(false);
+console.log('after commit, tree root based on all persisted leaves: ', nowRootAfterCommit.toString());
+
+// after commit, now you could successfully get the leaf by specifying 'leafIndex' and 'includeUncommitted' = false
+leaf1 = await standardTreeInstance.getLeafValue(0n, false);
+console.log('leaf1: ', leaf1);
+
+// go on append several leaves
+await standardTreeInstance.appendLeaves([Field(11)]);
+await standardTreeInstance.appendLeaves([Field(21)]);
+await standardTreeInstance.appendLeaves([Field(31)]);
+await standardTreeInstance.appendLeaves([Field(41)]);
+await standardTreeInstance.appendLeaves([Field(51)]);
+await standardTreeInstance.appendLeaves([Field(61)]);
+
+// get merkle witness
+const witness = await standardTreeInstance.getSiblingPath(3n, true);
+console.log('witness: ', witness.toJSON());
+// check the membership within circuit
+Provable.runAndCheck(() => {
+  const root = witness.calculateRoot(Field(41), Field(3n));
+  Provable.log(root);
+  Provable.assertEqual(Field, root, nowRootBeforeCommit);
+});
+
+const witness2 = await standardTreeInstance.getSiblingPath(6n, true);
+console.log('witness2: ', witness2.toJSON());
+Provable.runAndCheck(() => {
+  const root = witness2.calculateRoot(Field(0), Field(6n));
+  Provable.log('testroot: ', root);
+});
+
+await standardTreeInstance.commit();
+
+// when you app restart, you could load tree from leveldb easily
+const privateDataTree = await loadTree(StandardTree, db, poseidonHasher,  'privateData',)
+
+```
+
+
+#### Create and Load a SparseTree
+similar as StandardTree cases above.
+
+
+#### Create and Load a StandardIndexedTree
+StandardIndexedTree extends StandardTree, but MAINLY used for non-membership merkle witness. So the membership cases are like the ones above, and here are the non-membership witness cases.
+
+
+[here](./src/lib/alternatives/new_standard_index_tree_test.ts)
+
+// TODO add non-membership witness cases
+
+``` ts
+
+```
+
+If you wanna go deeper the theory of StandardIndexedTree, please refer to [here](https://docs.aztec.network/concepts/advanced/data_structures/indexed_merkle_tree).
+
+
+### 3. Contents Table of 'Implementation from the Scratch'
+
+#### 3.1 Install peer dependencies
 
 ```bash
 npm install o1js
@@ -82,17 +241,17 @@ MongoDB:
 npm install mongoose
 ```
 
-## What can you do with this library
+### What can you do with this library
 
 You can update the data of Sparse Merkle Tree(SMT) outside the circuit, and then verify the membership proof or non-membership proof of the data in the circuit. At the same time, you can also verify the correctness of the state transformation of SMT in the circuit, which makes us not need to update the SMT in the circuit, but also ensure the legal modification of SMT data outside the circuit. We can verify the validity of data modification through zkApp.
 
 ---
 
-## Usage
+### Usage
 
-### Create a merkle tree data store
+#### Create a merkle tree data store
 
-#### 1. Create a memory store
+##### 1. Create a memory store
 
 ```typescript
 import { MemoryStore, Store } from 'o1js-merkle';
@@ -102,7 +261,7 @@ import { Field } from 'o1js';
 let store: Store<Field> = new MemoryStore<Field>();
 ```
 
-#### 2. Create a leveldb store
+##### 2. Create a leveldb store
 
 ```typescript
 import { Field } from 'o1js';
@@ -113,7 +272,7 @@ const levelDb = new Level<string, any>('./db');
 let store: Store<Field> = new LevelStore<Field>(levelDb, Field, 'test');
 ```
 
-#### 3. Create a rocksdb store
+##### 3. Create a rocksdb store
 
 ```typescript
 import { RocksStore, Store } from 'o1js-merkle';
@@ -127,7 +286,7 @@ const db = levelup(encoded);
 let store: Store<Field> = new RocksStore<Field>(db, Field, 'test');
 ```
 
-#### 4. Create a mongodb store
+##### 4. Create a mongodb store
 
 ```typescript
 import mongoose from 'mongoose';
@@ -138,7 +297,7 @@ await mongoose.connect('mongodb://localhost/my_database');
 let store: Store<Field> = new MongoStore(mongoose.connection, Field, 'test');
 ```
 
-### Use MerkleTree (original NumIndexSparseMerkleTree)
+#### Use MerkleTree (original NumIndexSparseMerkleTree)
 
 > MerkleTree is a merkle tree of numerically indexed data that can customize the tree height, this merkel tree is equivalent to a data structure: Map<bigint, Struct>, Struct can be a CircuitValue type in o1js, such as Field, PublicKey, or a custom composite Struct.
 > Tree height <= 254, Numeric index <= (2^height-1).
@@ -201,7 +360,7 @@ const newRoot = ProvableMerkleTreeUtils.computeRoot(
 Support DeepMerkleSubTree: DeepMerkleSubTree is a deep sparse merkle subtree for working on only a few leafs.(ProvableDeepMerkleSubTree is a deep subtree version that works in circuit).
 [**DeepMerkleSubTree Example**](./src/experimental/merkle_subtree.ts)
 
-### Use SparseMerkleTree
+#### Use SparseMerkleTree
 
 > SparseMerkleTree is a merkle tree with a fixed height of 254, this merkel tree is equivalent to a data structure: Map<Struct,Struct>, Struct can be a CircuitValue type in o1js, such as Field, PublicKey, or a custom composite Struct.
 
@@ -285,7 +444,7 @@ console.log('newRoot: ', newRoot.toString());
 Support DeepSparseMerkleSubTree: DeepSparseMerkleSubTree is a deep sparse merkle subtree for working on only a few leafs.(ProvableDeepSparseMerkleSubTree is a deep subtree version that works in circuit).
 [**DeepSparseMerkleSubTree Example**](./src/experimental/subtree.ts)
 
-### Use CompactSparseMerkleTree
+#### Use CompactSparseMerkleTree
 
 > CompactSparseMerkleTree is a merkle tree with a fixed height of 254, this merkel tree is equivalent to a data structure: Map<Struct,Struct>, Struct can be a CircuitValue type in o1js, such as Field, PublicKey, or a custom composite Struct. Compared with SparseMerkleTree, its advantage is that it can save storage space, and the operation efficiency of the tree is relatively high, but it is currently impossible to calculate the new root after the state transformation in the circuit.
 
@@ -344,6 +503,6 @@ isOk = ProvableCSMTUtils.checkNonMembership(proof, root, testKey, Field);
 Support CompactDeepSparseMerkleSubTree: CompactDeepSparseMerkleSubTree is a deep sparse merkle subtree for working on only a few leafs.
 [**CompactDeepSparseMerkleSubTree Example**](./src/experimental/ctree.ts)
 
-## API Reference
+### API Reference
 
 - [API Document](https://github.com/plus3-labs/o1js-merkle)
