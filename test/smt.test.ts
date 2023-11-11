@@ -1,4 +1,4 @@
-import { Circuit, Field, isReady, Poseidon, shutdown } from 'o1js';
+import { Field, Poseidon, Provable } from 'o1js';
 import { MemoryStore } from '../src/lib/store/memory_store';
 import { SparseMerkleTree } from '../src/lib/smt/smt';
 import { SMTUtils } from '../src/lib/smt/proofs';
@@ -7,19 +7,7 @@ import { ProvableSMTUtils } from '../src/lib/smt/verify_circuit';
 describe('SparseMerkleTree', () => {
   let tree: SparseMerkleTree<Field, Field>;
 
-  // beforeAll(async () => {
-  //   await isReady;
-  // });
-
-  afterAll(async () => {
-    // `shutdown()` internally calls `process.exit()` which will exit the running Jest process early.
-    // Specifying a timeout of 0 is a workaround to defer `shutdown()` until Jest is done running all tests.
-    // This should be fixed with https://github.com/MinaProtocol/mina/issues/10943
-    setTimeout(shutdown, 0);
-  });
-
   beforeEach(async () => {
-    await isReady;
     tree = await SparseMerkleTree.build<Field, Field>(
       new MemoryStore<Field>(),
       Field,
@@ -85,9 +73,7 @@ describe('SparseMerkleTree', () => {
   });
 
   function log(...objs: any) {
-    Circuit.asProver(() => {
-      console.log(objs);
-    });
+    Provable.log(...objs);
   }
 
   it('should verify proof in circuit correctly', async () => {
@@ -101,7 +87,7 @@ describe('SparseMerkleTree', () => {
 
     const zproof = await tree.prove(z);
 
-    Circuit.runAndCheck(() => {
+    Provable.runAndCheck(() => {
       ProvableSMTUtils.checkNonMembership(zproof, root, z, Field).assertTrue();
       log('z nonMembership assert success');
 

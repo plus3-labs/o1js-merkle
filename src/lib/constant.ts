@@ -1,6 +1,4 @@
-import { Field, isReady } from 'o1js';
-
-await isReady;
+import { Field } from 'o1js';
 
 export const EMPTY_VALUE = Field(0);
 export const SMT_DEPTH = 254;

@@ -2,7 +2,6 @@ import {
   Bool,
   CircuitValue,
   Field,
-  isReady,
   Poseidon,
   Provable,
 } from 'o1js';
@@ -13,7 +12,6 @@ import { Hasher } from '../model';
 import { countSetBits, fieldToHexString, hexStringToField } from '../utils';
 import { ProvableMerkleTreeUtils } from './verify_circuit';
 
-await isReady;
 
 export { BaseMerkleProof, MerkleTreeUtils };
 export type { CompactMerkleProof, CompactMerkleProofJSON };

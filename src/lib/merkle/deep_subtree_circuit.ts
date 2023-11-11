@@ -1,4 +1,4 @@
-import { Bool, Circuit, Field, Poseidon, Provable, Struct } from 'o1js';
+import { Bool, Field, Poseidon, Provable, Struct } from 'o1js';
 import { EMPTY_VALUE } from '../constant';
 import { Hasher } from '../model';
 import { BaseMerkleProof } from './proofs';
@@ -96,7 +96,7 @@ class ProvableDeepMerkleSubTree<V> {
    * @memberof ProvableDeepMerkleSubTree
    */
   public addBranch(proof: BaseMerkleProof, index: Field, value?: V) {
-    Circuit.asProver(() => {
+    Provable.asProver(() => {
       const keyField = index;
       const valueField = this.getValueField(value);
 
@@ -125,7 +125,7 @@ class ProvableDeepMerkleSubTree<V> {
    * @memberof ProvableDeepMerkleSubTree
    */
   public prove(index: Field): BaseMerkleProof {
-    return Circuit.witness(BaseMerkleProof, () => {
+    return Provable.witness(BaseMerkleProof, () => {
       const path = index;
       let pathStr = path.toString();
       let valueHash = this.valueStore.get(pathStr);
@@ -176,10 +176,10 @@ class ProvableDeepMerkleSubTree<V> {
     const valueField = this.getValueField(value);
 
     class SideNodes extends Struct({
-      arr: Circuit.array(Field, this.height),
+      arr: Provable.Array(Field, this.height),
     }) {}
 
-    let fieldArr: SideNodes = Circuit.witness(SideNodes, () => {
+    let fieldArr: SideNodes = Provable.witness(SideNodes, () => {
       let sideNodes: Field[] = [];
       let nodeHash: Field = this.root;
       for (let i = 0; i < this.height; i++) {
@@ -203,7 +203,8 @@ class ProvableDeepMerkleSubTree<V> {
     });
 
     let sideNodes = fieldArr.arr;
-    const oldValueHash = Circuit.witness(Field, () => {
+    // @ts-ignore
+    const oldValueHash = Provable.witness(Field, () => {
       let oldValueHash = this.valueStore.get(path.toString());
       if (oldValueHash === undefined) {
         throw new Error('oldValueHash does not exist');
@@ -219,27 +220,28 @@ class ProvableDeepMerkleSubTree<V> {
 
     let currentHash = valueField;
 
-    Circuit.asProver(() => {
+    Provable.asProver(() => {
       this.nodeStore.set(currentHash.toString(), [currentHash]);
     });
 
     for (let i = this.height - 1; i >= 0; i--) {
       let sideNode = sideNodes[i];
 
-      let currentValue = Circuit.if(
+      let currentValue = Provable.if(
         pathBits[i],
+        Provable.Array(Field, 2),
         [sideNode, currentHash],
         [currentHash, sideNode]
       );
 
       currentHash = this.hasher(currentValue);
 
-      Circuit.asProver(() => {
+      Provable.asProver(() => {
         this.nodeStore.set(currentHash.toString(), currentValue);
       });
     }
 
-    Circuit.asProver(() => {
+    Provable.asProver(() => {
       this.valueStore.set(path.toString(), valueField);
     });
 
@@ -258,8 +260,9 @@ function impliedRootForHeightInCircuit(
   let impliedRoot = leaf;
   for (let i = height - 1; i >= 0; i--) {
     let sideNode = sideNodes[i];
-    let [left, right] = Circuit.if(
+    let [left, right] = Provable.if(
       pathBits[i],
+      Provable.Array(Field, 2),
       [sideNode, impliedRoot],
       [impliedRoot, sideNode]
     );

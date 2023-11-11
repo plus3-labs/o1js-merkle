@@ -22,7 +22,7 @@ function createEmptyValue<T>(valueType: Provable<T>): T {
     const n = valueType.sizeInFields();
     const xs = [];
     for (var i = 0; i < n; ++i) {
-      xs.push(Field.zero);
+      xs.push(Field(0));
     }
     return valueType.fromFields(xs, valueType.toAuxiliary());
   })();

@@ -3,12 +3,10 @@ import {
   Circuit,
   DeployArgs,
   Field,
-  isReady,
   method,
   Mina,
   Permissions,
   PrivateKey,
-  shutdown,
   SmartContract,
   State,
   state,
@@ -18,7 +16,6 @@ import { SparseMerkleProof } from '../lib/smt/proofs';
 import { SparseMerkleTree } from '../lib/smt/smt';
 import { MemoryStore } from '../lib/store/memory_store';
 
-await isReady;
 
 const doProofs = true;
 
@@ -151,7 +148,6 @@ async function test() {
   await tx.sign([feePayerKey]).send();
 
   console.log('end method');
-  shutdown();
 }
 
 await test();

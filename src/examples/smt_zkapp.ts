@@ -11,14 +11,12 @@ import {
   CircuitString,
   DeployArgs,
   Field,
-  isReady,
   method,
   Mina,
   Permissions,
   Poseidon,
   PrivateKey,
   PublicKey,
-  shutdown,
   SmartContract,
   State,
   state,
@@ -30,8 +28,6 @@ import { SparseMerkleProof } from '../lib/smt/proofs';
 import { SparseMerkleTree } from '../lib/smt/smt';
 import { ProvableSMTUtils } from '../lib/smt/verify_circuit';
 import { MemoryStore } from '../lib/store/memory_store';
-
-await isReady;
 
 const doProofs = true;
 
@@ -212,7 +208,6 @@ await addNewAccount(Olivia, oliviaAc);
 
 console.log('Final Olivia points: ' + (await smt.get(Olivia))?.points);
 
-shutdown();
 
 async function addNewAccount(name: CircuitString, account: Account) {
   let merkleProof = await smt.prove(name);

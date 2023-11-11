@@ -3,24 +3,20 @@ import {
   Circuit,
   DeployArgs,
   Field,
-  isReady,
   method,
   Mina,
   Permissions,
   PrivateKey,
-  shutdown,
   SmartContract,
   State,
   state,
 } from 'o1js';
-import { getProofsEnabled } from 'snarkyjs/dist/node/lib/mina';
 import { ProvableDeepMerkleSubTree } from '../lib/merkle/deep_subtree_circuit';
 import { MerkleTree } from '../lib/merkle/merkle_tree';
 import { ProvableMerkleTreeUtils } from '../lib/merkle/verify_circuit';
 
 import { MemoryStore } from '../lib/store/memory_store';
 
-await isReady;
 
 const doProofs = true;
 
@@ -153,7 +149,6 @@ async function test() {
   await tx.prove();
   await tx.sign([feePayerKey]).send();
   console.log('end method');
-  shutdown();
 }
 
 await test();

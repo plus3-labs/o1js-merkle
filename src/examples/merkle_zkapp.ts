@@ -10,14 +10,12 @@ import {
   AccountUpdate,
   DeployArgs,
   Field,
-  isReady,
   method,
   Mina,
   Permissions,
   Poseidon,
   PrivateKey,
   PublicKey,
-  shutdown,
   SmartContract,
   State,
   state,
@@ -29,7 +27,6 @@ import { MerkleTree } from '../lib/merkle/merkle_tree';
 import { ProvableMerkleTreeUtils } from '../lib/merkle/verify_circuit';
 import { MemoryStore } from '../lib/store/memory_store';
 
-await isReady;
 
 const doProofs = true;
 
@@ -197,7 +194,6 @@ await addNewAccount(3n, olivia);
 
 console.log('Final Olivia points: ' + (await tree.get(3n))?.points);
 
-shutdown();
 
 async function addNewAccount(index: bigint, account: Account) {
   let merkleProof = await tree.prove(index);

@@ -1,4 +1,4 @@
-import { Bool, Circuit, Field, Poseidon, Provable } from 'o1js';
+import { Bool, Field, Poseidon, Provable } from 'o1js';
 import { EMPTY_VALUE, SMT_DEPTH } from '../constant';
 import { Hasher } from '../model';
 import { SparseMerkleProof } from './proofs';
@@ -257,8 +257,9 @@ function computeRootByFieldInCircuit(
   for (let i = SMT_DEPTH - 1; i >= 0; i--) {
     let node = sideNodes[i];
 
-    let currentValue = Circuit.if(
+    let currentValue = Provable.if(
       pathBits[i],
+      Provable.Array(Field, 2),
       [node, currentHash],
       [currentHash, node]
     );

@@ -1,4 +1,4 @@
-import { Circuit, Field, isReady, shutdown } from 'o1js';
+import { Field, Provable } from 'o1js';
 import { MerkleTree } from '../src/lib/merkle/merkle_tree';
 import { MerkleTreeUtils } from '../src/lib/merkle/proofs';
 import { ProvableMerkleTreeUtils } from '../src/lib/merkle/verify_circuit';
@@ -7,19 +7,7 @@ import { MemoryStore } from '../src/lib/store/memory_store';
 describe('SparseMerkleTree', () => {
   let tree: MerkleTree<Field>;
 
-  // beforeAll(async () => {
-  //   await isReady;
-  // });
-
-  afterAll(async () => {
-    // `shutdown()` internally calls `process.exit()` which will exit the running Jest process early.
-    // Specifying a timeout of 0 is a workaround to defer `shutdown()` until Jest is done running all tests.
-    // This should be fixed with https://github.com/MinaProtocol/mina/issues/10943
-    setTimeout(shutdown, 0);
-  });
-
   beforeEach(async () => {
-    await isReady;
     tree = await MerkleTree.build(new MemoryStore<Field>(), 8, Field);
   });
 
@@ -91,7 +79,7 @@ describe('SparseMerkleTree', () => {
 
     const zproof = await tree.prove(z);
 
-    Circuit.runAndCheck(() => {
+    Provable.runAndCheck(() => {
       ProvableMerkleTreeUtils.checkMembership(
         proof,
         root,
