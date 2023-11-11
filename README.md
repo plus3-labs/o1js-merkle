@@ -198,6 +198,8 @@ const privateDataTree = await loadTree(StandardTree, db, poseidonHasher,  'priva
 
 ```
 
+Besides, you could see the rich cases within circuits at [Anomix Network](https://github.com/anomix-zk/anomix-network/tree/main/packages/circuits/src)
+
 
 #### Create and Load a SparseTree
 similar as StandardTree cases above.
@@ -309,7 +311,7 @@ console.assert(nowRootAfterCommit.equals(root1).toBoolean());
 ```
 
 If you wanna go deeper the theory of StandardIndexedTree, please refer to [here](https://docs.aztec.network/concepts/advanced/data_structures/indexed_merkle_tree).
-
+Besides, you could see the rich cases within circuits at [Anomix Network](https://github.com/anomix-zk/anomix-network/tree/main/packages/circuits/src)
 
 ### 3. Contents Table of 'Implementation from the Scratch'
 
