@@ -1,11 +1,11 @@
-import { Bool, Circuit, Field, Poseidon, Provable, Struct } from 'o1js';
+import { Bool, Field, Poseidon, Provable, Struct } from 'o1js';
 import { EMPTY_VALUE, SMT_DEPTH } from '../constant';
 import { Hasher } from '../model';
 import { SparseMerkleProof } from './proofs';
 
 export { ProvableDeepSparseMerkleSubTree };
 
-class SMTSideNodes extends Struct({ arr: Circuit.array(Field, SMT_DEPTH) }) {}
+class SMTSideNodes extends Struct({ arr: Provable.Array(Field, SMT_DEPTH) }) {}
 
 /**
  * ProvableDeepSparseMerkleSubTree is a deep sparse merkle subtree for working on only a few leafs in circuit.
@@ -107,7 +107,7 @@ class ProvableDeepSparseMerkleSubTree<K, V> {
    * @memberof ProvableDeepSparseMerkleSubTree
    */
   public addBranch(proof: SparseMerkleProof, key: K, value?: V) {
-    Circuit.asProver(() => {
+    Provable.asProver(() => {
       const keyField = this.getKeyField(key);
       const valueField = this.getValueField(value);
       let updates = getUpdatesBySideNodes(
@@ -134,7 +134,7 @@ class ProvableDeepSparseMerkleSubTree<K, V> {
    * @memberof ProvableDeepSparseMerkleSubTree
    */
   public prove(key: K): SparseMerkleProof {
-    return Circuit.witness(SparseMerkleProof, () => {
+    return Provable.witness(SparseMerkleProof, () => {
       const keyField = this.getKeyField(key);
       let pathStr = keyField.toString();
       let valueHash = this.valueStore.get(pathStr);
@@ -182,7 +182,7 @@ class ProvableDeepSparseMerkleSubTree<K, V> {
     const treeHeight = this.getHeight();
     const pathBits = path.toBits(treeHeight);
 
-    let sideNodesArr: SMTSideNodes = Circuit.witness(SMTSideNodes, () => {
+    let sideNodesArr: SMTSideNodes = Provable.witness(SMTSideNodes, () => {
       let sideNodes: Field[] = [];
       let nodeHash: Field = this.root;
 
@@ -207,8 +207,8 @@ class ProvableDeepSparseMerkleSubTree<K, V> {
     });
 
     let sideNodes = sideNodesArr.arr;
-
-    const oldValueHash = Circuit.witness(Field, () => {
+    // @ts-ignore
+    const oldValueHash = Provable.witness(Field, () => {
       let oldValueHash = this.valueStore.get(path.toString());
       if (oldValueHash === undefined) {
         throw new Error('oldValueHash does not exist');
@@ -222,27 +222,28 @@ class ProvableDeepSparseMerkleSubTree<K, V> {
 
     let currentHash = valueField;
 
-    Circuit.asProver(() => {
+    Provable.asProver(() => {
       this.nodeStore.set(currentHash.toString(), [currentHash]);
     });
 
     for (let i = this.getHeight() - 1; i >= 0; i--) {
       let sideNode = sideNodes[i];
 
-      let currentValue = Circuit.if(
+      let currentValue = Provable.if(
         pathBits[i],
+        Provable.Array(Field, 2),
         [sideNode, currentHash],
         [currentHash, sideNode]
       );
 
       currentHash = this.hasher(currentValue);
 
-      Circuit.asProver(() => {
+      Provable.asProver(() => {
         this.nodeStore.set(currentHash.toString(), currentValue);
       });
     }
 
-    Circuit.asProver(() => {
+    Provable.asProver(() => {
       this.valueStore.set(path.toString(), valueField);
     });
     this.root = currentHash;
@@ -259,8 +260,9 @@ function impliedRootInCircuit(
   let impliedRoot = leaf;
   for (let i = SMT_DEPTH - 1; i >= 0; i--) {
     let sideNode = sideNodes[i];
-    let [left, right] = Circuit.if(
+    let [left, right] = Provable.if(
       pathBits[i],
+      Provable.Array(Field, 2),
       [sideNode, impliedRoot],
       [impliedRoot, sideNode]
     );

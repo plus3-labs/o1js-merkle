@@ -11,13 +11,11 @@ import {
   Circuit,
   DeployArgs,
   Field,
-  isReady,
   method,
   Mina,
   Permissions,
   Poseidon,
   PrivateKey,
-  shutdown,
   SmartContract,
   State,
   state,
@@ -27,7 +25,6 @@ import { MerkleTree } from '../lib/merkle/merkle_tree';
 import { ProvableMerkleTreeUtils } from '../lib/merkle/verify_circuit';
 import { MemoryStore } from '../lib/store/memory_store';
 
-await isReady;
 
 const doProofs = true;
 const treeHeight = 3;
@@ -188,7 +185,6 @@ await addNewField(3n, olivia);
 
 console.log('Final Olivia f: ' + (await tree.get(3n))?.toString());
 
-shutdown();
 
 async function addNewField(index: bigint, f: Field) {
   let merkleProof = await tree.prove(index);

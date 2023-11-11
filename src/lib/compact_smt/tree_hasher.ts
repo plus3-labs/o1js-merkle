@@ -1,13 +1,13 @@
-import { Bool, Field, isReady, Poseidon, Provable } from 'o1js';
+import { Bool, Field, Poseidon, Provable } from 'o1js';
 import { Hasher } from '../model';
-
-await isReady;
 
 export { TreeHasher };
 
 const emptyPrefix = Field(0);
 const leafPrefix = Field(1);
 const nodePrefix = Field(2);
+
+const emptyData = Field(0);
 
 /**
  * Tree Hasher
@@ -97,7 +97,7 @@ class TreeHasher<K, V> {
   }
 
   emptyData(): Field[] {
-    return [emptyPrefix, Field.zero, Field.zero];
+    return [emptyPrefix, emptyData, emptyData];
   }
 
   digestNode(

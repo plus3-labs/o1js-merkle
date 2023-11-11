@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { Field, isReady, shutdown } from 'o1js';
+import { Field } from 'o1js';
 import { MongoStore } from '../src/lib/store/mongo_store';
 import { MongoMemoryReplSet } from 'mongodb-memory-server';
 
@@ -27,14 +27,9 @@ describe('MongoStore', () => {
     if (replset) {
       await replset.stop();
     }
-    // `shutdown()` internally calls `process.exit()` which will exit the running Jest process early.
-    // Specifying a timeout of 0 is a workaround to defer `shutdown()` until Jest is done running all tests.
-    // This should be fixed with https://github.com/MinaProtocol/mina/issues/10943
-    setTimeout(shutdown, 0);
   });
 
   beforeEach(async () => {
-    await isReady;
     store = new MongoStore(conn, Field, 'test');
   });
 

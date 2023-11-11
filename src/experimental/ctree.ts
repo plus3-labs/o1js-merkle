@@ -1,10 +1,9 @@
-import { Field, isReady, shutdown } from 'o1js';
+import { Field } from 'o1js';
 import { CompactDeepSparseMerkleSubTree } from '../lib/compact_smt/deep_subtree';
 import { CompactSparseMerkleTree } from '../lib/compact_smt/csmt';
 import { ProvableCSMTUtils } from '../lib/compact_smt/verify_circuit';
 import { MemoryStore } from '../lib/store/memory_store';
 
-await isReady;
 
 let tree = new CompactSparseMerkleTree(new MemoryStore<Field>(), Field, Field);
 
@@ -43,5 +42,3 @@ console.log('root3: ', root3.toString());
 //   Field(5)
 // );
 // console.log('updateRoot: ', updateRoot.toString());
-
-shutdown();

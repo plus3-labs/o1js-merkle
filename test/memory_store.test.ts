@@ -1,22 +1,10 @@
-import { Field, isReady, shutdown } from 'o1js';
+import { Field } from 'o1js';
 import { MemoryStore } from '../src/lib/store/memory_store';
 
 describe('MemoryStore', () => {
   let store: MemoryStore<Field>;
 
-  // beforeAll(async () => {
-  //   await isReady;
-  // });
-
-  afterAll(async () => {
-    // `shutdown()` internally calls `process.exit()` which will exit the running Jest process early.
-    // Specifying a timeout of 0 is a workaround to defer `shutdown()` until Jest is done running all tests.
-    // This should be fixed with https://github.com/MinaProtocol/mina/issues/10943
-    setTimeout(shutdown, 0);
-  });
-
   beforeEach(async () => {
-    await isReady;
     store = new MemoryStore<Field>();
   });
 

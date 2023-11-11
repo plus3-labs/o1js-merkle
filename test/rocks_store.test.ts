@@ -1,4 +1,4 @@
-import { Field, isReady, shutdown } from 'o1js';
+import { Field } from 'o1js';
 import { RocksStore } from '../src/lib/store/rocks_store';
 import encode from 'encoding-down';
 import rocksdb from 'rocksdb';
@@ -7,19 +7,7 @@ import levelup from 'levelup';
 describe('RocksStore', () => {
   let store: RocksStore<Field>;
 
-  // beforeAll(async () => {
-  //   await isReady;
-  // });
-
-  afterAll(async () => {
-    // `shutdown()` internally calls `process.exit()` which will exit the running Jest process early.
-    // Specifying a timeout of 0 is a workaround to defer `shutdown()` until Jest is done running all tests.
-    // This should be fixed with https://github.com/MinaProtocol/mina/issues/10943
-    setTimeout(shutdown, 0);
-  });
-
   beforeEach(async () => {
-    await isReady;
     const encoded = encode(rocksdb('./rocksdb'));
     const db = levelup(encoded);
     db.setMaxListeners(17);

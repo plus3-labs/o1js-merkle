@@ -1,23 +1,11 @@
 import { Level } from 'level';
-import { Field, isReady, shutdown } from 'o1js';
+import { Field } from 'o1js';
 import { LevelStore } from '../src/lib/store/level_store';
 
 describe('LevelStore', () => {
   let store: LevelStore<Field>;
 
-  // beforeAll(async () => {
-  //   await isReady;
-  // });
-
-  afterAll(async () => {
-    // `shutdown()` internally calls `process.exit()` which will exit the running Jest process early.
-    // Specifying a timeout of 0 is a workaround to defer `shutdown()` until Jest is done running all tests.
-    // This should be fixed with https://github.com/MinaProtocol/mina/issues/10943
-    setTimeout(shutdown, 0);
-  });
-
   beforeEach(async () => {
-    await isReady;
     const levelDb = new Level<string, any>('./db');
     store = new LevelStore(levelDb, Field, 'test');
   });

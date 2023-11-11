@@ -2,7 +2,6 @@ import {
   Bool,
   Circuit,
   Field,
-  isReady,
   Poseidon,
   Provable,
   Struct,
@@ -11,8 +10,6 @@ import { RIGHT } from '../constant';
 import { Hasher } from '../model';
 import { CP_PADD_VALUE, CSMT_DEPTH, PLACEHOLDER } from './constant';
 import { TreeHasher } from './tree_hasher';
-
-await isReady;
 
 export { CompactSparseMerkleProof, CSMTUtils };
 export type { CSparseCompactMerkleProof };

@@ -1,4 +1,4 @@
-import { arrayProp, Bool, Circuit, Field, Poseidon, Provable } from 'o1js';
+import { arrayProp, Bool, Field, Poseidon, Provable } from 'o1js';
 import { EMPTY_VALUE } from '../constant';
 import { Hasher } from '../model';
 import { BaseMerkleProof } from './proofs';
@@ -165,8 +165,9 @@ function computeRootByFieldInCircuit(
   for (let i = h - 1; i >= 0; i--) {
     let node = proof.sideNodes[i];
 
-    let currentValue = Circuit.if(
+    let currentValue = Provable.if(
       pathBits[i],
+      Provable.Array(Field, 2),
       [node, currentHash],
       [currentHash, node]
     );
