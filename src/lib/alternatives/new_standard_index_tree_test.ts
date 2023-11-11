@@ -88,9 +88,9 @@ const nonMembershipWitness = {
 
 // the membership witness of previous leaf is the Non-membership witness of 'nullifier1'
 // pseudocode to check within circuit
-console.assert(leafData.nextValue != nullifier1);
 const commitment = Poseidon.hash([Field(leafData.value), Field(leafData.nextValue), Field(leafData.nextIndex)]);
 const root1 = siblingPath.calculateRoot(commitment, Field(index), poseidonHasher);
-// if true, then mean 'nullifier1' is not in the tree.
+// if both are true, then mean 'nullifier1' is not in the tree.
+console.assert(leafData.nextValue != nullifier1);
 console.assert(nowRootAfterCommit.equals(root1).toBoolean());
 
