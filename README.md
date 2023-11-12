@@ -109,9 +109,10 @@ import { ChainedBatch, Level } from "level";
 import { PoseidonHasher } from './types/index.js';
 import { Field, Provable } from 'o1js';
 import { StandardTree } from './standard_tree/standard_tree.js';
+import { loadTree } from './load_tree.js';
 
 // create a leveldb for test
-let db = new Level<string, Buffer>('example');
+let db = new Level<string, Buffer>('example', {valueEncoding:'buffer'});
 
 // poseidonHasher from o1js package
 let poseidonHasher = new PoseidonHasher();
@@ -192,9 +193,17 @@ await standardTreeInstance.commit();
 
 ```
 
-the below is how to load tree from levelDB when process restart:
+The below is how to load tree from levelDB when process restart:
 ``` ts
-// TBD
+
+// load a standard merkle tree instance
+const standardTreeInstance1: StandardTree = await loadTree(
+  StandardTree,
+  db,
+  poseidonHasher,
+  'privateData'
+);
+
 
 ```
 
@@ -217,10 +226,10 @@ import { ChainedBatch, Level } from "level";
 import { PoseidonHasher } from './types/index.js';
 import { StandardIndexedTree } from './standard_indexed_tree/standard_indexed_tree.js';
 import { Field, Poseidon, Provable } from 'o1js';
+import { loadTree } from './load_tree.js';
 
 // create a leveldb for test
-let db = new Level<string, Buffer>('example-index');
-
+let db = new Level<string, Buffer>('example-index', {valueEncoding:'buffer'});
 
 // poseidonHasher from o1js package
 let poseidonHasher = new PoseidonHasher();
@@ -306,6 +315,20 @@ const root1 = siblingPath.calculateRoot(commitment, Field(index), poseidonHasher
 // if both are true, then mean 'nullifier1' is not in the tree.
 console.assert(leafData.nextValue != nullifier1);
 console.assert(nowRootAfterCommit.equals(root1).toBoolean());
+
+```
+
+
+The below is how to load tree from levelDB when process restart:
+``` ts
+
+// load a standard indexed merkle tree instance
+const standardIndexedTreeInstance1: StandardIndexedTree = await loadTree(
+  StandardIndexedTree,
+  db,
+  poseidonHasher,
+  'NULLIFIER_TREE'
+);
 
 
 

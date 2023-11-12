@@ -3,10 +3,10 @@ import { ChainedBatch, Level } from "level";
 import { PoseidonHasher } from './types/index.js';
 import { StandardIndexedTree } from './standard_indexed_tree/standard_indexed_tree.js';
 import { Field, Poseidon, Provable } from 'o1js';
+import { loadTree } from './load_tree.js';
 
 // create a leveldb for test
-let db = new Level<string, Buffer>('example-index');
-
+let db = new Level<string, Buffer>('example-index', {valueEncoding:'buffer'});
 
 // poseidonHasher from o1js package
 let poseidonHasher = new PoseidonHasher();
@@ -92,4 +92,5 @@ const root1 = siblingPath.calculateRoot(commitment, Field(index), poseidonHasher
 // if both are true, then mean 'nullifier1' is not in the tree.
 console.assert(leafData.nextValue != nullifier1);
 console.assert(nowRootAfterCommit.equals(root1).toBoolean());
+
 
