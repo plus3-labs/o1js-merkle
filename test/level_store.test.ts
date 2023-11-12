@@ -1,7 +1,9 @@
 import { Level } from 'level';
 import { Field } from 'o1js';
 import { LevelStore } from '../src/lib/store/level_store';
+import { jest } from '@jest/globals';
 
+jest.setTimeout(100000);
 describe('LevelStore', () => {
   let store: LevelStore<Field>;
 

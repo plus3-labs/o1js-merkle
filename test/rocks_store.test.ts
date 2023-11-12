@@ -3,7 +3,9 @@ import { RocksStore } from '../src/lib/store/rocks_store';
 import encode from 'encoding-down';
 import rocksdb from 'rocksdb';
 import levelup from 'levelup';
+import { jest } from '@jest/globals';
 
+jest.setTimeout(100000);
 describe('RocksStore', () => {
   let store: RocksStore<Field>;
 

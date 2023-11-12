@@ -15,7 +15,7 @@ export default {
   resolver: '<rootDir>/jest-resolver.cjs',
   testPathIgnorePatterns: ['node_modules', 'mongo_store'],
   transformIgnorePatterns: [
-    '<rootDir>/node_modules/(?!snarkyjs/node_modules/tslib)',
+    '<rootDir>/node_modules/(?!o1js/node_modules/tslib)',
     '<rootDir>/node_modules/mongodb',
     // '<rootDir>/node_modules/bson',
     '<rootDir>/node_modules/mongoose',
