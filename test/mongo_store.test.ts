@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import { Field } from 'o1js';
 import { MongoStore } from '../src/lib/store/mongo_store';
 import { MongoMemoryReplSet } from 'mongodb-memory-server';
+import { jest } from '@jest/globals';
 
 jest.setTimeout(10000);
 describe('MongoStore', () => {
