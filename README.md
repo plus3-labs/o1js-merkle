@@ -111,7 +111,7 @@ import { Field, Provable } from 'o1js';
 import { StandardTree } from './standard_tree/standard_tree.js';
 
 // create a leveldb for test
-let db = new Level('example');
+let db = new Level<string, Buffer>('example');
 
 // poseidonHasher from o1js package
 let poseidonHasher = new PoseidonHasher();
@@ -190,13 +190,16 @@ Provable.runAndCheck(() => {
 
 await standardTreeInstance.commit();
 
+```
 
-// when you app restart, you could load tree from leveldb easily
-const privateDataTree = await loadTree(StandardTree, db, poseidonHasher,  'privateData',)
+the below is how to load tree from levelDB when process restart:
+``` ts
+// TBD
 
 ```
 
 Besides, you could see the rich cases within circuits at [Anomix Network](https://github.com/anomix-zk/anomix-network/tree/main/packages/circuits/src)
+
 
 
 #### Create and Load a SparseTree
@@ -216,7 +219,7 @@ import { StandardIndexedTree } from './standard_indexed_tree/standard_indexed_tr
 import { Field, Poseidon, Provable } from 'o1js';
 
 // create a leveldb for test
-let db = new Level('example');
+let db = new Level<string, Buffer>('example-index');
 
 
 // poseidonHasher from o1js package
@@ -303,6 +306,7 @@ const root1 = siblingPath.calculateRoot(commitment, Field(index), poseidonHasher
 // if both are true, then mean 'nullifier1' is not in the tree.
 console.assert(leafData.nextValue != nullifier1);
 console.assert(nowRootAfterCommit.equals(root1).toBoolean());
+
 
 
 ```

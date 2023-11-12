@@ -14,7 +14,7 @@ import { TreeBase } from './tree_base.js';
  */
 export async function newTree<T extends TreeBase>(
   c: new (...args: any[]) => T,
-  db: Level,
+  db: Level<string, Buffer>,
   hasher: Hasher,
   name: string,
   depth: number,

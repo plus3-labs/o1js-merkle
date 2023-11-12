@@ -5,7 +5,7 @@ import { StandardIndexedTree } from './standard_indexed_tree/standard_indexed_tr
 import { Field, Poseidon, Provable } from 'o1js';
 
 // create a leveldb for test
-let db = new Level('example');
+let db = new Level<string, Buffer>('example-index');
 
 
 // poseidonHasher from o1js package

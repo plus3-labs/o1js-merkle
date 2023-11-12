@@ -5,7 +5,7 @@ import { Field, Provable } from 'o1js';
 import { StandardTree } from './standard_tree/standard_tree.js';
 
 // create a leveldb for test
-let db = new Level('example');
+let db = new Level<string, Buffer>('example');
 
 // poseidonHasher from o1js package
 let poseidonHasher = new PoseidonHasher();
