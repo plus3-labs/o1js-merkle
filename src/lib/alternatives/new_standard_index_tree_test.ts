@@ -1,13 +1,12 @@
 import { newTree } from './new_tree.js';
 import { ChainedBatch, Level } from "level";
-import { default as memdown, type MemDown } from 'memdown';
 import { PoseidonHasher } from './types/index.js';
 import { StandardIndexedTree } from './standard_indexed_tree/standard_indexed_tree.js';
 import { Field, Poseidon, Provable } from 'o1js';
 
 // create a leveldb for test
-const createMemDown = () => (memdown as any)() as MemDown<any, any>;
-let db = new Level(createMemDown());
+let db = new Level('example');
+
 
 // poseidonHasher from o1js package
 let poseidonHasher = new PoseidonHasher();

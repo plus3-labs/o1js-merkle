@@ -1,14 +1,10 @@
 import { toBigIntBE, toBufferBE } from '../../utils';
-import { createDebugLogger, createLogger } from '../log';
 import { Hasher } from '../types';
 import { IndexedTree, LeafData } from '../interfaces/indexed_tree';
 import { TreeBase } from '../tree_base';
 import { SiblingPath } from '../types';
 import { Field } from 'o1js';
 import { BaseSiblingPath } from '../types';
-
-const log = createDebugLogger('standard-indexed-tree');
-log(`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~StandardIndexedTree~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`);
 
 const indexToKeyLeaf = (name: string, index: bigint) => {
     return `${name}:leaf:${index}`;
@@ -309,17 +305,18 @@ export class StandardIndexedTree extends TreeBase implements IndexedTree {
     public async initFromDb(): Promise<void> {
         const startingIndex = 0n;
         const values: LeafData[] = [];
-        const promise = new Promise<void>((resolve, reject) => {
-            this.db
-                .createReadStream({
+        const promise = new Promise<void>(async (resolve, reject) => {
+            const iterator = this.db
+                .iterator({
                     gte: indexToKeyLeaf(this.getName(), startingIndex),
                     lte: indexToKeyLeaf(this.getName(), 999999999999999999999999999n), //2n ** BigInt(this.getDepth())
-                })
+                });
+
+                /*
                 .on('data', function (data) {
                     const arr = data.key.toString().split(':');
                     const index = Number(arr[arr.length - 1]);
                     values[index] = decodeTreeValue(data.value);
-
                 })
                 .on('close', function () { })
                 .on('end', function () {
@@ -328,6 +325,19 @@ export class StandardIndexedTree extends TreeBase implements IndexedTree {
                 .on('error', function () {
                     reject();
                 });
+                */
+
+                try {
+                  for await (const [key, value] of iterator) {
+                    const arr = key.toString().split(':');
+                    const index = Number(arr[arr.length - 1]);
+                    values[index] = decodeTreeValue(value);
+                  }
+                  resolve();
+                } catch (err) {
+                  console.error(err)
+                  reject();
+                }
         });
         await promise;
         this.leaves = values;

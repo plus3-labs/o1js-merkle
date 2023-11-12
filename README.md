@@ -106,14 +106,12 @@ npm install level
 ``` ts
 import { newTree } from './new_tree.js';
 import { ChainedBatch, Level } from "level";
-import { default as memdown, type MemDown } from 'memdown';
 import { PoseidonHasher } from './types/index.js';
 import { Field, Provable } from 'o1js';
 import { StandardTree } from './standard_tree/standard_tree.js';
 
 // create a leveldb for test
-const createMemDown = () => (memdown as any)() as MemDown<any, any>;
-let db = new Level(createMemDown());
+let db = new Level('example');
 
 // poseidonHasher from o1js package
 let poseidonHasher = new PoseidonHasher();
@@ -172,12 +170,13 @@ await standardTreeInstance.appendLeaves([Field(41)]);
 await standardTreeInstance.appendLeaves([Field(51)]);
 await standardTreeInstance.appendLeaves([Field(61)]);
 
+nowRootBeforeCommit = standardTreeInstance.getRoot(includeUncommitted);
 // get merkle witness
 const membershipWitness = await standardTreeInstance.getSiblingPath(3n, includeUncommitted);
 console.log('witness: ', membershipWitness.toJSON());
 // check the membership within circuit
 Provable.runAndCheck(() => {
-  const root = membershipWitness.calculateRoot(Field(41), Field(3n));
+  const root = membershipWitness.calculateRoot(Field(31), Field(3n));
   Provable.log(root);
   Provable.assertEqual(Field, root, nowRootBeforeCommit);
 });
@@ -212,14 +211,13 @@ StandardIndexedTree extends StandardTree, but MAINLY used for non-membership mer
 ``` ts
 import { newTree } from './new_tree.js';
 import { ChainedBatch, Level } from "level";
-import { default as memdown, type MemDown } from 'memdown';
 import { PoseidonHasher } from './types/index.js';
 import { StandardIndexedTree } from './standard_indexed_tree/standard_indexed_tree.js';
 import { Field, Poseidon, Provable } from 'o1js';
 
 // create a leveldb for test
-const createMemDown = () => (memdown as any)() as MemDown<any, any>;
-let db = new Level(createMemDown());
+let db = new Level('example');
+
 
 // poseidonHasher from o1js package
 let poseidonHasher = new PoseidonHasher();
