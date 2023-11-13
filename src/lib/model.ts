@@ -1,5 +1,9 @@
-import { Field } from 'o1js';
+import { Field, Poseidon } from 'o1js';
 
 export type { Hasher };
+export { PoseidonHasherFunc };
 
 type Hasher = (v: Field[]) => Field;
+
+
+const PoseidonHasherFunc = (v: Field[]) => Poseidon.hash(v);

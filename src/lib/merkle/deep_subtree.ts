@@ -1,6 +1,6 @@
 import { Field, Poseidon, Provable } from 'o1js';
 import { EMPTY_VALUE } from '../constant';
-import { Hasher } from '../model';
+import { Hasher, PoseidonHasherFunc } from '../model';
 import { BaseMerkleProof, MerkleTreeUtils } from './proofs';
 import { ProvableMerkleTreeUtils } from './verify_circuit';
 
@@ -27,9 +27,9 @@ class DeepMerkleSubTree<V> {
    * @param {number} height
    * @param {Provable<V>} valueType
    * @param {{ hasher: Hasher; hashValue: boolean }} [options={
-   *       hasher: Poseidon.hash,
+   *       hasher: PoseidonHasherFunc,
    *       hashValue: true,
-   *     }]  hasher: The hash function to use, defaults to Poseidon.hash;
+   *     }]  hasher: The hash function to use, defaults to PoseidonHasherFunc;
    * hashValue: whether to hash the value, the default is true.
    * @memberof DeepMerkleSubTree
    */
@@ -38,7 +38,7 @@ class DeepMerkleSubTree<V> {
     height: number,
     valueType: Provable<V>,
     options: { hasher: Hasher; hashValue: boolean } = {
-      hasher: Poseidon.hash,
+      hasher: PoseidonHasherFunc,
       hashValue: true,
     }
   ) {

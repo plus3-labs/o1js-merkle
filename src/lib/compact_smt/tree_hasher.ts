@@ -1,5 +1,5 @@
 import { Bool, Field, Poseidon, Provable } from 'o1js';
-import { Hasher } from '../model';
+import { Hasher, PoseidonHasherFunc } from '../model';
 
 export { TreeHasher };
 
@@ -25,11 +25,11 @@ class TreeHasher<K, V> {
    * Creates an instance of TreeHasher.
    * @param {Provable<V>} keyType
    * @param {Provable<V>} valueType
-   * @param {Hasher} [hasher=Poseidon.hash]
+   * @param {Hasher} [hasher=PoseidonHasherFunc]
    * @memberof TreeHasher
    */
   constructor(
-    hasher: Hasher = Poseidon.hash,
+    hasher: Hasher = PoseidonHasherFunc,
     keyType?: Provable<K>,
     valueType?: Provable<V>
   ) {
@@ -39,7 +39,7 @@ class TreeHasher<K, V> {
   }
 
   /**
-   * Tree Hasher based on Poseidon.hash
+   * Tree Hasher based on PoseidonHasherFunc
    *
    * @static
    * @template K
@@ -53,7 +53,7 @@ class TreeHasher<K, V> {
     keyType?: Provable<K>,
     valueType?: Provable<V>
   ): TreeHasher<K, V> {
-    return new TreeHasher(Poseidon.hash, keyType, valueType);
+    return new TreeHasher(PoseidonHasherFunc, keyType, valueType);
   }
 
   digestValue(value: V): Field {

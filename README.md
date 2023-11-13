@@ -628,4 +628,4 @@ Support CompactDeepSparseMerkleSubTree: CompactDeepSparseMerkleSubTree is a deep
 
 ### API Reference
 
-- [API Document](https://github.com/plus3-labs/o1js-merkle)
+- [API Document](https://plus3-labs.github.io/o1js-merkle/)

@@ -2,7 +2,7 @@ import { Field, Poseidon, Provable } from 'o1js';
 
 import { EMPTY_VALUE, RIGHT, SMT_DEPTH } from '../constant';
 import { defaultNodes } from '../default_nodes';
-import { Hasher } from '../model';
+import { Hasher, PoseidonHasherFunc } from '../model';
 import { Store } from '../store/store';
 import { BaseMerkleProof, CompactMerkleProof, MerkleTreeUtils } from './proofs';
 import { ProvableMerkleTreeUtils } from './verify_circuit';
@@ -33,9 +33,9 @@ class MerkleTree<V> {
    * @param {number} height
    * @param {Provable<V>} valueType
    * @param {{ hasher?: Hasher; hashValue?: boolean }} [options={
-   *       hasher: Poseidon.hash,
+   *       hasher: PoseidonHasherFunc,
    *       hashValue: true,
-   *     }]  hasher: The hash function to use, defaults to Poseidon.hash;
+   *     }]  hasher: The hash function to use, defaults to PoseidonHasherFunc;
    * hashValue: whether to hash the value, the default is true.
    * @return {*}  {Promise<MerkleTree<V>>}
    * @memberof MerkleTree
@@ -45,7 +45,7 @@ class MerkleTree<V> {
     height: number,
     valueType: Provable<V>,
     options: { hasher?: Hasher; hashValue?: boolean } = {
-      hasher: Poseidon.hash,
+      hasher: PoseidonHasherFunc,
       hashValue: true,
     }
   ): Promise<MerkleTree<V>> {
@@ -53,7 +53,7 @@ class MerkleTree<V> {
       throw new Error(`The height must be between 1 and ${SMT_DEPTH}`);
     }
 
-    let hasher: Hasher = Poseidon.hash;
+    let hasher: Hasher = PoseidonHasherFunc;
     let hashValue = true;
     if (options.hasher !== undefined) {
       hasher = options.hasher;
@@ -88,9 +88,9 @@ class MerkleTree<V> {
    * @param {number} height
    * @param {Provable<V>} valueType
    * @param {{ hasher?: Hasher; hashValue?: boolean }} [options={
-   *       hasher: Poseidon.hash,
+   *       hasher: PoseidonHasherFunc,
    *       hashValue: true,
-   *     }]  hasher: The hash function to use, defaults to Poseidon.hash;
+   *     }]  hasher: The hash function to use, defaults to PoseidonHasherFunc;
    * hashValue: whether to hash the value, the default is true.
    * @return {*}  {Promise<MerkleTree<V>>}
    * @memberof MerkleTree
@@ -100,14 +100,14 @@ class MerkleTree<V> {
     height: number,
     valueType: Provable<V>,
     options: { hasher?: Hasher; hashValue?: boolean } = {
-      hasher: Poseidon.hash,
+      hasher: PoseidonHasherFunc,
       hashValue: true,
     }
   ): Promise<MerkleTree<V>> {
     if (height > SMT_DEPTH || height < 1) {
       throw new Error('The height must be between 1 and ' + SMT_DEPTH);
     }
-    let hasher: Hasher = Poseidon.hash;
+    let hasher: Hasher = PoseidonHasherFunc;
     let hashValue = true;
     if (options.hasher !== undefined) {
       hasher = options.hasher;

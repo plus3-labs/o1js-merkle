@@ -1,6 +1,6 @@
 import { Bool, Field, Poseidon, Provable, Struct } from 'o1js';
 import { EMPTY_VALUE, SMT_DEPTH } from '../constant';
-import { Hasher } from '../model';
+import { Hasher, PoseidonHasherFunc } from '../model';
 import { SparseMerkleProof } from './proofs';
 
 export { ProvableDeepSparseMerkleSubTree };
@@ -29,10 +29,10 @@ class ProvableDeepSparseMerkleSubTree<K, V> {
    * @param {Provable<K>} keyType
    * @param {Provable<V>} valueType
    * @param {{ hasher: Hasher; hashKey: boolean; hashValue: boolean }} [options={
-   *       hasher: Poseidon.hash,
+   *       hasher: PoseidonHasherFunc,
    *       hashKey: true,
    *       hashValue: true,
-   *     }]  hasher: The hash function to use, defaults to Poseidon.hash; hashKey:
+   *     }]  hasher: The hash function to use, defaults to PoseidonHasherFunc; hashKey:
    * whether to hash the key, the default is true; hashValue: whether to hash the value,
    * the default is true.
    * @memberof ProvableDeepSparseMerkleSubTree
@@ -42,7 +42,7 @@ class ProvableDeepSparseMerkleSubTree<K, V> {
     keyType: Provable<K>,
     valueType: Provable<V>,
     options: { hasher: Hasher; hashKey: boolean; hashValue: boolean } = {
-      hasher: Poseidon.hash,
+      hasher: PoseidonHasherFunc,
       hashKey: true,
       hashValue: true,
     }
@@ -275,7 +275,7 @@ function getUpdatesBySideNodes(
   sideNodes: Field[],
   keyHashOrKeyField: Field,
   valueHashOrValueField: Field,
-  hasher: Hasher = Poseidon.hash
+  hasher: Hasher = PoseidonHasherFunc
 ): [Field, Field[]][] {
   let currentHash: Field = valueHashOrValueField;
   let updates: [Field, Field[]][] = [];

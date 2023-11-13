@@ -1,6 +1,6 @@
-import { Bool, Field, Poseidon, Provable } from 'o1js';
+import { Bool, Field, Provable } from 'o1js';
 import { EMPTY_VALUE, SMT_DEPTH } from '../constant';
-import { Hasher } from '../model';
+import { Hasher, PoseidonHasherFunc } from '../model';
 import { SparseMerkleProof } from './proofs';
 
 export { ProvableSMTUtils };
@@ -27,7 +27,7 @@ class ProvableSMTUtils {
    * @param {Field} expectedRoot
    * @param {Field} keyHashOrKeyField
    * @param {Field} valueHashOrValueField
-   * @param {Hasher} [hasher=Poseidon.hash]
+   * @param {Hasher} [hasher=PoseidonHasherFunc]
    * @return {*}  {Bool}
    * @memberof ProvableSMTUtils
    */
@@ -40,7 +40,7 @@ class ProvableSMTUtils {
    * @param {Field[]} sideNodes
    * @param {Field} keyHashOrKeyField
    * @param {Field} valueHashOrValueField
-   * @param {Hasher} [hasher=Poseidon.hash]
+   * @param {Hasher} [hasher=PoseidonHasherFunc]
    * @return {*}  {Field}
    * @memberof ProvableSMTUtils
    */
@@ -59,10 +59,10 @@ class ProvableSMTUtils {
    * @param {V} value
    * @param {Provable<V>} valueType
    * @param {{ hasher?: Hasher; hashKey: boolean; hashValue: boolean }} [options={
-   *       hasher: Poseidon.hash,
+   *       hasher: PoseidonHasherFunc,
    *       hashKey: true,
    *       hashValue: true,
-   *     }]  hasher: The hash function to use, defaults to Poseidon.hash; hashKey:
+   *     }]  hasher: The hash function to use, defaults to PoseidonHasherFunc; hashKey:
    * whether to hash the key, the default is true; hashValue: whether to hash the value,
    * the default is true.
    * @return {*}  {Bool}
@@ -76,12 +76,12 @@ class ProvableSMTUtils {
     value: V,
     valueType: Provable<V>,
     options: { hasher?: Hasher; hashKey: boolean; hashValue: boolean } = {
-      hasher: Poseidon.hash,
+      hasher: PoseidonHasherFunc,
       hashKey: true,
       hashValue: true,
     }
   ): Bool {
-    let hasher = Poseidon.hash;
+    let hasher = PoseidonHasherFunc;
     if (options.hasher !== undefined) {
       hasher = options.hasher;
     }
@@ -115,9 +115,9 @@ class ProvableSMTUtils {
    * @param {K} key
    * @param {Provable<K>} keyType
    * @param {{ hasher?: Hasher; hashKey: boolean }} [options={
-   *       hasher: Poseidon.hash,
+   *       hasher: PoseidonHasherFunc,
    *       hashKey: true,
-   *     }]  hasher: The hash function to use, defaults to Poseidon.hash; hashKey:
+   *     }]  hasher: The hash function to use, defaults to PoseidonHasherFunc; hashKey:
    * whether to hash the key, the default is true; hashValue: whether to hash the value,
    * the default is true.
    * @return {*}  {Bool}
@@ -129,11 +129,11 @@ class ProvableSMTUtils {
     key: K,
     keyType: Provable<K>,
     options: { hasher?: Hasher; hashKey: boolean } = {
-      hasher: Poseidon.hash,
+      hasher: PoseidonHasherFunc,
       hashKey: true,
     }
   ): Bool {
-    let hasher = Poseidon.hash;
+    let hasher = PoseidonHasherFunc;
     if (options.hasher !== undefined) {
       hasher = options.hasher;
     }
@@ -165,7 +165,7 @@ class ProvableSMTUtils {
    * @param {V} value
    * @param {Provable<V>} valueType
    * @param {{ hasher?: Hasher; hashKey: boolean; hashValue: boolean }} [options={
-   *       hasher: Poseidon.hash,
+   *       hasher: PoseidonHasherFunc,
    *       hashKey: true,
    *       hashValue: true,
    *     }]
@@ -179,12 +179,12 @@ class ProvableSMTUtils {
     value: V,
     valueType: Provable<V>,
     options: { hasher?: Hasher; hashKey: boolean; hashValue: boolean } = {
-      hasher: Poseidon.hash,
+      hasher: PoseidonHasherFunc,
       hashKey: true,
       hashValue: true,
     }
   ): Field {
-    let hasher = Poseidon.hash;
+    let hasher = PoseidonHasherFunc;
     if (options.hasher !== undefined) {
       hasher = options.hasher;
     }
@@ -216,7 +216,7 @@ class ProvableSMTUtils {
  * @param {Field} expectedRoot
  * @param {Field} keyHashOrKeyField
  * @param {Field} valueHashOrValueField
- * @param {Hasher} [hasher=Poseidon.hash]
+ * @param {Hasher} [hasher=PoseidonHasherFunc]
  * @return {*}  {Bool}
  */
 function verifyProofByFieldInCircuit(
@@ -224,7 +224,7 @@ function verifyProofByFieldInCircuit(
   expectedRoot: Field,
   keyHashOrKeyField: Field,
   valueHashOrValueField: Field,
-  hasher: Hasher = Poseidon.hash
+  hasher: Hasher = PoseidonHasherFunc
 ): Bool {
   const currentRoot = computeRootByFieldInCircuit(
     proof.sideNodes,
@@ -242,14 +242,14 @@ function verifyProofByFieldInCircuit(
  * @param {Field[]} sideNodes
  * @param {Field} keyHashOrKeyField
  * @param {Field} valueHashOrValueField
- * @param {Hasher} [hasher=Poseidon.hash]
+ * @param {Hasher} [hasher=PoseidonHasherFunc]
  * @return {*}  {Field}
  */
 function computeRootByFieldInCircuit(
   sideNodes: Field[],
   keyHashOrKeyField: Field,
   valueHashOrValueField: Field,
-  hasher: Hasher = Poseidon.hash
+  hasher: Hasher = PoseidonHasherFunc
 ): Field {
   let currentHash = valueHashOrValueField;
   const pathBits = keyHashOrKeyField.toBits(SMT_DEPTH);

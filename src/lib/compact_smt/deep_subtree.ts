@@ -1,5 +1,5 @@
 import { Field, Poseidon, Provable } from 'o1js';
-import { Hasher } from '../model';
+import { Hasher, PoseidonHasherFunc } from '../model';
 import { Store } from '../store/store';
 import { CompactSparseMerkleProof, CSMTUtils } from './proofs';
 import { CompactSparseMerkleTree } from './csmt';
@@ -25,10 +25,10 @@ class CompactDeepSparseMerkleSubTree<K, V> extends CompactSparseMerkleTree<
    * @param {Provable<K>} keyType
    * @param {Provable<V>} valueType
    * @param {{ hasher?: Hasher; hashKey?: boolean; hashValue?: boolean }} [options={
-   *       hasher: Poseidon.hash,
+   *       hasher: PoseidonHasherFunc,
    *       hashKey: true,
    *       hashValue: true,
-   *     }]  hasher: The hash function to use, defaults to Poseidon.hash; hashKey:
+   *     }]  hasher: The hash function to use, defaults to PoseidonHasherFunc; hashKey:
    * whether to hash the key, the default is true; hashValue: whether to hash the value,
    * the default is true.
    * @memberof CompactDeepSparseMerkleSubTree
@@ -39,7 +39,7 @@ class CompactDeepSparseMerkleSubTree<K, V> extends CompactSparseMerkleTree<
     keyType: Provable<K>,
     valueType: Provable<V>,
     options: { hasher?: Hasher; hashKey?: boolean; hashValue?: boolean } = {
-      hasher: Poseidon.hash,
+      hasher: PoseidonHasherFunc,
       hashKey: true,
       hashValue: true,
     }

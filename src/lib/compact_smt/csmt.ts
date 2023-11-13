@@ -1,6 +1,6 @@
 import { Field, Poseidon, Provable } from 'o1js';
 import { ERR_KEY_ALREADY_EMPTY, RIGHT } from '../constant';
-import { Hasher } from '../model';
+import { Hasher, PoseidonHasherFunc } from '../model';
 import { Store } from '../store/store';
 import { countCommonPrefix } from '../utils';
 import { CP_PADD_VALUE, CSMT_DEPTH, PLACEHOLDER } from './constant';
@@ -35,10 +35,10 @@ class CompactSparseMerkleTree<K, V> {
    * @param {Provable<V>} valueType
    * @param {Field} [root]
    * @param {{ hasher?: Hasher; hashKey?: boolean; hashValue?: boolean }} [options={
-   *       hasher: Poseidon.hash,
+   *       hasher: PoseidonHasherFunc,
    *       hashKey: true,
    *       hashValue: true,
-   *     }]  hasher: The hash function to use, defaults to Poseidon.hash; hashKey:
+   *     }]  hasher: The hash function to use, defaults to PoseidonHasherFunc; hashKey:
    * whether to hash the key, the default is true; hashValue: whether to hash the value,
    * the default is true.
    * @memberof CompactSparseMerkleTree
@@ -49,12 +49,12 @@ class CompactSparseMerkleTree<K, V> {
     valueType: Provable<V>,
     root?: Field,
     options: { hasher?: Hasher; hashKey?: boolean; hashValue?: boolean } = {
-      hasher: Poseidon.hash,
+      hasher: PoseidonHasherFunc,
       hashKey: true,
       hashValue: true,
     }
   ) {
-    let hasher = Poseidon.hash;
+    let hasher = PoseidonHasherFunc;
     if (options.hasher !== undefined) {
       hasher = options.hasher;
     }
@@ -89,10 +89,10 @@ class CompactSparseMerkleTree<K, V> {
    * @param {Provable<K>} keyType
    * @param {Provable<V>} valueType
    * @param {{ hasher?: Hasher; hashKey?: boolean; hashValue?: boolean }} [options={
-   *       hasher: Poseidon.hash,
+   *       hasher: PoseidonHasherFunc,
    *       hashKey: true,
    *       hashValue: true,
-   *     }]  hasher: The hash function to use, defaults to Poseidon.hash; hashKey:
+   *     }]  hasher: The hash function to use, defaults to PoseidonHasherFunc; hashKey:
    * whether to hash the key, the default is true; hashValue: whether to hash the value,
    * the default is true.
    * @return {*}  {Promise<CompactSparseMerkleTree<K, V>>}
@@ -103,12 +103,12 @@ class CompactSparseMerkleTree<K, V> {
     keyType: Provable<K>,
     valueType: Provable<V>,
     options: { hasher?: Hasher; hashKey?: boolean; hashValue?: boolean } = {
-      hasher: Poseidon.hash,
+      hasher: PoseidonHasherFunc,
       hashKey: true,
       hashValue: true,
     }
   ): Promise<CompactSparseMerkleTree<K, V>> {
-    let hasher = Poseidon.hash;
+    let hasher = PoseidonHasherFunc;
     if (options.hasher !== undefined) {
       hasher = options.hasher;
     }

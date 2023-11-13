@@ -8,7 +8,7 @@ import {
 
 import { EMPTY_VALUE, RIGHT } from '../constant';
 import { defaultNodes } from '../default_nodes';
-import { Hasher } from '../model';
+import { Hasher, PoseidonHasherFunc } from '../model';
 import { countSetBits, fieldToHexString, hexStringToField } from '../utils';
 import { ProvableMerkleTreeUtils } from './verify_circuit';
 
@@ -81,13 +81,13 @@ class MerkleTreeUtils {
    *
    * @static
    * @param {BaseMerkleProof} proof
-   * @param {Hasher} [hasher=Poseidon.hash]
+   * @param {Hasher} [hasher=PoseidonHasherFunc]
    * @return {*}  {CompactMerkleProof}
    * @memberof MerkleTreeUtils
    */
   static compactMerkleProof(
     proof: BaseMerkleProof,
-    hasher: Hasher = Poseidon.hash
+    hasher: Hasher = PoseidonHasherFunc
   ): CompactMerkleProof {
     const h = proof.height();
     if (proof.sideNodes.length !== h) {
@@ -118,13 +118,13 @@ class MerkleTreeUtils {
    *
    * @static
    * @param {CompactMerkleProof} proof
-   * @param {Hasher} [hasher=Poseidon.hash]
+   * @param {Hasher} [hasher=PoseidonHasherFunc]
    * @return {*}  {BaseMerkleProof}
    * @memberof MerkleTreeUtils
    */
   static decompactMerkleProof(
     proof: CompactMerkleProof,
-    hasher: Hasher = Poseidon.hash
+    hasher: Hasher = PoseidonHasherFunc
   ): BaseMerkleProof {
     const h = proof.height;
     const bits = proof.bitMask.toBits();
@@ -201,9 +201,9 @@ class MerkleTreeUtils {
    * @param {V} [value]
    * @param {Provable<V>} [valueType]
    * @param {{ hasher: Hasher; hashValue: boolean }} [options={
-   *       hasher: Poseidon.hash,
+   *       hasher: PoseidonHasherFunc,
    *       hashValue: true,
-   *     }]  hasher: The hash function to use, defaults to Poseidon.hash;
+   *     }]  hasher: The hash function to use, defaults to PoseidonHasherFunc;
    * hashValue: whether to hash the value, the default is true.
    * @return {*}  {Field}
    * @memberof MerkleTreeUtils
@@ -214,7 +214,7 @@ class MerkleTreeUtils {
     value?: V,
     valueType?: Provable<V>,
     options: { hasher: Hasher; hashValue: boolean } = {
-      hasher: Poseidon.hash,
+      hasher: PoseidonHasherFunc,
       hashValue: true,
     }
   ): Field {
@@ -267,9 +267,9 @@ class MerkleTreeUtils {
    * @param {V} value
    * @param {Provable<V>} valueType
    * @param {{ hasher: Hasher; hashValue: boolean }} [options={
-   *       hasher: Poseidon.hash,
+   *       hasher: PoseidonHasherFunc,
    *       hashValue: true,
-   *     }]  hasher: The hash function to use, defaults to Poseidon.hash;
+   *     }]  hasher: The hash function to use, defaults to PoseidonHasherFunc;
    * hashValue: whether to hash the value, the default is true.
    * @return {*}  {boolean}
    * @memberof MerkleTreeUtils
@@ -281,7 +281,7 @@ class MerkleTreeUtils {
     value: V,
     valueType: Provable<V>,
     options: { hasher: Hasher; hashValue: boolean } = {
-      hasher: Poseidon.hash,
+      hasher: PoseidonHasherFunc,
       hashValue: true,
     }
   ): boolean {
@@ -303,7 +303,7 @@ class MerkleTreeUtils {
    * @param {BaseMerkleProof} proof
    * @param {Field} expectedRoot
    * @param {bigint} index
-   * @param {Hasher} [hasher=Poseidon.hash]
+   * @param {Hasher} [hasher=PoseidonHasherFunc]
    * @return {*}  {boolean}
    * @memberof MerkleTreeUtils
    */
@@ -311,7 +311,7 @@ class MerkleTreeUtils {
     proof: BaseMerkleProof,
     expectedRoot: Field,
     index: bigint,
-    hasher: Hasher = Poseidon.hash
+    hasher: Hasher = PoseidonHasherFunc
   ): boolean {
     return this.verifyProof<V>(
       proof,
@@ -337,9 +337,9 @@ class MerkleTreeUtils {
    * @param {V} [value]
    * @param {Provable<V>} [valueType]
    * @param {{ hasher: Hasher; hashValue: boolean }} [options={
-   *       hasher: Poseidon.hash,
+   *       hasher: PoseidonHasherFunc,
    *       hashValue: true,
-   *     }]  hasher: The hash function to use, defaults to Poseidon.hash;
+   *     }]  hasher: The hash function to use, defaults to PoseidonHasherFunc;
    * hashValue: whether to hash the value, the default is true.
    * @return {*}  {boolean}
    * @memberof MerkleTreeUtils
@@ -351,7 +351,7 @@ class MerkleTreeUtils {
     value?: V,
     valueType?: Provable<V>,
     options: { hasher: Hasher; hashValue: boolean } = {
-      hasher: Poseidon.hash,
+      hasher: PoseidonHasherFunc,
       hashValue: true,
     }
   ): boolean {
@@ -377,7 +377,7 @@ class MerkleTreeUtils {
    * @param {Field} expectedRoot
    * @param {bigint} index
    * @param {Field} valueHashOrValueField
-   * @param {Hasher} [hasher=Poseidon.hash]
+   * @param {Hasher} [hasher=PoseidonHasherFunc]
    * @return {*}  {boolean}
    * @memberof MerkleTreeUtils
    */
@@ -386,7 +386,7 @@ class MerkleTreeUtils {
     expectedRoot: Field,
     index: bigint,
     valueHashOrValueField: Field,
-    hasher: Hasher = Poseidon.hash
+    hasher: Hasher = PoseidonHasherFunc
   ): boolean {
     if (!proof.root.equals(expectedRoot).toBoolean()) {
       return false;
@@ -410,7 +410,7 @@ class MerkleTreeUtils {
    * @param {Field} expectedRoot
    * @param {bigint} index
    * @param {Field} valueHashOrValueField
-   * @param {Hasher} [hasher=Poseidon.hash]
+   * @param {Hasher} [hasher=PoseidonHasherFunc]
    * @return {*}  {{ ok: boolean; updates: [Field, Field[]][] }}
    * @memberof MerkleTreeUtils
    */
@@ -419,7 +419,7 @@ class MerkleTreeUtils {
     expectedRoot: Field,
     index: bigint,
     valueHashOrValueField: Field,
-    hasher: Hasher = Poseidon.hash
+    hasher: Hasher = PoseidonHasherFunc
   ): { ok: boolean; updates: [Field, Field[]][] } {
     if (!proof.root.equals(expectedRoot).toBoolean()) {
       return { ok: false, updates: [] };
@@ -442,7 +442,7 @@ class MerkleTreeUtils {
    * @param {BaseMerkleProof} proof
    * @param {bigint} index
    * @param {Field} valueHashOrValueField
-   * @param {Hasher} [hasher=Poseidon.hash]
+   * @param {Hasher} [hasher=PoseidonHasherFunc]
    * @return {*}  {Field}
    * @memberof MerkleTreeUtils
    */
@@ -450,7 +450,7 @@ class MerkleTreeUtils {
     proof: BaseMerkleProof,
     index: bigint,
     valueHashOrValueField: Field,
-    hasher: Hasher = Poseidon.hash
+    hasher: Hasher = PoseidonHasherFunc
   ): Field {
     let h = proof.height();
     let currentHash: Field = valueHashOrValueField;
@@ -480,7 +480,7 @@ class MerkleTreeUtils {
    * @param {BaseMerkleProof} proof
    * @param {bigint} index
    * @param {Field} valueHashOrValueField
-   * @param {Hasher} [hasher=Poseidon.hash]
+   * @param {Hasher} [hasher=PoseidonHasherFunc]
    * @return {*}  {{ actualRoot: Field; updates: [Field, Field[]][] }}
    * @memberof MerkleTreeUtils
    */
@@ -488,7 +488,7 @@ class MerkleTreeUtils {
     proof: BaseMerkleProof,
     index: bigint,
     valueHashOrValueField: Field,
-    hasher: Hasher = Poseidon.hash
+    hasher: Hasher = PoseidonHasherFunc
   ): { actualRoot: Field; updates: [Field, Field[]][] } {
     let h = proof.height();
     let currentHash: Field = valueHashOrValueField;
