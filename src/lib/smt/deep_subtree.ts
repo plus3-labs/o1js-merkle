@@ -1,6 +1,6 @@
 import { Field, Poseidon, Provable } from 'o1js';
 import { EMPTY_VALUE, SMT_DEPTH } from '../constant';
-import { Hasher } from '../model';
+import { Hasher, PoseidonHasherFunc } from '../model';
 import { SparseMerkleProof } from './proofs';
 
 export { DeepSparseMerkleSubTree };
@@ -26,10 +26,10 @@ class DeepSparseMerkleSubTree<K, V> {
    * @param {Provable<K>} keyType
    * @param {Provable<V>} valueType
    * @param {{ hasher: Hasher; hashKey: boolean; hashValue: boolean }} [options={
-   *       hasher: Poseidon.hash,
+   *       hasher: PoseidonHasherFunc,
    *       hashKey: true,
    *       hashValue: true,
-   *     }]  hasher: The hash function to use, defaults to Poseidon.hash; hashKey:
+   *     }]  hasher: The hash function to use, defaults to PoseidonHasherFunc; hashKey:
    * whether to hash the key, the default is true; hashValue: whether to hash the value,
    * the default is true.
    * @memberof DeepSparseMerkleSubTree
@@ -39,7 +39,7 @@ class DeepSparseMerkleSubTree<K, V> {
     keyType: Provable<K>,
     valueType: Provable<V>,
     options: { hasher: Hasher; hashKey: boolean; hashValue: boolean } = {
-      hasher: Poseidon.hash,
+      hasher: PoseidonHasherFunc,
       hashKey: true,
       hashValue: true,
     }
@@ -261,7 +261,7 @@ function verifyProofWithUpdates(
   expectedRoot: Field,
   keyHashOrKeyField: Field,
   valueHashOrValueField: Field,
-  hasher: Hasher = Poseidon.hash
+  hasher: Hasher = PoseidonHasherFunc
 ): { ok: boolean; updates: [Field, Field[]][] } {
   if (!proof.root.equals(expectedRoot).toBoolean()) {
     return { ok: false, updates: [] };
@@ -281,7 +281,7 @@ function computeRoot(
   sideNodes: Field[],
   keyHashOrKeyField: Field,
   valueHashOrValueField: Field,
-  hasher: Hasher = Poseidon.hash
+  hasher: Hasher = PoseidonHasherFunc
 ): { actualRoot: Field; updates: [Field, Field[]][] } {
   let currentHash: Field = valueHashOrValueField;
 

@@ -1,7 +1,7 @@
 import { Field, Poseidon, Provable } from 'o1js';
 import { EMPTY_VALUE, RIGHT, SMT_DEPTH } from '../constant';
 import { defaultNodes } from '../default_nodes';
-import { Hasher } from '../model';
+import { Hasher, PoseidonHasherFunc } from '../model';
 import { Store } from '../store/store';
 import {
   SMTUtils,
@@ -46,10 +46,10 @@ class SparseMerkleTree<K, V> {
    * @param {Provable<K>} KeyType
    * @param {Provable<V>} ValueType
    * @param {{ hasher?: Hasher; hashKey?: boolean; hashValue?: boolean }} [options={
-   *       hasher: Poseidon.hash,
+   *       hasher: PoseidonHasherFunc,
    *       hashKey: true,
    *       hashValue: true,
-   *     }]  hasher: The hash function to use, defaults to Poseidon.hash; hashKey:
+   *     }]  hasher: The hash function to use, defaults to PoseidonHasherFunc; hashKey:
    * whether to hash the key, the default is true; hashValue: whether to hash the value,
    * the default is true.
    * @return {*}  {Promise<SparseMerkleTree<K, V>>}
@@ -60,12 +60,12 @@ class SparseMerkleTree<K, V> {
     KeyType: Provable<K>,
     ValueType: Provable<V>,
     options: { hasher?: Hasher; hashKey?: boolean; hashValue?: boolean } = {
-      hasher: Poseidon.hash,
+      hasher: PoseidonHasherFunc,
       hashKey: true,
       hashValue: true,
     }
   ): Promise<SparseMerkleTree<K, V>> {
-    let hasher: Hasher = Poseidon.hash;
+    let hasher: Hasher = PoseidonHasherFunc;
     let config = { hashKey: true, hashValue: true };
     if (options.hasher !== undefined) {
       hasher = options.hasher;
@@ -109,10 +109,10 @@ class SparseMerkleTree<K, V> {
    * @param {Provable<K>} keyType
    * @param {Provable<V>} valueType
    * @param {{ hasher?: Hasher; hashKey?: boolean; hashValue?: boolean }} [options={
-   *       hasher: Poseidon.hash,
+   *       hasher: PoseidonHasherFunc,
    *       hashKey: true,
    *       hashValue: true,
-   *     }]  hasher: The hash function to use, defaults to Poseidon.hash; hashKey:
+   *     }]  hasher: The hash function to use, defaults to PoseidonHasherFunc; hashKey:
    * whether to hash the key, the default is true; hashValue: whether to hash the value,
    * the default is true.
    * @return {*}  {Promise<SparseMerkleTree<K, V>>}
@@ -123,12 +123,12 @@ class SparseMerkleTree<K, V> {
     keyType: Provable<K>,
     valueType: Provable<V>,
     options: { hasher?: Hasher; hashKey?: boolean; hashValue?: boolean } = {
-      hasher: Poseidon.hash,
+      hasher: PoseidonHasherFunc,
       hashKey: true,
       hashValue: true,
     }
   ): Promise<SparseMerkleTree<K, V>> {
-    let hasher: Hasher = Poseidon.hash;
+    let hasher: Hasher = PoseidonHasherFunc;
     let config = { hashKey: true, hashValue: true };
     if (options.hasher !== undefined) {
       hasher = options.hasher;

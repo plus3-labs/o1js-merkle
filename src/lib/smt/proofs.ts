@@ -1,7 +1,7 @@
 import { Bool, Circuit, Field, Poseidon, Provable, Struct } from 'o1js';
 import { EMPTY_VALUE, RIGHT, SMT_DEPTH } from '../constant';
 import { defaultNodes } from '../default_nodes';
-import { Hasher } from '../model';
+import { Hasher, PoseidonHasherFunc } from '../model';
 import { countSetBits, fieldToHexString, hexStringToField } from '../utils';
 
 export { SparseMerkleProof, SMTUtils };
@@ -106,10 +106,10 @@ class SMTUtils {
    * @param {V} [value]
    * @param {Provable<V>} [valueType]
    * @param {{ hasher: Hasher; hashKey: boolean; hashValue: boolean }} [options={
-   *       hasher: Poseidon.hash,
+   *       hasher: PoseidonHasherFunc,
    *       hashKey: true,
    *       hashValue: true,
-   *     }]  hasher: The hash function to use, defaults to Poseidon.hash; hashKey:
+   *     }]  hasher: The hash function to use, defaults to PoseidonHasherFunc; hashKey:
    * whether to hash the key, the default is true; hashValue: whether to hash the value,
    * the default is true.
    * @return {*}  {Field}
@@ -122,7 +122,7 @@ class SMTUtils {
     value?: V,
     valueType?: Provable<V>,
     options: { hasher: Hasher; hashKey: boolean; hashValue: boolean } = {
-      hasher: Poseidon.hash,
+      hasher: PoseidonHasherFunc,
       hashKey: true,
       hashValue: true,
     }
@@ -177,10 +177,10 @@ class SMTUtils {
    * @param {V} value
    * @param {Provable<V>} valueType
    * @param {{ hasher: Hasher; hashKey: boolean; hashValue: boolean }} [options={
-   *       hasher: Poseidon.hash,
+   *       hasher: PoseidonHasherFunc,
    *       hashKey: true,
    *       hashValue: true,
-   *     }]  hasher: The hash function to use, defaults to Poseidon.hash; hashKey:
+   *     }]  hasher: The hash function to use, defaults to PoseidonHasherFunc; hashKey:
    * whether to hash the key, the default is true; hashValue: whether to hash the value,
    * the default is true.
    * @return {*}  {boolean}
@@ -194,7 +194,7 @@ class SMTUtils {
     value: V,
     valueType: Provable<V>,
     options: { hasher: Hasher; hashKey: boolean; hashValue: boolean } = {
-      hasher: Poseidon.hash,
+      hasher: PoseidonHasherFunc,
       hashKey: true,
       hashValue: true,
     }
@@ -221,10 +221,10 @@ class SMTUtils {
    * @param {K} key
    * @param {Provable<K>} keyType
    * @param {{ hasher: Hasher; hashKey: boolean; hashValue: boolean }} [options={
-   *       hasher: Poseidon.hash,
+   *       hasher: PoseidonHasherFunc,
    *       hashKey: true,
    *       hashValue: true,
-   *     }]  hasher: The hash function to use, defaults to Poseidon.hash; hashKey:
+   *     }]  hasher: The hash function to use, defaults to PoseidonHasherFunc; hashKey:
    * whether to hash the key, the default is true; hashValue: whether to hash the value,
    * the default is true.
    * @return {*}  {boolean}
@@ -236,7 +236,7 @@ class SMTUtils {
     key: K,
     keyType: Provable<K>,
     options: { hasher: Hasher; hashKey: boolean; hashValue: boolean } = {
-      hasher: Poseidon.hash,
+      hasher: PoseidonHasherFunc,
       hashKey: true,
       hashValue: true,
     }
@@ -265,10 +265,10 @@ class SMTUtils {
    * @param {V} [value]
    * @param {Provable<V>} [valueType]
    * @param {{ hasher: Hasher; hashKey: boolean; hashValue: boolean }} [options={
-   *       hasher: Poseidon.hash,
+   *       hasher: PoseidonHasherFunc,
    *       hashKey: true,
    *       hashValue: true,
-   *     }]  hasher: The hash function to use, defaults to Poseidon.hash; hashKey:
+   *     }]  hasher: The hash function to use, defaults to PoseidonHasherFunc; hashKey:
    * whether to hash the key, the default is true; hashValue: whether to hash the value,
    * the default is true.
    * @return {*}  {boolean}
@@ -282,7 +282,7 @@ class SMTUtils {
     value?: V,
     valueType?: Provable<V>,
     options: { hasher: Hasher; hashKey: boolean; hashValue: boolean } = {
-      hasher: Poseidon.hash,
+      hasher: PoseidonHasherFunc,
       hashKey: true,
       hashValue: true,
     }
@@ -315,7 +315,7 @@ class SMTUtils {
    * @param {V} [value]
    * @param {Provable<V>} [valueType]
    * @param {{ hasher: Hasher; hashKey: boolean; hashValue: boolean }} [options={
-   *       hasher: Poseidon.hash,
+   *       hasher: PoseidonHasherFunc,
    *       hashKey: true,
    *       hashValue: true,
    *     }]
@@ -330,7 +330,7 @@ class SMTUtils {
     value?: V,
     valueType?: Provable<V>,
     options: { hasher: Hasher; hashKey: boolean; hashValue: boolean } = {
-      hasher: Poseidon.hash,
+      hasher: PoseidonHasherFunc,
       hashKey: true,
       hashValue: true,
     }
@@ -352,13 +352,13 @@ class SMTUtils {
    *
    * @static
    * @param {SparseMerkleProof} proof
-   * @param {Hasher} [hasher=Poseidon.hash]
+   * @param {Hasher} [hasher=PoseidonHasherFunc]
    * @return {*}  {SparseCompactMerkleProof}
    * @memberof SMTUtils
    */
   static compactProof(
     proof: SparseMerkleProof,
-    hasher: Hasher = Poseidon.hash
+    hasher: Hasher = PoseidonHasherFunc
   ): SparseCompactMerkleProof {
     if (proof.sideNodes.length !== SMT_DEPTH) {
       throw new Error('Bad proof size');
@@ -387,13 +387,13 @@ class SMTUtils {
    *
    * @static
    * @param {SparseCompactMerkleProof} proof
-   * @param {Hasher} [hasher=Poseidon.hash]
+   * @param {Hasher} [hasher=PoseidonHasherFunc]
    * @return {*}  {SparseMerkleProof}
    * @memberof SMTUtils
    */
   static decompactProof(
     proof: SparseCompactMerkleProof,
-    hasher: Hasher = Poseidon.hash
+    hasher: Hasher = PoseidonHasherFunc
   ): SparseMerkleProof {
     const bits = proof.bitMask.toBits();
     const proofSize = SMT_DEPTH - countSetBits(bits);

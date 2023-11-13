@@ -1,6 +1,6 @@
 import { Bool, Field, Poseidon, Provable, Struct } from 'o1js';
 import { EMPTY_VALUE } from '../constant';
-import { Hasher } from '../model';
+import { Hasher, PoseidonHasherFunc } from '../model';
 import { BaseMerkleProof } from './proofs';
 import { ProvableMerkleTreeUtils } from './verify_circuit';
 
@@ -27,9 +27,9 @@ class ProvableDeepMerkleSubTree<V> {
    * @param {number} height height of tree
    * @param {Provable<V>} valueType
    * @param {{ hasher?: Hasher; hashValue: boolean }} [options={
-   *       hasher: Poseidon.hash,
+   *       hasher: PoseidonHasherFunc,
    *       hashValue: true,
-   *     }]  hasher: The hash function to use, defaults to Poseidon.hash;
+   *     }]  hasher: The hash function to use, defaults to PoseidonHasherFunc;
    * hashValue: whether to hash the value, he default is true.
    * @memberof ProvableDeepMerkleSubTree
    */
@@ -38,7 +38,7 @@ class ProvableDeepMerkleSubTree<V> {
     height: number,
     valueType: Provable<V>,
     options: { hasher?: Hasher; hashValue: boolean } = {
-      hasher: Poseidon.hash,
+      hasher: PoseidonHasherFunc,
       hashValue: true,
     }
   ) {
@@ -46,7 +46,7 @@ class ProvableDeepMerkleSubTree<V> {
     this.nodeStore = new Map<string, Field[]>();
     this.valueStore = new Map<string, Field>();
     this.height = height;
-    this.hasher = Poseidon.hash;
+    this.hasher = PoseidonHasherFunc;
     if (options.hasher !== undefined) {
       this.hasher = options.hasher;
     }
@@ -276,7 +276,7 @@ function getUpdatesBySideNodes(
   keyHashOrKeyField: Field,
   valueHashOrValueField: Field,
   height: number,
-  hasher: Hasher = Poseidon.hash
+  hasher: Hasher = PoseidonHasherFunc
 ): [Field, Field[]][] {
   let currentHash: Field = valueHashOrValueField;
   let updates: [Field, Field[]][] = [];

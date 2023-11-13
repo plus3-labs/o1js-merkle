@@ -7,7 +7,7 @@ import {
   Struct,
 } from 'o1js';
 import { RIGHT } from '../constant';
-import { Hasher } from '../model';
+import { Hasher, PoseidonHasherFunc } from '../model';
 import { CP_PADD_VALUE, CSMT_DEPTH, PLACEHOLDER } from './constant';
 import { TreeHasher } from './tree_hasher';
 
@@ -88,10 +88,10 @@ class CSMTUtils {
    * @param {V} [value]
    * @param {Provable<V>} [valueType]
    * @param {{ hasher: Hasher; hashKey: boolean; hashValue: boolean }} [options={
-   *       hasher: Poseidon.hash,
+   *       hasher: PoseidonHasherFunc,
    *       hashKey: true,
    *       hashValue: true,
-   *     }]  hasher: The hash function to use, defaults to Poseidon.hash; hashKey:
+   *     }]  hasher: The hash function to use, defaults to PoseidonHasherFunc; hashKey:
    * whether to hash the key, the default is true; hashValue: whether to hash the value,
    * the default is true.
    * @return {*}  {boolean}
@@ -105,7 +105,7 @@ class CSMTUtils {
     value?: V,
     valueType?: Provable<V>,
     options: { hasher: Hasher; hashKey: boolean; hashValue: boolean } = {
-      hasher: Poseidon.hash,
+      hasher: PoseidonHasherFunc,
       hashKey: true,
       hashValue: true,
     }
@@ -135,10 +135,10 @@ class CSMTUtils {
    * @param {V} [value]
    * @param {Provable<V>} [valueType]
    * @param {{ hasher: Hasher; hashKey: boolean; hashValue: boolean }} [options={
-   *       hasher: Poseidon.hash,
+   *       hasher: PoseidonHasherFunc,
    *       hashKey: true,
    *       hashValue: true,
-   *     }]  hasher: The hash function to use, defaults to Poseidon.hash; hashKey:
+   *     }]  hasher: The hash function to use, defaults to PoseidonHasherFunc; hashKey:
    * whether to hash the key, the default is true; hashValue: whether to hash the value,
    * the default is true.
    * @return {*}  {({
@@ -155,7 +155,7 @@ class CSMTUtils {
     value?: V,
     valueType?: Provable<V>,
     options: { hasher: Hasher; hashKey: boolean; hashValue: boolean } = {
-      hasher: Poseidon.hash,
+      hasher: PoseidonHasherFunc,
       hashKey: true,
       hashValue: true,
     }
@@ -278,10 +278,10 @@ class CSMTUtils {
    * @param {V} [value]
    * @param {Provable<V>} [valueType]
    * @param {{ hasher: Hasher; hashKey: boolean; hashValue: boolean }} [options={
-   *       hasher: Poseidon.hash,
+   *       hasher: PoseidonHasherFunc,
    *       hashKey: true,
    *       hashValue: true,
-   *     }]  hasher: The hash function to use, defaults to Poseidon.hash; hashKey:
+   *     }]  hasher: The hash function to use, defaults to PoseidonHasherFunc; hashKey:
    * whether to hash the key, the default is true; hashValue: whether to hash the value,
    * the default is true.
    * @return {*}  {boolean}
@@ -295,7 +295,7 @@ class CSMTUtils {
     value?: V,
     valueType?: Provable<V>,
     options: { hasher: Hasher; hashKey: boolean; hashValue: boolean } = {
-      hasher: Poseidon.hash,
+      hasher: PoseidonHasherFunc,
       hashKey: true,
       hashValue: true,
     }
@@ -322,9 +322,9 @@ class CSMTUtils {
    * @param {K} key
    * @param {Provable<K>} keyType
    * @param {{ hasher: Hasher; hashKey: boolean }} [options={
-   *       hasher: Poseidon.hash,
+   *       hasher: PoseidonHasherFunc,
    *       hashKey: true,
-   *     }]  hasher: The hash function to use, defaults to Poseidon.hash;
+   *     }]  hasher: The hash function to use, defaults to PoseidonHasherFunc;
    * hashKey: whether to hash the key, the default is true
    * @return {*}  {boolean}
    * @memberof CSMTUtils
@@ -335,7 +335,7 @@ class CSMTUtils {
     key: K,
     keyType: Provable<K>,
     options: { hasher: Hasher; hashKey: boolean } = {
-      hasher: Poseidon.hash,
+      hasher: PoseidonHasherFunc,
       hashKey: true,
     }
   ): boolean {
@@ -367,10 +367,10 @@ class CSMTUtils {
    * @param {V} [value]
    * @param {Provable<V>} [valueType]
    * @param {{ hasher: Hasher; hashKey: boolean; hashValue: boolean }} [options={
-   *       hasher: Poseidon.hash,
+   *       hasher: PoseidonHasherFunc,
    *       hashKey: true,
    *       hashValue: true,
-   *     }]  hasher: The hash function to use, defaults to Poseidon.hash; hashKey:
+   *     }]  hasher: The hash function to use, defaults to PoseidonHasherFunc; hashKey:
    * whether to hash the key, the default is true; hashValue: whether to hash the value,
    * the default is true.
    * @return {*}  {boolean}
@@ -384,7 +384,7 @@ class CSMTUtils {
     value?: V,
     valueType?: Provable<V>,
     options: { hasher: Hasher; hashKey: boolean; hashValue: boolean } = {
-      hasher: Poseidon.hash,
+      hasher: PoseidonHasherFunc,
       hashKey: true,
       hashValue: true,
     }
@@ -406,13 +406,13 @@ class CSMTUtils {
    *
    * @static
    * @param {CompactSparseMerkleProof} proof
-   * @param {Hasher} [hasher=Poseidon.hash]
+   * @param {Hasher} [hasher=PoseidonHasherFunc]
    * @return {*}  {CSparseCompactMerkleProof}
    * @memberof CSMTUtils
    */
   static compactProof(
     proof: CompactSparseMerkleProof,
-    hasher: Hasher = Poseidon.hash
+    hasher: Hasher = PoseidonHasherFunc
   ): CSparseCompactMerkleProof {
     const sideNodes = proof.sideNodes;
     const sideNodesLength = sideNodes.length;
@@ -448,13 +448,13 @@ class CSMTUtils {
    *
    * @static
    * @param {CSparseCompactMerkleProof} proof
-   * @param {Hasher} [hasher=Poseidon.hash]
+   * @param {Hasher} [hasher=PoseidonHasherFunc]
    * @return {*}  {CompactSparseMerkleProof}
    * @memberof CSMTUtils
    */
   static decompactProof(
     proof: CSparseCompactMerkleProof,
-    hasher: Hasher = Poseidon.hash
+    hasher: Hasher = PoseidonHasherFunc
   ): CompactSparseMerkleProof {
     let decompactedSideNodes = [];
     let position = 0;
