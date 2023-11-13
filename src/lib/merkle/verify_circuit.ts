@@ -1,6 +1,6 @@
 import { arrayProp, Bool, Field, Poseidon, Provable } from 'o1js';
 import { EMPTY_VALUE } from '../constant';
-import { Hasher } from '../model';
+import { Hasher, PoseidonHasher } from '../model';
 import { BaseMerkleProof } from './proofs';
 
 export { ProvableMerkleTreeUtils };
@@ -64,11 +64,11 @@ class ProvableMerkleTreeUtils {
     value: V,
     valueType: Provable<V>,
     options: { hasher?: Hasher; hashValue: boolean } = {
-      hasher: Poseidon.hash,
+      hasher: PoseidonHasher,
       hashValue: true,
     }
   ): Field {
-    let hasher = Poseidon.hash;
+    let hasher = PoseidonHasher;
     if (options.hasher !== undefined) {
       hasher = options.hasher;
     }
@@ -140,7 +140,7 @@ class ProvableMerkleTreeUtils {
     proof: BaseMerkleProof,
     expectedRoot: Field,
     index: Field,
-    hasher: Hasher = Poseidon.hash
+    hasher: Hasher = PoseidonHasher
   ): Bool {
     const currentRoot = computeRootByFieldInCircuit(
       proof,
@@ -156,7 +156,7 @@ function computeRootByFieldInCircuit(
   proof: BaseMerkleProof,
   index: Field,
   valueHashOrValueField: Field,
-  hasher: Hasher = Poseidon.hash
+  hasher: Hasher = PoseidonHasher
 ): Field {
   let h = proof.height();
   let currentHash = valueHashOrValueField;
