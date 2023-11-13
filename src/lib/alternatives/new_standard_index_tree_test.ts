@@ -4,6 +4,7 @@ import { PoseidonHasher } from './types/index.js';
 import { StandardIndexedTree } from './standard_indexed_tree/standard_indexed_tree.js';
 import { Field, Poseidon, Provable } from 'o1js';
 import { loadTree } from './load_tree.js';
+import { LeafData as CircuitLeafData, LeafData, verifyNonMembership } from "./standard_indexed_tree/verify_circuit.js";
 
 // create a leveldb for test
 let db = new Level<string, Buffer>('example-index', {valueEncoding:'buffer'});
@@ -70,27 +71,22 @@ await standardIndexedTreeInstance.commit();
 
 // Non-Membership merkle witness
 nowRootAfterCommit = standardIndexedTreeInstance.getRoot(!includeUncommitted);
-const nullifier1 = 71n;// the nullifier to be inserted
-const { index, alreadyPresent } = await standardIndexedTreeInstance.findIndexOfPreviousValue(nullifier1, includeUncommitted);
+const nullifier1 = Field(71n);// the nullifier to be inserted
+const { index, alreadyPresent } = await standardIndexedTreeInstance.findIndexOfPreviousValue(nullifier1.toBigInt(), includeUncommitted);
 if (alreadyPresent) {// if exist, then throw error.
     throw new Error("nullifier1[${nullifier1}] existed!");
 }
-const siblingPath = (await standardIndexedTreeInstance.getSiblingPath(BigInt(index), includeUncommitted))!;
+const predecessorSiblingPath = (await standardIndexedTreeInstance.getSiblingPath(BigInt(index), includeUncommitted))!;
 const leafData = standardIndexedTreeInstance.getLatestLeafDataCopy(index, includeUncommitted)!;
-
-// compose the result
-const nonMembershipWitness = {
-  index: `${index}`,
-  siblingPath,
-  leafData
-};
+const predecessorLeafData = new LeafData({value: Field(leafData.value), nextIndex: Field(leafData.nextIndex), nextValue: Field(leafData.nextValue)});
+const predecessorLeafDataIndex= Field(index);
 
 // the membership witness of previous leaf is the Non-membership witness of 'nullifier1'
-// pseudocode to check within circuit
-const commitment = Poseidon.hash([Field(leafData.value), Field(leafData.nextValue), Field(leafData.nextIndex)]);
-const root1 = siblingPath.calculateRoot(commitment, Field(index), poseidonHasher);
-// if both are true, then mean 'nullifier1' is not in the tree.
-console.assert(leafData.nextValue != nullifier1);
-console.assert(nowRootAfterCommit.equals(root1).toBoolean());
+Provable.runAndCheck(() => {
+  verifyNonMembership(nowRootAfterCommit, nullifier1, predecessorLeafData, predecessorSiblingPath, predecessorLeafDataIndex);
+  Provable.log(`verify: true`);
+});
+
+
 
 

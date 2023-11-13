@@ -1,9 +1,9 @@
 import { newTree } from './new_tree.js';
-import { ChainedBatch, Level } from "level";
+import { Level } from "level";
 import { PoseidonHasher } from './types/index.js';
 import { Field, Provable } from 'o1js';
 import { StandardTree } from './standard_tree/standard_tree.js';
-import { loadTree } from './load_tree.js';
+import { verifyMembership  } from "./standard_tree/verify_circuit.js";
 
 // create a leveldb for test
 let db = new Level<string, Buffer>('example', {valueEncoding:'buffer'});
@@ -74,6 +74,8 @@ Provable.runAndCheck(() => {
   const root = membershipWitness.calculateRoot(Field(31), Field(3n));
   Provable.log(root);
   Provable.assertEqual(Field, root, nowRootBeforeCommit);
+
+  // verifyMembership(nowRootBeforeCommit, membershipWitness, Field(31), Field(3n))
 });
 
 const membershipWitness2 = await standardTreeInstance.getSiblingPath(6n, includeUncommitted);
