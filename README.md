@@ -2,8 +2,6 @@
 
 ![npm](https://img.shields.io/npm/v/o1js-merkle)
 ![node-current](https://img.shields.io/node/v/o1js-merkle)
-![Libraries.io dependency status for latest release](https://img.shields.io/librariesio/release/npm/o1js-merkle)
-![npm](https://img.shields.io/npm/dm/o1js-merkle)
 
 **Merkle Trees for o1js (membership / non-membership merkle witness)**
 
