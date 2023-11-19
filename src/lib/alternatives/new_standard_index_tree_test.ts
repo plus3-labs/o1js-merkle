@@ -7,7 +7,7 @@ import { loadTree } from './load_tree.js';
 import { LeafData as CircuitLeafData, LeafData, verifyNonMembership } from "./standard_indexed_tree/verify_circuit.js";
 
 // create a leveldb for test
-let db = new Level<string, Buffer>('example-index', {valueEncoding:'buffer'});
+let db = new Level<string, Buffer>('example-index-db', {valueEncoding:'buffer'});
 
 // poseidonHasher from o1js package
 let poseidonHasher = new PoseidonHasher();
