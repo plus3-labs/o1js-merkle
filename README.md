@@ -7,7 +7,9 @@
 
 The library contains implementations of *Sparse Merkle Tree*, *Standard Merkle Tree* and *Compact Merkle Tree* based on o1js, which you can use in the **browser** or **node.js** env, and provides a corresponding set of verifiable utility methods that can be run in **circuits**. Besides, you could choose different persistence storage tools for each Merkle tree.
 
-This article gives a brief introduction to SMT: [Whats a sparse merkle tree](https://medium.com/@kelvinfichter/whats-a-sparse-merkle-tree-acda70aeb837)
+This article gives a brief introduction to SMT: [Whats a sparse merkle tree](https://medium.com/@kelvinfichter/whats-a-sparse-merkle-tree-acda70aeb837), and SMT of this standard kind is carried out within [Implementation from the Scratch](#3-contents-table-of-implementation-from-the-scratch).
+
+Further, this library also provides another kind of SMT, which is of different theory and lets us customize the three height within our zkApp to achieve the decremental of our circuit constraint size significantly. please go to [Contents Table of 'Retrofit from Third-Party library'](#2-contents-table-of-retrofit-from-third-party-library).
 
 ## Disclaimer and Notes
 
