@@ -379,20 +379,7 @@ export class StandardIndexedTree extends TreeBase implements IndexedTree {
      * @param index - The index of the element.
      */
     public async updateLeafWithNoValueCheck(leaf: LeafData, index: bigint): Promise<void> {
-        let encodedLeaf;
-        // === origin code block ===
-        /*
-        if (leaf.value == 0n) {
-            encodedLeaf = Field(0);
-        } else {
-            encodedLeaf = hashEncodedTreeValue(leaf, this.hasher);
-        }
-        */
-        // === origin code block ===
-
-        // === new code block ===
-        encodedLeaf = hashEncodedTreeValue(leaf, this.hasher);
-        // === new code block ===
+        let encodedLeaf = hashEncodedTreeValue(leaf, this.hasher);
 
         this.cachedLeaves[Number(index)] = leaf;
         await this._updateLeaf(encodedLeaf, index);
