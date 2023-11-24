@@ -14,5 +14,6 @@ export const verifyMembership = (
     leaf: Field,
     leafIndex: Field
 ) => {
+  // assert tree root is equal to target root
   siblingPath.calculateRoot(leaf, leafIndex).assertEquals(root);
 }
