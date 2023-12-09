@@ -30,7 +30,7 @@ console.log('standard tree initial root: ', standardTreeInstance.getRoot(include
 // append the first leaf of type: Field, the newly inserted leaf is kept in an array before being flushed into db.
 await standardTreeInstance.appendLeaves([
   Field(
-    '20468198949394563802460512965219839480612000520504690501918527632215047268421'
+    '20005205046905019185276322150472684212046819894939456380246051296521983948061'
   ),
 ]);
 
