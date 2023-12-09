@@ -4,6 +4,11 @@ import { greaterThanFor254BitField } from "../../utils";
 
 export const DUMMY_FIELD = Field(0);
 
+/**
+ * @param value current value
+ * @param nextValue next value
+ * @param nextIndex index of nextValue
+ */
 export class LeafData extends Struct({
   value: Field,
   nextValue: Field,
