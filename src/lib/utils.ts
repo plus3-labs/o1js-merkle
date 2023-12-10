@@ -246,3 +246,8 @@ export function greaterThanFor254BitField(x: Field, y: Field) {
 
   return highPartGreaterThan.or(highPartEqual.and(parityGreaterThan));
 }
+
+export function fieldArrayToStringArray(fields: Field[]): string[] {
+  return fields.map((field) => field.toString());
+}
+
