@@ -8,6 +8,13 @@ import { Field } from 'o1js';
 
 const MAX_DEPTH = 254;
 
+/**
+ * cache key as a index
+ * @param name
+ * @param level
+ * @param index
+ * @returns
+ */
 const indexToKeyHash = (name: string, level: number, index: bigint) =>
   `${name}:${level}:${index}`;
 
