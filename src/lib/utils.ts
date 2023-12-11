@@ -68,15 +68,21 @@ function strToFieldArry(str: string): Field[] {
   return fs;
 }
 
+/**
+ * Computes the common prefix length of two Boolean arrays
+ * @param data1bits
+ * @param data2bits
+ * @returns
+ */
 function countCommonPrefix(data1bits: Bool[], data2bits: Bool[]): number {
-  let count = 0;
+  let count = 0; // init 0 as the common prefix
   const len = data1bits.length;
 
-  for (let i = 0; i < len; i++) {
+  for (let i = 0; i < len; i++) { // iterate the Array<Bool>
     if (data1bits[i].equals(data2bits[i]).toBoolean()) {
-      count++;
+      count++; // if equal, then add 1 to the common prefix length
     } else {
-      break;
+      break; // exit loop if not equal
     }
   }
 
@@ -178,6 +184,11 @@ export function toBufferBE(num: bigint, width: number): Buffer {
   return buffer;
 }
 
+/**
+ * transform a int256 to buffer
+ * @param n
+ * @returns
+ */
 export const int256ToBuffer = (n: bigint) => {
   const buf = Buffer.alloc(32); // 256 bits = 32 bytes
 
