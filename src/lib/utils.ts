@@ -189,6 +189,11 @@ export const int256ToBuffer = (n: bigint) => {
   return buf;
 };
 
+/**
+ * transform a buffer to int256
+ * @param buf
+ * @returns
+ */
 export const bufferToInt256 = (buf: Buffer) => {
   const bi = BigInt("0x" + buf.toString("hex"));
   const res = bi & ((BigInt(1) << BigInt(256)) - BigInt(1));
