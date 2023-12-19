@@ -237,7 +237,12 @@ export function separateHighPartFor254BitField(x: Field): {
   };
 }
 
-// Negative numbers are not supported. only support 254 bit field
+/**
+ *  Negative numbers are not supported. only support 254 bit field
+ * @param x
+ * @param y
+ * @returns
+ */
 export function greaterThanFor254BitField(x: Field, y: Field) {
   let { xDiv2Var: xHighPart, isOddVar: xParity } =
     separateHighPartFor254BitField(x);
