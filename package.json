@@ -54,9 +54,9 @@
     "level": "^8.0.0",
     "levelup": "^5.1.1",
     "memdown": "^6.1.1",
-    "rocksdb": "^5.2.1",
     "mongoose": "^6.5.2",
-    "o1js": "0.14.1"
+    "o1js": "0.14.1",
+    "rocksdb": "^5.2.1"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.16.4",
@@ -64,8 +64,8 @@
     "@types/encoding-down": "^5.0.0",
     "@types/jest": "^28.1.8",
     "@types/leveldown": "^4.0.3",
-    "@types/memdown": "^3.0.1",
     "@types/levelup": "^5.1.2",
+    "@types/memdown": "^3.0.1",
     "@types/rocksdb": "^3.0.1",
     "@typescript-eslint/eslint-plugin": "^5.5.0",
     "@typescript-eslint/parser": "^5.5.0",
@@ -90,5 +90,10 @@
   ],
   "prettier": {
     "singleQuote": true
+  },
+  "dependencies": {
+    "level": "^8.0.1",
+    "mongoose": "^8.2.1",
+    "o1js": "^0.16.2"
   }
 }
