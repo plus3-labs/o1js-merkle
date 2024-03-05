@@ -1,3 +1,3 @@
-export * from "./hasher";
-export * from "./poseidon_hasher";
-export * from "./sibling_path";
+export * from "./hasher.js";
+export * from "./poseidon_hasher.js";
+export * from "./sibling_path.js";

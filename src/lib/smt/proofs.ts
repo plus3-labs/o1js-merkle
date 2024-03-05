@@ -1,8 +1,8 @@
 import { Bool, Circuit, Field, Poseidon, Provable, Struct } from 'o1js';
-import { EMPTY_VALUE, RIGHT, SMT_DEPTH } from '../constant';
-import { defaultNodes } from '../default_nodes';
-import { Hasher, PoseidonHasherFunc } from '../model';
-import { countSetBits, fieldToHexString, hexStringToField } from '../utils';
+import { EMPTY_VALUE, RIGHT, SMT_DEPTH } from '../constant.js';
+import { defaultNodes } from '../default_nodes.js';
+import { Hasher, PoseidonHasherFunc } from '../model.js';
+import { countSetBits, fieldToHexString, hexStringToField } from '../utils.js';
 
 export { SparseMerkleProof, SMTUtils };
 export type { SparseCompactMerkleProof, SparseCompactMerkleProofJSON };

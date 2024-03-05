@@ -1,8 +1,8 @@
 import { Field, Poseidon, Provable } from 'o1js';
-import { Hasher, PoseidonHasherFunc } from '../model';
-import { Store } from '../store/store';
-import { CompactSparseMerkleProof, CSMTUtils } from './proofs';
-import { CompactSparseMerkleTree } from './csmt';
+import { Hasher, PoseidonHasherFunc } from '../model.js';
+import { Store } from '../store/store.js';
+import { CompactSparseMerkleProof, CSMTUtils } from './proofs.js';
+import { CompactSparseMerkleTree } from './csmt.js';
 
 export { CompactDeepSparseMerkleSubTree };
 

@@ -6,10 +6,10 @@ import {
   Provable,
   Struct,
 } from 'o1js';
-import { RIGHT } from '../constant';
-import { Hasher, PoseidonHasherFunc } from '../model';
-import { CP_PADD_VALUE, CSMT_DEPTH, PLACEHOLDER } from './constant';
-import { TreeHasher } from './tree_hasher';
+import { RIGHT } from '../constant.js';
+import { Hasher, PoseidonHasherFunc } from '../model.js';
+import { CP_PADD_VALUE, CSMT_DEPTH, PLACEHOLDER } from './constant.js';
+import { TreeHasher } from './tree_hasher.js';
 
 export { CompactSparseMerkleProof, CSMTUtils };
 export type { CSparseCompactMerkleProof };

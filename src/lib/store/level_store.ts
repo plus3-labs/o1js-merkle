@@ -1,7 +1,7 @@
 import { Level } from 'level';
 import { Field, Provable } from 'o1js';
-import { strToFieldArry } from '../utils';
-import { Store } from './store';
+import { strToFieldArry } from '../utils.js';
+import { Store } from './store.js';
 import {
   AbstractBatchPutOperation,
   AbstractBatchDelOperation,

@@ -1,7 +1,7 @@
 import { Field, Provable } from 'o1js';
-import { Store } from './store';
+import { Store } from './store.js';
 import mongoose, { Schema, model, Model } from 'mongoose';
-import { strToFieldArry } from '../utils';
+import { strToFieldArry } from '../utils.js';
 
 export { MongoStore };
 

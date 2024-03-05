@@ -1,6 +1,6 @@
 import { Bool, Field, Poseidon, Provable, Struct } from "o1js";
-import { BaseSiblingPath } from "../types";
-import { greaterThanFor254BitField } from "../../utils";
+import { BaseSiblingPath } from "../types/index.js";
+import { greaterThanFor254BitField } from "../../utils.js";
 
 export const DUMMY_FIELD = Field(0);
 

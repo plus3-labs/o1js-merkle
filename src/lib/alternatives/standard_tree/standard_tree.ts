@@ -1,6 +1,6 @@
 import { Field } from 'o1js';
-import { AppendOnlyTree } from '../interfaces/append_only_tree';
-import { TreeBase } from '../tree_base';
+import { AppendOnlyTree } from '../interfaces/append_only_tree.js';
+import { TreeBase } from '../tree_base.js';
 
 /**
  * A Merkle tree implementation that uses a LevelDB database to store the tree.

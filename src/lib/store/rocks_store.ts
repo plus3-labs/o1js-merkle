@@ -1,6 +1,6 @@
 import { Provable, Field } from 'o1js';
-import { strToFieldArry } from '../utils';
-import { Store } from './store';
+import { strToFieldArry } from '../utils.js';
+import { Store } from './store.js';
 
 import levelup from 'levelup';
 

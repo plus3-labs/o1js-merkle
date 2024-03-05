@@ -24,10 +24,10 @@ import {
   UInt32,
   UInt64,
 } from 'o1js';
-import { SparseMerkleProof } from '../lib/smt/proofs';
-import { SparseMerkleTree } from '../lib/smt/smt';
-import { ProvableSMTUtils } from '../lib/smt/verify_circuit';
-import { MemoryStore } from '../lib/store/memory_store';
+import { SparseMerkleProof } from '../lib/smt/proofs.js';
+import { SparseMerkleTree } from '../lib/smt/smt.js';
+import { ProvableSMTUtils } from '../lib/smt/verify_circuit.js';
+import { MemoryStore } from '../lib/store/memory_store.js';
 
 const doProofs = true;
 

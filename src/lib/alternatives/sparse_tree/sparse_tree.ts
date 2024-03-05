@@ -1,5 +1,5 @@
 import { Field } from 'o1js';
-import { UpdateOnlyTree } from '../interfaces/update_only_tree';
+import { UpdateOnlyTree } from '../interfaces/update_only_tree.js';
 import { INITIAL_LEAF, TreeBase } from '../tree_base.js';
 
 /**

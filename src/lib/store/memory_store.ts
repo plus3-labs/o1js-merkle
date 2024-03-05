@@ -1,5 +1,5 @@
 import { Field } from 'o1js';
-import { Store } from './store';
+import { Store } from './store.js';
 
 export { MemoryStore };
 

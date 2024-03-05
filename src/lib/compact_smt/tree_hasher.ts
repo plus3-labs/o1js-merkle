@@ -1,5 +1,5 @@
 import { Bool, Field, Poseidon, Provable } from 'o1js';
-import { Hasher, PoseidonHasherFunc } from '../model';
+import { Hasher, PoseidonHasherFunc } from '../model.js';
 
 export { TreeHasher };
 

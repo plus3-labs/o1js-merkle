@@ -1,13 +1,13 @@
 import { Field, Poseidon, Provable } from 'o1js';
-import { EMPTY_VALUE, RIGHT, SMT_DEPTH } from '../constant';
-import { defaultNodes } from '../default_nodes';
-import { Hasher, PoseidonHasherFunc } from '../model';
-import { Store } from '../store/store';
+import { EMPTY_VALUE, RIGHT, SMT_DEPTH } from '../constant.js';
+import { defaultNodes } from '../default_nodes.js';
+import { Hasher, PoseidonHasherFunc } from '../model.js';
+import { Store } from '../store/store.js';
 import {
   SMTUtils,
   SparseCompactMerkleProof,
   SparseMerkleProof,
-} from './proofs';
+} from './proofs.js';
 
 export { SparseMerkleTree };
 
