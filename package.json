@@ -54,9 +54,9 @@
     "level": "^8.0.0",
     "levelup": "^5.1.1",
     "memdown": "^6.1.1",
-    "mongoose": "^6.5.2",
-    "o1js": "0.14.1",
     "rocksdb": "^5.2.1"
+    "mongoose": "^6.5.2",
+    "o1js": ">=0.14.1"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.16.4",

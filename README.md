@@ -87,6 +87,8 @@ or with yarn:
 yarn add o1js-merkle
 ```
 
+NOTE: Please add `node --experimental-specifier-resolution=node`  at the execution script in your project's package.json, which would activate node's native ESM revolution capability.
+
 ### 2. Contents Table of 'Retrofit from Third-Party library'
 
 #### 2.1 Install peer dependencies
