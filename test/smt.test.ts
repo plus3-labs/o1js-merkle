@@ -1,8 +1,8 @@
 import { Field, Poseidon, Provable } from 'o1js';
-import { MemoryStore } from '../src/lib/store/memory_store';
-import { SparseMerkleTree } from '../src/lib/smt/smt';
-import { SMTUtils } from '../src/lib/smt/proofs';
-import { ProvableSMTUtils } from '../src/lib/smt/verify_circuit';
+import { MemoryStore } from '../src/lib/store/memory_store.js';
+import { SparseMerkleTree } from '../src/lib/smt/smt.js';
+import { SMTUtils } from '../src/lib/smt/proofs.js';
+import { ProvableSMTUtils } from '../src/lib/smt/verify_circuit.js';
 
 describe('SparseMerkleTree', () => {
   let tree: SparseMerkleTree<Field, Field>;

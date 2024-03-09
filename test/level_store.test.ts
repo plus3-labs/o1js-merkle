@@ -1,6 +1,6 @@
 import { Level } from 'level';
 import { Field } from 'o1js';
-import { LevelStore } from '../src/lib/store/level_store';
+import { LevelStore } from '../src/lib/store/level_store.js';
 import { jest } from '@jest/globals';
 
 jest.setTimeout(100000);

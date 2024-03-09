@@ -1,5 +1,5 @@
 import { Field } from 'o1js';
-import { RocksStore } from '../src/lib/store/rocks_store';
+import { RocksStore } from '../src/lib/store/rocks_store.js';
 import encode from 'encoding-down';
 import rocksdb from 'rocksdb';
 import levelup from 'levelup';

@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import { Field } from 'o1js';
-import { MongoStore } from '../src/lib/store/mongo_store';
+import { MongoStore } from '../src/lib/store/mongo_store.js';
 import { MongoMemoryReplSet } from 'mongodb-memory-server';
 import { jest } from '@jest/globals';
 

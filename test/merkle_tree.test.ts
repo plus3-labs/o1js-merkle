@@ -1,8 +1,8 @@
 import { Field, Provable } from 'o1js';
-import { MerkleTree } from '../src/lib/merkle/merkle_tree';
-import { MerkleTreeUtils } from '../src/lib/merkle/proofs';
-import { ProvableMerkleTreeUtils } from '../src/lib/merkle/verify_circuit';
-import { MemoryStore } from '../src/lib/store/memory_store';
+import { MerkleTree } from '../src/lib/merkle/merkle_tree.js';
+import { MerkleTreeUtils } from '../src/lib/merkle/proofs.js';
+import { ProvableMerkleTreeUtils } from '../src/lib/merkle/verify_circuit.js';
+import { MemoryStore } from '../src/lib/store/memory_store.js';
 
 describe('SparseMerkleTree', () => {
   let tree: MerkleTree<Field>;

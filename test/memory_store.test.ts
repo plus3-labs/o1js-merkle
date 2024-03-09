@@ -1,5 +1,5 @@
 import { Field } from 'o1js';
-import { MemoryStore } from '../src/lib/store/memory_store';
+import { MemoryStore } from '../src/lib/store/memory_store.js';
 
 describe('MemoryStore', () => {
   let store: MemoryStore<Field>;

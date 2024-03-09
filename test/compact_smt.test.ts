@@ -1,8 +1,8 @@
 import { Field,  Poseidon, Provable } from 'o1js';
-import { CSMTUtils } from '../src/lib/compact_smt/proofs';
-import { CompactSparseMerkleTree } from '../src/lib/compact_smt/csmt';
-import { ProvableCSMTUtils } from '../src/lib/compact_smt/verify_circuit';
-import { MemoryStore } from '../src/lib/store/memory_store';
+import { CSMTUtils } from '../src/lib/compact_smt/proofs.js';
+import { CompactSparseMerkleTree } from '../src/lib/compact_smt/csmt.js';
+import { ProvableCSMTUtils } from '../src/lib/compact_smt/verify_circuit.js';
+import { MemoryStore } from '../src/lib/store/memory_store.js';
 
 describe('CompactSparseMerkleTree', () => {
   let tree: CompactSparseMerkleTree<Field, Field>;
