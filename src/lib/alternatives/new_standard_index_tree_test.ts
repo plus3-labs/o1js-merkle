@@ -13,7 +13,7 @@ let db = new Level<string, Buffer>('example-index-db', {valueEncoding:'buffer'})
 let poseidonHasher = new PoseidonHasher();
 
 // tree height: 4
-const PRIVATE_DATA_TREE_HEIGHT = 4;
+const PRIVATE_NULLIFIER_TREE_HEIGHT = 4;
 
 // indicate if need consider the cached leaves, beside the existing leaves.
 const includeUncommitted = true;
@@ -24,7 +24,7 @@ const standardIndexedTreeInstance: StandardIndexedTree = await newTree(
   db,
   poseidonHasher,
   'NULLIFIER_TREE',
-  PRIVATE_DATA_TREE_HEIGHT
+  PRIVATE_NULLIFIER_TREE_HEIGHT
 );
 console.log('standard indexed tree initial root: ', standardIndexedTreeInstance.getRoot(includeUncommitted).toString());
 
