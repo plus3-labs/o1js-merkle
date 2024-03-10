@@ -9,4 +9,3 @@ coverage
 yarn.lock
 db
 rocksdb
-

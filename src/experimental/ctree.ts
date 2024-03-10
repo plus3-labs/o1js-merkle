@@ -1,8 +1,8 @@
 import { Field } from 'o1js';
-import { CompactDeepSparseMerkleSubTree } from '../lib/compact_smt/deep_subtree';
-import { CompactSparseMerkleTree } from '../lib/compact_smt/csmt';
-import { ProvableCSMTUtils } from '../lib/compact_smt/verify_circuit';
-import { MemoryStore } from '../lib/store/memory_store';
+import { CompactDeepSparseMerkleSubTree } from '../lib/compact_smt/deep_subtree.js';
+import { CompactSparseMerkleTree } from '../lib/compact_smt/csmt.js';
+import { ProvableCSMTUtils } from '../lib/compact_smt/verify_circuit.js';
+import { MemoryStore } from '../lib/store/memory_store.js';
 
 
 let tree = new CompactSparseMerkleTree(new MemoryStore<Field>(), Field, Field);

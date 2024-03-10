@@ -23,9 +23,9 @@ import {
   UInt32,
   UInt64,
 } from 'o1js';
-import { MerkleTree } from '../lib/merkle/merkle_tree';
-import { ProvableMerkleTreeUtils } from '../lib/merkle/verify_circuit';
-import { MemoryStore } from '../lib/store/memory_store';
+import { MerkleTree } from '../lib/merkle/merkle_tree.js';
+import { ProvableMerkleTreeUtils } from '../lib/merkle/verify_circuit.js';
+import { MemoryStore } from '../lib/store/memory_store.js';
 
 
 const doProofs = true;

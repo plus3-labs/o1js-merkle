@@ -1,5 +1,5 @@
 import { Field } from 'o1js';
-import { BaseSiblingPath } from '../types';
+import { BaseSiblingPath } from '../types/index.js';
 
 /**
  * Defines the interface for a source of sibling paths.

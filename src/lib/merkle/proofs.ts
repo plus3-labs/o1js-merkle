@@ -6,11 +6,11 @@ import {
   Provable,
 } from 'o1js';
 
-import { EMPTY_VALUE, RIGHT } from '../constant';
-import { defaultNodes } from '../default_nodes';
-import { Hasher, PoseidonHasherFunc } from '../model';
-import { countSetBits, fieldToHexString, hexStringToField } from '../utils';
-import { ProvableMerkleTreeUtils } from './verify_circuit';
+import { EMPTY_VALUE, RIGHT } from '../constant.js';
+import { defaultNodes } from '../default_nodes.js';
+import { Hasher, PoseidonHasherFunc } from '../model.js';
+import { countSetBits, fieldToHexString, hexStringToField } from '../utils.js';
+import { ProvableMerkleTreeUtils } from './verify_circuit.js';
 
 
 export { BaseMerkleProof, MerkleTreeUtils };

@@ -1,7 +1,7 @@
 import { Bool, Field, Poseidon, Provable, Struct } from 'o1js';
-import { EMPTY_VALUE, SMT_DEPTH } from '../constant';
-import { Hasher, PoseidonHasherFunc } from '../model';
-import { SparseMerkleProof } from './proofs';
+import { EMPTY_VALUE, SMT_DEPTH } from '../constant.js';
+import { Hasher, PoseidonHasherFunc } from '../model.js';
+import { SparseMerkleProof } from './proofs.js';
 
 export { ProvableDeepSparseMerkleSubTree };
 

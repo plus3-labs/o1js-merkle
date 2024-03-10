@@ -1,10 +1,10 @@
-import { toBigIntBE, toBufferBE } from '../../utils';
-import { Hasher } from '../types';
-import { IndexedTree, LeafData } from '../interfaces/indexed_tree';
-import { TreeBase } from '../tree_base';
-import { SiblingPath } from '../types';
+import { toBigIntBE, toBufferBE } from '../../utils.js';
+import { Hasher } from '../types/index.js';
+import { IndexedTree, LeafData } from '../interfaces/indexed_tree.js';
+import { TreeBase } from '../tree_base.js';
+import { SiblingPath } from '../types/index.js';
 import { Field } from 'o1js';
-import { BaseSiblingPath } from '../types';
+import { BaseSiblingPath } from '../types/index.js';
 
 const indexToKeyLeaf = (name: string, index: bigint) => {
     return `${name}:leaf:${index}`;

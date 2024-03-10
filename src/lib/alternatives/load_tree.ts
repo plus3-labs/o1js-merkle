@@ -1,5 +1,5 @@
 import { Level } from 'level';
-import { Hasher } from './types';
+import { Hasher } from './types/index.js';
 import { TreeBase, decodeMeta } from './tree_base.js';
 
 /**

@@ -1,9 +1,9 @@
 import { Field } from 'o1js';
-import { DeepMerkleSubTree } from '../lib/merkle/deep_subtree';
-import { MerkleTree } from '../lib/merkle/merkle_tree';
-import { MerkleTreeUtils } from '../lib/merkle/proofs';
-import { MemoryStore } from '../lib/store/memory_store';
-import { printBits } from '../lib/utils';
+import { DeepMerkleSubTree } from '../lib/merkle/deep_subtree.js';
+import { MerkleTree } from '../lib/merkle/merkle_tree.js';
+import { MerkleTreeUtils } from '../lib/merkle/proofs.js';
+import { MemoryStore } from '../lib/store/memory_store.js';
+import { printBits } from '../lib/utils.js';
 
 
 // printBits(Field(0).toBits(), '0');

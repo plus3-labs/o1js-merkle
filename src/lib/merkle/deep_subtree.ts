@@ -1,8 +1,8 @@
 import { Field, Poseidon, Provable } from 'o1js';
-import { EMPTY_VALUE } from '../constant';
-import { Hasher, PoseidonHasherFunc } from '../model';
-import { BaseMerkleProof, MerkleTreeUtils } from './proofs';
-import { ProvableMerkleTreeUtils } from './verify_circuit';
+import { EMPTY_VALUE } from '../constant.js';
+import { Hasher, PoseidonHasherFunc } from '../model.js';
+import { BaseMerkleProof, MerkleTreeUtils } from './proofs.js';
+import { ProvableMerkleTreeUtils } from './verify_circuit.js';
 
 export { DeepMerkleSubTree };
 

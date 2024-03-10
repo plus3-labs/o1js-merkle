@@ -1,5 +1,5 @@
 import { Field } from 'o1js';
-import { IMerkleTree } from './merkle_tree';
+import { IMerkleTree } from './merkle_tree.js';
 
 /**
  * A Merkle tree that supports updates at arbitrary indices but not appending.

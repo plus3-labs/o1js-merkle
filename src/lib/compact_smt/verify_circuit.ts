@@ -1,7 +1,7 @@
 import { Bool, Circuit, Field, Provable } from 'o1js';
-import { CP_PADD_VALUE, CSMT_DEPTH, PLACEHOLDER } from './constant';
-import { CompactSparseMerkleProof } from './proofs';
-import { TreeHasher } from './tree_hasher';
+import { CP_PADD_VALUE, CSMT_DEPTH, PLACEHOLDER } from './constant.js';
+import { CompactSparseMerkleProof } from './proofs.js';
+import { TreeHasher } from './tree_hasher.js';
 
 export { ProvableCSMTUtils };
 

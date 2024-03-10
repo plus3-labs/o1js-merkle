@@ -1,5 +1,5 @@
 import { ChainedBatch, Level } from "level";
-import { Hasher } from './types';
+import { Hasher } from './types/index.js';
 import { TreeBase } from './tree_base.js';
 
 /**

@@ -1,5 +1,5 @@
 import { Bool, Field } from "o1js";
-import { BaseSiblingPath } from "../types";
+import { BaseSiblingPath } from "../types/index.js";
 
 /**
  * check membership of merkle tree

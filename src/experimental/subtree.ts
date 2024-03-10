@@ -11,10 +11,10 @@ import {
   State,
   state,
 } from 'o1js';
-import { ProvableDeepSparseMerkleSubTree } from '../lib/smt/deep_subtree_circuit';
-import { SparseMerkleProof } from '../lib/smt/proofs';
-import { SparseMerkleTree } from '../lib/smt/smt';
-import { MemoryStore } from '../lib/store/memory_store';
+import { ProvableDeepSparseMerkleSubTree } from '../lib/smt/deep_subtree_circuit.js';
+import { SparseMerkleProof } from '../lib/smt/proofs.js';
+import { SparseMerkleTree } from '../lib/smt/smt.js';
+import { MemoryStore } from '../lib/store/memory_store.js';
 
 
 const doProofs = true;
