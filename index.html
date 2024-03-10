@@ -17,12 +17,11 @@
   <h1>o1js-merkle</h1>
 </a>
 <p><img src="https://img.shields.io/npm/v/o1js-merkle" alt="npm">
-<img src="https://img.shields.io/node/v/o1js-merkle" alt="node-current">
-<img src="https://img.shields.io/librariesio/release/npm/o1js-merkle" alt="Libraries.io dependency status for latest release">
-<img src="https://img.shields.io/npm/dm/o1js-merkle" alt="npm"></p>
+<img src="https://img.shields.io/node/v/o1js-merkle" alt="node-current"></p>
 <p><strong>Merkle Trees for o1js (membership / non-membership merkle witness)</strong></p>
 <p>The library contains implementations of <em>Sparse Merkle Tree</em>, <em>Standard Merkle Tree</em> and <em>Compact Merkle Tree</em> based on o1js, which you can use in the <strong>browser</strong> or <strong>node.js</strong> env, and provides a corresponding set of verifiable utility methods that can be run in <strong>circuits</strong>. Besides, you could choose different persistence storage tools for each Merkle tree.</p>
-<p>This article gives a brief introduction to SMT: <a href="https://medium.com/@kelvinfichter/whats-a-sparse-merkle-tree-acda70aeb837">Whats a sparse merkle tree</a></p>
+<p>This article gives a brief introduction to SMT: <a href="https://medium.com/@kelvinfichter/whats-a-sparse-merkle-tree-acda70aeb837">Whats a sparse merkle tree</a>, and SMT of this standard kind is carried out within <a href="#3-contents-table-of-implementation-from-the-scratch">Implementation from the Scratch</a>.</p>
+<p>Further, this library also provides another kind of SMT, which is of different theory and lets us customize the three height within our zkApp to achieve the decremental of our circuit constraint size significantly. please go to <a href="#2-contents-table-of-retrofit-from-third-party-library">Contents Table of &#39;Retrofit from Third-Party library&#39;</a>.</p>
 
 <a href="#disclaimer-and-notes" id="disclaimer-and-notes" style="color: inherit; text-decoration: none;">
   <h2>Disclaimer and Notes</h2>
@@ -112,6 +111,7 @@ Make sure you know what you are doing before using this library.</p>
 <p>or with yarn:</p>
 <pre><code class="language-bash"><span class="hl-0">yarn</span><span class="hl-1"> </span><span class="hl-2">add</span><span class="hl-1"> </span><span class="hl-2">o1js-merkle</span>
 </code></pre>
+<p>NOTE: Please add <code>node --experimental-specifier-resolution=node</code>  at the execution script in your project&#39;s package.json, which would activate node&#39;s native ESM revolution capability.</p>
 
 <a href="#2-contents-table-of-39retrofit-from-third-party-library39" id="2-contents-table-of-39retrofit-from-third-party-library39" style="color: inherit; text-decoration: none;">
   <h3>2. Contents Table of &#39;Retrofit from Third-Party library&#39;</h3>
@@ -336,6 +336,7 @@ Tree height &lt;= 254, Numeric index &lt;= (2^height-1).</p>
 <li class="tsd-kind-function"><a href="functions/countSetBits.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>count<wbr/>Set<wbr/>Bits</a></li>
 <li class="tsd-kind-function"><a href="functions/createEmptyValue.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>create<wbr/>Empty<wbr/>Value</a></li>
 <li class="tsd-kind-function"><a href="functions/defaultNodes.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>default<wbr/>Nodes</a></li>
+<li class="tsd-kind-function"><a href="functions/fieldArrayToStringArray.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>field<wbr/>Array<wbr/>To<wbr/>String<wbr/>Array</a></li>
 <li class="tsd-kind-function"><a href="functions/fieldToHexString.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>field<wbr/>To<wbr/>Hex<wbr/>String</a></li>
 <li class="tsd-kind-function"><a href="functions/greaterThanFor254BitField.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>greater<wbr/>Than<wbr/>For254<wbr/>Bit<wbr/>Field</a></li>
 <li class="tsd-kind-function"><a href="functions/hexStringToField.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>hex<wbr/>String<wbr/>To<wbr/>Field</a></li>
