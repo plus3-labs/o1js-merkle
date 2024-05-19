@@ -44,8 +44,7 @@
     "test:compact": "jest --config jest.config.js compact_smt",
     "test:ts": "node --experimental-vm-modules --experimental-wasm-modules --experimental-wasm-threads --no-warnings node_modules/jest/bin/jest.js --config jest.config.js --findRelatedTests test/compact_smt.test.ts",
     "test:tree": "node --experimental-vm-modules --experimental-wasm-modules --experimental-wasm-threads --no-warnings node_modules/jest/bin/jest.js --config jest.config.js --findRelatedTests test/compact_smt.test.ts test/smt.test.ts test/merkle_tree.test.ts",
-    "prepublishOnly": "npm run build:module && npm run doc:html && npm run doc:publish",
-    "x": "tsc -p tsconfig.json && node --no-warnings --experimental-specifier-resolution=node ./build/src/lib/alternatives/new_standard_index_tree_test.js"
+    "prepublishOnly": "npm run build:module && npm run doc:html && npm run doc:publish"
   },
   "engines": {
     "node": ">=16.4.0"
@@ -57,7 +56,7 @@
     "memdown": "^6.1.1",
     "rocksdb": "^5.2.1",
     "mongoose": "^6.5.2",
-    "o1js": "^1.1.0"
+    "o1js": ">=0.14.1"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.16.4",
