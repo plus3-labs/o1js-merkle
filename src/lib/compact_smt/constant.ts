@@ -1,6 +1,4 @@
-import { Field, isReady } from 'o1js';
-
-await isReady;
+import { Field } from 'o1js';
 
 export const PLACEHOLDER = Field(0);
 export const CSMT_DEPTH = 254;
