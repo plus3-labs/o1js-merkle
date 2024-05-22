@@ -7,6 +7,7 @@ import {
   Mina,
   Permissions,
   PrivateKey,
+  Provable,
   SmartContract,
   State,
   state,
@@ -27,7 +28,7 @@ class MerkleProof extends ProvableMerkleTreeUtils.MerkleProof(treeHeight) {}
 class TestZkapp extends SmartContract {
   @state(Field) commitment = State<Field>();
 
-  deploy(args: DeployArgs) {
+  async deploy(args?: DeployArgs) {
     super.deploy(args);
 
     this.account.permissions.set({
@@ -39,7 +40,7 @@ class TestZkapp extends SmartContract {
   }
 
   @method
-  merkle(
+  async merkle(
     proof1: MerkleProof,
     index1: Field,
     value1: Field,
@@ -50,8 +51,8 @@ class TestZkapp extends SmartContract {
     index3: Field,
     value3: Field
   ) {
-    let commitment = this.commitment.get();
-    this.commitment.assertEquals(commitment);
+    let commitment = this.commitment.getAndRequireEquals();
+    commitment.assertEquals(commitment);
 
     let tree = new ProvableDeepMerkleSubTree(proof1.root, treeHeight, Field);
     // let tree = new NumIndexDeepSparseMerkleSubTree<Field>(
@@ -75,7 +76,7 @@ class TestZkapp extends SmartContract {
     // finalRoot = tree.update(proof2.path, Poseidon.hash([Field(99)]));
     // finalRoot = tree.update(proof3.path, Poseidon.hash([Field(1010)]));
 
-    Circuit.asProver(() => {
+    Provable.asProver(() => {
       console.log('finalRoot by field: ', finalRoot.toString());
     });
 
@@ -83,10 +84,10 @@ class TestZkapp extends SmartContract {
   }
 }
 
-let local = Mina.LocalBlockchain({ proofsEnabled: doProofs });
+let local = await Mina.LocalBlockchain({ proofsEnabled: doProofs });
 Mina.setActiveInstance(local);
-let feePayer = local.testAccounts[0].publicKey;
-let feePayerKey = local.testAccounts[0].privateKey;
+let feePayer = local.testAccounts[0];
+let feePayerKey = local.testAccounts[0].key;
 let zkappKey = PrivateKey.random();
 let zkappAddress = zkappKey.toPublicKey();
 
@@ -123,18 +124,18 @@ async function test() {
   }
 
   console.log('deploying');
-  let tx = await local.transaction(feePayer, () => {
+  let tx = await local.transaction(feePayer, async () => {
     AccountUpdate.fundNewAccount(feePayer);
-    zkapp.deploy({ zkappKey });
+    await zkapp.deploy();
   });
   await tx.prove();
-  await tx.sign([feePayerKey]).send();
+  await tx.sign([feePayerKey, zkappKey]).send();
 
   console.log('deploy done');
 
   console.log('start method');
-  tx = await local.transaction(feePayer, () => {
-    zkapp.merkle(
+  tx = await local.transaction(feePayer, async () => {
+    await zkapp.merkle(
       proof1,
       Field(key1),
       value1,

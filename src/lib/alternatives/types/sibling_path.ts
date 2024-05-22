@@ -2,7 +2,7 @@
 import { PoseidonHasher } from "./poseidon_hasher.js";
 import { Bool, Field } from "o1js";
 import { Hasher } from "./hasher.js";
-import { arrayProp, CircuitValue, } from "./circuit-value.js";
+import { arrayProp, CircuitValue, } from "../../o1js_types";
 
 export class BaseSiblingPath extends CircuitValue {
     static height: number;

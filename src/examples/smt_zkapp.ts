@@ -16,6 +16,7 @@ import {
   Permissions,
   Poseidon,
   PrivateKey,
+  Provable,
   PublicKey,
   SmartContract,
   State,
@@ -53,7 +54,7 @@ class Leaderboard extends SmartContract {
   // a commitment is a cryptographic primitive that allows us to commit to data, with the ability to "reveal" it later
   @state(Field) commitment = State<Field>();
 
-  deploy(args: DeployArgs) {
+  async deploy(args?: DeployArgs) {
     super.deploy(args);
     this.account.permissions.set({
       ...Permissions.default(),
@@ -65,14 +66,14 @@ class Leaderboard extends SmartContract {
 
   // If an account with this name does not exist, it is added as a new account (non-existence merkle proof)
   @method
-  addNewAccount(
+  async addNewAccount(
     name: CircuitString,
     account: Account,
     merkleProof: SparseMerkleProof
   ) {
     // we fetch the on-chain commitment
-    let commitment = this.commitment.get();
-    this.commitment.assertEquals(commitment);
+    let commitment = this.commitment.getAndRequireEquals();
+    commitment.assertEquals(commitment);
 
     // We need to prove that the account is not in Merkle Tree.
     ProvableSMTUtils.checkNonMembership(
@@ -95,8 +96,7 @@ class Leaderboard extends SmartContract {
   }
 
   // existence merkle proof
-  @method
-  guessPreimage(
+  @method async guessPreimage(
     guess: Field,
     name: CircuitString,
     account: Account,
@@ -110,8 +110,8 @@ class Leaderboard extends SmartContract {
     Poseidon.hash([guess]).assertEquals(target);
 
     // we fetch the on-chain commitment
-    let commitment = this.commitment.get();
-    this.commitment.assertEquals(commitment);
+    let commitment = this.commitment.getAndRequireEquals();
+    commitment.assertEquals(commitment);
 
     // we check that the account is within the committed Merkle Tree
     ProvableSMTUtils.checkMembership(
@@ -139,11 +139,11 @@ class Leaderboard extends SmartContract {
   }
 }
 
-let Local = Mina.LocalBlockchain({ proofsEnabled: doProofs });
+let Local = await Mina.LocalBlockchain({ proofsEnabled: doProofs });
 Mina.setActiveInstance(Local);
 
-let feePayer = Local.testAccounts[0].publicKey;
-let feePayerKey = Local.testAccounts[0].privateKey;
+let feePayer = Local.testAccounts[0];
+let feePayerKey = Local.testAccounts[0].key;
 
 // the zkapp account
 let zkappKey = PrivateKey.random();
@@ -162,19 +162,19 @@ const Charlie = CircuitString.fromString('Charlie');
 const Olivia = CircuitString.fromString('Olivia');
 
 let bobAc = new Account({
-  publicKey: Local.testAccounts[0].publicKey,
+  publicKey: Local.testAccounts[0],
   points: UInt32.from(0),
 });
 let aliceAc = new Account({
-  publicKey: Local.testAccounts[1].publicKey,
+  publicKey: Local.testAccounts[1],
   points: UInt32.from(0),
 });
 let charlieAc = new Account({
-  publicKey: Local.testAccounts[2].publicKey,
+  publicKey: Local.testAccounts[2],
   points: UInt32.from(0),
 });
 let oliviaAc = new Account({
-  publicKey: Local.testAccounts[3].publicKey,
+  publicKey: Local.testAccounts[3],
   points: UInt32.from(2),
 });
 
@@ -190,12 +190,12 @@ console.log('Deploying leaderboard..');
 if (doProofs) {
   await Leaderboard.compile();
 }
-let tx = await Mina.transaction(feePayer, () => {
+let tx = await Mina.transaction(feePayer, async () => {
   AccountUpdate.fundNewAccount(feePayer);
-  leaderboardZkApp.deploy({ zkappKey });
+  await leaderboardZkApp.deploy();
 });
 await tx.prove();
-await tx.sign([feePayerKey]).send();
+await tx.sign([feePayerKey, zkappKey]).send();
 
 console.log('Initial points: ' + (await smt.get(Bob))?.points);
 
@@ -212,8 +212,8 @@ console.log('Final Olivia points: ' + (await smt.get(Olivia))?.points);
 async function addNewAccount(name: CircuitString, account: Account) {
   let merkleProof = await smt.prove(name);
 
-  let tx = await Mina.transaction(feePayer, () => {
-    leaderboardZkApp.addNewAccount(name, account, merkleProof);
+  let tx = await Mina.transaction(feePayer, async () => {
+    await leaderboardZkApp.addNewAccount(name, account, merkleProof);
   });
   await tx.prove();
   await tx.sign([feePayerKey]).send();
@@ -227,8 +227,8 @@ async function makeGuess(name: CircuitString, guess: number) {
 
   let merkleProof = await smt.prove(name);
 
-  let tx = await Mina.transaction(feePayer, () => {
-    leaderboardZkApp.guessPreimage(Field(guess), name, account!, merkleProof);
+  let tx = await Mina.transaction(feePayer, async () => {
+    await leaderboardZkApp.guessPreimage(Field(guess), name, account!, merkleProof);
   });
   await tx.prove();
   await tx.sign([feePayerKey]).send();

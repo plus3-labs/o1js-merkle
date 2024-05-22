@@ -16,6 +16,7 @@ import {
   Permissions,
   Poseidon,
   PrivateKey,
+  Provable,
   SmartContract,
   State,
   state,
@@ -44,7 +45,7 @@ class Leaderboard extends SmartContract {
   // a commitment is a cryptographic primitive that allows us to commit to data, with the ability to "reveal" it later
   @state(Field) commitment = State<Field>();
 
-  deploy(args: DeployArgs) {
+  async deploy(args?: DeployArgs) {
     super.deploy(args);
     this.account.permissions.set({
       ...Permissions.default(),
@@ -56,10 +57,10 @@ class Leaderboard extends SmartContract {
 
   // If an account with this name does not exist, it is added as a new account (non-existence merkle proof)
   @method
-  addNewField(index: Field, f: Field, proof: MerkleProof) {
+  async addNewField(index: Field, f: Field, proof: MerkleProof) {
     // we fetch the on-chain commitment
-    let commitment = this.commitment.get();
-    this.commitment.assertEquals(commitment);
+    let commitment = this.commitment.getAndRequireEquals();
+    commitment.assertEquals(commitment);
 
     // We need to prove that the numerically indexed account does not exist in the merkle tree.
 
@@ -83,7 +84,7 @@ class Leaderboard extends SmartContract {
   }
 
   @method
-  guessPreimage(guess: Field, index: Field, f: Field, proof: MerkleProof) {
+  async guessPreimage(guess: Field, index: Field, f: Field, proof: MerkleProof) {
     // this is our hash! its the hash of the preimage "22", but keep it a secret!
     let target = Field(
       '17057234437185175411792943285768571642343179330449434169483610110583519635705'
@@ -92,8 +93,8 @@ class Leaderboard extends SmartContract {
     Poseidon.hash([guess]).assertEquals(target);
 
     // we fetch the on-chain commitment
-    let commitment = this.commitment.get();
-    this.commitment.assertEquals(commitment);
+    let commitment = this.commitment.getAndRequireEquals();
+    commitment.assertEquals(commitment);
 
     // we check that the account is within the committed Merkle Tree
     ProvableMerkleTreeUtils.checkMembership(
@@ -106,7 +107,7 @@ class Leaderboard extends SmartContract {
         hashValue: false,
       }
     ).assertTrue();
-    Circuit.asProver(() => {
+    Provable.asProver(() => {
       console.log('proof verify ok');
     });
 
@@ -121,7 +122,7 @@ class Leaderboard extends SmartContract {
       Field,
       { hashValue: false }
     );
-    Circuit.asProver(() => {
+    Provable.asProver(() => {
       console.log('compute root ok');
     });
 
@@ -129,11 +130,11 @@ class Leaderboard extends SmartContract {
   }
 }
 
-let Local = Mina.LocalBlockchain({ proofsEnabled: doProofs });
+let Local = await Mina.LocalBlockchain({ proofsEnabled: doProofs });
 Mina.setActiveInstance(Local);
 
-let feePayer = Local.testAccounts[0].publicKey;
-let feePayerKey = Local.testAccounts[0].privateKey;
+let feePayer = Local.testAccounts[0];
+let feePayerKey = Local.testAccounts[0].key;
 
 // the zkapp account
 let zkappKey = PrivateKey.random();
@@ -167,12 +168,12 @@ if (doProofs) {
   await Leaderboard.compile();
   console.timeEnd('compile');
 }
-let tx = await Mina.transaction(feePayer, () => {
+let tx = await Mina.transaction(feePayer, async () => {
   AccountUpdate.fundNewAccount(feePayer);
-  leaderboardZkApp.deploy({ zkappKey });
+  await leaderboardZkApp.deploy();
 });
 await tx.prove();
-await tx.sign([feePayerKey]).send();
+await tx.sign([feePayerKey, zkappKey]).send();
 
 console.log('Initial f: ' + (await tree.get(0n))?.toString());
 
@@ -189,8 +190,8 @@ console.log('Final Olivia f: ' + (await tree.get(3n))?.toString());
 async function addNewField(index: bigint, f: Field) {
   let merkleProof = await tree.prove(index);
 
-  let tx = await Mina.transaction(feePayer, () => {
-    leaderboardZkApp.addNewField(Field(index), f, merkleProof);
+  let tx = await Mina.transaction(feePayer, async () => {
+    await leaderboardZkApp.addNewField(Field(index), f, merkleProof);
   });
   await tx.prove();
   await tx.sign([feePayerKey]).send();
@@ -208,8 +209,8 @@ async function makeGuess(index: bigint, guess: number) {
 
   console.log('proof height: ', proof.height());
 
-  let tx = await Mina.transaction(feePayer, () => {
-    leaderboardZkApp.guessPreimage(Field(guess), Field(index), f!, proof);
+  let tx = await Mina.transaction(feePayer, async () => {
+    await leaderboardZkApp.guessPreimage(Field(guess), Field(index), f!, proof);
   });
   await tx.prove();
   await tx.sign([feePayerKey]).send();

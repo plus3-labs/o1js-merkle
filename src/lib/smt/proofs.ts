@@ -11,10 +11,10 @@ export type { SparseCompactMerkleProof, SparseCompactMerkleProofJSON };
  * Merkle proof CircuitValue for an element in a SparseMerkleTree.
  *
  * @class SparseMerkleProof
- * @extends {Struct({sideNodes: Circuit.array(Field, SMT_DEPTH), root: Field})}
+ * @extends {Struct({sideNodes: Provable.Array(Field, SMT_DEPTH), root: Field})}
  */
 class SparseMerkleProof extends Struct({
-  sideNodes: Circuit.array(Field, SMT_DEPTH),
+  sideNodes: Provable.Array(Field, SMT_DEPTH),
   root: Field,
 }) {}
 

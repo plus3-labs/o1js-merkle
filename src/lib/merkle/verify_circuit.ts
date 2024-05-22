@@ -1,7 +1,8 @@
-import { arrayProp, Bool, Field, Provable } from 'o1js';
+import { Bool, Field, Provable } from 'o1js';
 import { EMPTY_VALUE } from '../constant.js';
 import { Hasher, PoseidonHasherFunc } from '../model.js';
 import { BaseMerkleProof } from './proofs.js';
+import { arrayProp } from "../o1js_types";
 
 export { ProvableMerkleTreeUtils };
 

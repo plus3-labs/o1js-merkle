@@ -120,7 +120,7 @@ class ProvableCSMTUtils {
       proof.nonMembershipLeafData
     );
 
-    let currentHash = Circuit.if(
+    let currentHash = Provable.if(
       th.isEmptyDataInCircuit(proof.nonMembershipLeafData),
       PLACEHOLDER,
       th.digestLeaf(actualPath, leafData).hash
@@ -152,14 +152,14 @@ function computeRootInCircuit<K, V>(
     let node = sideNodes[i];
 
     // right node
-    currentHash = Circuit.if(
+    currentHash = Provable.if(
       pathBits[len - 1 - i].and(node.equals(CP_PADD_VALUE).not()),
       th.digestNode(node, currentHash).hash,
       currentHash
     );
 
     // left node
-    currentHash = Circuit.if(
+    currentHash = Provable.if(
       pathBits[len - 1 - i].not().and(node.equals(CP_PADD_VALUE).not()),
       th.digestNode(currentHash, node).hash,
       currentHash

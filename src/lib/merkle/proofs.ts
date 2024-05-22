@@ -1,10 +1,10 @@
 import {
   Bool,
-  CircuitValue,
   Field,
   Poseidon,
   Provable,
 } from 'o1js';
+import { CircuitValue } from "../o1js_types";
 
 import { EMPTY_VALUE, RIGHT } from '../constant.js';
 import { defaultNodes } from '../default_nodes.js';

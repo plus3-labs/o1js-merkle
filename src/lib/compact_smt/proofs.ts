@@ -19,16 +19,16 @@ export type { CSparseCompactMerkleProof };
  *
  * @class CompactSparseMerkleProof
  * @extends {Struct({
- *   sideNodes: Circuit.array(Field, CSMT_DEPTH),
- *   nonMembershipLeafData: Circuit.array(Field, 3),
- *   siblingData: Circuit.array(Field, 3),
+ *   sideNodes: Provable.Array(Field, CSMT_DEPTH),
+ *   nonMembershipLeafData: Provable.Array(Field, 3),
+ *   siblingData: Provable.Array(Field, 3),
  *   root: Field,
  * })}
  */
 class CompactSparseMerkleProof extends Struct({
-  sideNodes: Circuit.array(Field, CSMT_DEPTH),
-  nonMembershipLeafData: Circuit.array(Field, 3),
-  siblingData: Circuit.array(Field, 3),
+  sideNodes: Provable.Array(Field, CSMT_DEPTH),
+  nonMembershipLeafData: Provable.Array(Field, 3),
+  siblingData: Provable.Array(Field, 3),
   root: Field,
 }) {
   constructor(value: {
