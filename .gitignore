@@ -9,4 +9,4 @@ coverage
 yarn.lock
 db
 rocksdb
-build/*
+build
